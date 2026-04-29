@@ -3,6 +3,6 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/cos30043/s10######/Assign2/', // Please change to your user when hosting
+  base: '/cos30043/s104551544/Assign2/', // Please change to your user when hosting on mercury
   plugins: [vue()],
 })
