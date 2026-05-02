@@ -160,7 +160,6 @@ code {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
-  text-align: center;
   border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
@@ -292,5 +291,121 @@ code {
   &::after {
     right: 0;
     border-right-color: var(--border);
+  }
+}
+
+/*ContactUs.Vue*/
+/*Phone (default)*/
+@media (min-width: 320px) {
+  .contactus-container {
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    padding: 20px;
+    width: 90%;
+    max-width: 250px;
+    margin: 20px auto;
+    background-color: white;
+    box-shadow: var(--shadow);
+    color: black;
+    input, textarea {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+      border: 0px solid var(--border);
+      box-sizing: border-box;
+      border-radius: 25px;
+      text-align: left;
+      font-family: var(--sans);
+      color: black;
+      background-color: rgb(236, 236, 236);
+    }
+
+    textarea {
+      height: 200px;
+      width: 100%;
+      margin: 20px 0;
+    }
+    button{
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 50px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      display: block;
+      margin: 0 auto;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: var(--accent-border);
+      }
+    }
+  }
+  #intro{
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+/* Contact Us -- Laptop view*/
+@media (min-width: 1024px) {
+  .contactus-container {
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    padding: 20px;
+    max-width: 500px;
+    margin: 20px auto;
+    background-color: white;
+    box-shadow: var(--shadow);
+    color: black;
+    input, textarea {
+      padding: 10px;
+      border: 0px solid var(--border);
+      box-sizing: border-box;
+      border-radius: 25px;
+      text-align: left;
+      color: black;
+      background-color: rgb(236, 236, 236);
+    }
+
+    #nameRow{
+      margin-bottom: 10px;
+      border: 0 solid var(--border);
+    }
+
+    #email, #ponumber{
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    textarea {
+      height: 200px;
+      width: 100%;
+      margin: 20px 0;
+    }
+    button{
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 50px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      display: block;
+      margin: 0 auto;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: var(--accent-border);
+      }
+    }
+    #intro{
+      text-align: center;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
   }
 }
