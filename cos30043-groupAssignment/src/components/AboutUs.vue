@@ -1,0 +1,199 @@
+<template>
+  <main class="about-page">
+
+    <!-- Temporary Toggle Button -->
+    <button @click="toggleTheme" class="theme-toggle">
+        {{ isDark ? 'Light' : 'Dark' }} Mode
+    </button>
+
+
+    <section class="about-hero">
+      <p class="eyebrow">Who we are</p>
+      <h1>Made by film people,<br>for film people.</h1>
+      <p class="hero-desc">
+        This is a student project from students at Swinburne University. We're a group of film lovers who wanted to create a review site for people who loves films as much as we do. 
+      </p>
+    </section>
+
+    <section class="about-body">
+      <h2 class="section-label">The team</h2>
+      <div class="team-grid">
+        <div class="team-card" v-for="member in team" :key="member.initials">
+          <div class="avatar">{{ member.initials }}</div>
+          <h3>{{ member.name }}</h3>
+          <ul class="task-list">
+            <li v-for="task in member.tasks" v-bind:key="task">{{ task }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 class="section-label">Tmp Title</h2>
+      <div class="mission">
+        <p class="mission-quote">"Inspirational quote here"</p>
+        <p class="mission-body">
+          Blah blah blah. Temp paragraph about the mission statement of the project. This is just filler text to show how it would look like when it's filled with real content.
+        </p>
+    </div>
+    </section>
+
+  </main>
+</template>
+
+<script setup>
+import { useTheme } from '../js/Theme.js';
+
+const { isDark, toggleTheme } = useTheme();
+
+
+const team = [
+  { initials: 'AL', name: 'Anabelle', tasks: ['UI and Mobile Responsive', 'Contact Us page', 'Film API,', 'ADVANCED TMP'] },
+  { initials: 'SR', name: 'Sofia', tasks: ['UI and Mobile Responsive', 'About Us page', 'Search & filter'] },
+  { initials: 'AM', name: 'Alessandra', tasks: ['UI Team','Terms of Service page', 'Search & Filter', 'ADVANCED TMP','Routing'] },
+  { initials: 'CS', name: 'Cole', tasks: ['Account Settings', 'Account Deletion', 'Favourite Movies','Login/Sign Up'] },
+  { initials: 'TF', name: 'Theodore', tasks: ['Advanced Feature - Movie Recommendaiton Algorithm','Catalogue'] },
+  { initials: 'M', name: 'Matt', tasks: ['User dashboard', 'Database setup'] },
+]
+</script>
+
+<style scoped>
+.about-page {
+  background: var(--bg-primary);
+}
+
+/* HERO SECTION */
+.about-hero {
+  background: var(--accent);
+  padding: 5rem 2.5rem;
+  border-bottom: 8px solid var(--accent-deep);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Racing Stripe thingo */
+.about-hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 15%;
+  width: 60px;
+  height: 100%;
+  background: var(--bg-primary);
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--bg-dark);
+  line-height: 0.9;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: var(--accent-text-muted);
+  line-height: 1.6;
+  max-width: 560px;
+}
+
+/* TEAM GRID SECTION */
+.about-body {
+  padding: 3rem;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-left: 4px solid var(--accent);
+  padding-left: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+/* Using CSS Grid TMP CHANGE BOOTSTRAP LATER */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+/* TEAM CARDS */
+.team-card {
+  background: var(--bg-surface);
+  background-blend-mode: overlay;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  background: var(--accent);
+  color: var(--bg-dark);
+  font-weight: 900;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-card h3 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.task-list li {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 8px;
+  border: 1px solid var(--border-subtle);
+}
+
+/* MISSION SECTION */
+.mission {
+  border-left: 4px solid var(--accent);
+  background: var(--bg-surface);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.mission-quote {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem;
+}
+
+.mission-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Temp Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1.2rem;
+  background: var(--bg-dark);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+</style>
