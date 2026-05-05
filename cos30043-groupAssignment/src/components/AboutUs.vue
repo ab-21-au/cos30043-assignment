@@ -15,18 +15,26 @@
       </p>
     </section>
 
-    <section class="about-body">
-      <h2 class="section-label">The team</h2>
-      <div class="team-grid">
-        <div class="team-card" v-for="member in team" :key="member.initials">
+<section class="about-body">
+  <h2 class="section-label">The team</h2>
+  <div class="row g-4"> 
+    <div class="col-12 col-md-12 col-xxl-4" v-for="member in team" :key="member.initials">
+      <div class="team-card">
+        <div class="card-identity">
           <div class="avatar">{{ member.initials }}</div>
           <h3>{{ member.name }}</h3>
           <ul class="task-list">
             <li v-for="task in member.tasks" v-bind:key="task">{{ task }}</li>
           </ul>
         </div>
+        <p class="about-text">{{ member.about }}</p>
       </div>
+    </div>
+  </div>
+</section>
 
+
+      <section class="inspo-quote">
       <h2 class="section-label">Tmp Title</h2>
       <div class="mission">
         <p class="mission-quote">"Inspirational quote here"</p>
@@ -46,12 +54,30 @@ const { isDark, toggleTheme } = useTheme();
 
 
 const team = [
-  { initials: 'AL', name: 'Anabelle', tasks: ['UI and Mobile Responsive', 'Contact Us page', 'Film API,', 'ADVANCED TMP'] },
-  { initials: 'SR', name: 'Sofia', tasks: ['UI and Mobile Responsive', 'About Us page', 'Search & filter'] },
-  { initials: 'AM', name: 'Alessandra', tasks: ['UI Team','Terms of Service page', 'Search & Filter', 'ADVANCED TMP','Routing'] },
-  { initials: 'CS', name: 'Cole', tasks: ['Account Settings', 'Account Deletion', 'Favourite Movies','Login/Sign Up'] },
-  { initials: 'TF', name: 'Theodore', tasks: ['Advanced Feature - Movie Recommendaiton Algorithm','Catalogue'] },
-  { initials: 'M', name: 'Matt', tasks: ['User dashboard', 'Database setup'] },
+  { initials: 'AL', 
+    name: 'Anabelle', 
+    tasks: ['UI and Mobile Responsive', 'Contact Us page', 'Film API,', 'ADVANCED TMP'],
+    about: 'Majoring in Software Development. Mostly reads and likes cryptic puzzles. Enjoys watching the footy but knows her team wont ever win (shes a saints supporter)'},
+  { initials: 'SR', 
+    name: 'Sofia', 
+    tasks: ['UI and Mobile Responsive', 'About Us page', 'Search & filter'], 
+    about: 'Majoring in Software Devel. Growing up I loved film and animation. Watching Ghibli and Pixar movies made me love and want to create art.'},
+  { initials: 'AM', 
+    name: 'Alessandra', 
+    tasks: ['UI Team','Terms of Service page', 'Search & Filter', 'ADVANCED TMP','Routing'], 
+    about: 'Majors in Software Design. She enjoys spending time playing games or bouldering, especially when she is able to do these activities with loved ones or friends' },
+  { initials: 'CS', 
+    name: 'Cole', 
+    tasks: ['Account Settings', 'Account Deletion', 'Favourite Movies','Login/Sign Up'], 
+    about: 'tmp' },
+  { initials: 'TF', 
+    name: 'Theodore', 
+    tasks: ['Advanced Feature - Movie Recommendaiton Algorithm','Catalogue'], 
+    about: 'tmp' },
+  { initials: 'MB', 
+    name: 'Matt', 
+    tasks: ['User dashboard', 'Database setup'], 
+    about: 'tmp' },
 ]
 </script>
 
@@ -69,6 +95,10 @@ const team = [
   overflow: hidden;
 }
 
+.about-hero p {
+  color: var(--text-secondary);
+}
+
 /* Racing Stripe thingo */
 .about-hero::after {
   content: "";
@@ -78,13 +108,26 @@ const team = [
   width: 60px;
   height: 100%;
   background: var(--bg-primary);
+  /* Hide by default (mobile) */
+  display: none; 
 }
 
 h1 {
   font-size: 3.5rem;
+  font-family: freight-sans-pro-ultra, sans-serif;
   font-weight: 900;
-  color: var(--bg-dark);
+  font-style: normal;
+  letter-spacing: 0.03em;
+  color: var(--text-primary) !important;
   line-height: 0.9;
+  -webkit-text-stroke: 1px var(--accent-deep);
+  text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+}
+
+p {
+  font-family: libre-franklin, sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .hero-desc {
@@ -109,21 +152,15 @@ h1 {
   margin-bottom: 2rem;
 }
 
-/* Using CSS Grid TMP CHANGE BOOTSTRAP LATER */
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 4rem;
-}
-
 /* TEAM CARDS */
 .team-card {
   background: var(--bg-surface);
-  background-blend-mode: overlay;
   padding: 2rem 1.5rem;
   text-align: center;
   transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column; 
+  /* align-items: center; */
 }
 
 .avatar {
@@ -149,6 +186,8 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 75%;
+  margin: 0 auto 1rem; 
 }
 
 .task-list li {
@@ -157,6 +196,10 @@ h1 {
   background: rgba(255, 255, 255, 0.05);
   padding: 4px 8px;
   border: 1px solid var(--border-subtle);
+}
+
+p.about-text {
+  color: var(--text-secondary);
 }
 
 /* MISSION SECTION */
@@ -196,4 +239,57 @@ h1 {
   text-transform: uppercase;
   font-size: 0.7rem;
 }
+
+
+
+
+@media (min-width: 768px) and (max-width: 1459px) {
+  .team-card {
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+  .card-identity {
+    flex: 0 0 45%;
+  }
+
+  .about-text {
+    flex: 1;
+    margin: 0;
+    padding-top: 10px;
+  }
+
+  .task-list {
+    width: 100%;
+    margin: 0;
+  }
+
+  .avatar {
+    margin: 0 0 1rem 0;
+  }
+}
+
+@media (min-width: 1460px) {
+  .team-card {
+    flex-direction: column;
+    text-align: center;
+    height: 100%; /* Keeps cards same height in a row */
+  }
+  .avatar {
+    margin: 0 auto 1rem;
+  }
+  .task-list {
+    width: 75%;
+    margin: 0 auto 1rem;
+  }
+}
+
+/* hero stripe thingy display in bigger screens */
+@media (min-width: 768px) {
+  .about-hero::after {
+    display: block;
+  }
+}
+
 </style>
