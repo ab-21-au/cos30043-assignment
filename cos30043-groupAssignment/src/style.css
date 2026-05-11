@@ -184,6 +184,7 @@ code {
   --text-muted: #6B6D5B;
   --accent-text-muted: #D6D5C9;
   --border-subtle: rgba(10, 16, 13, 0.15);
+  --img-inverse: invert(0);
 }
 
 :root.dark {
@@ -202,6 +203,7 @@ code {
   --text-muted: #7A7B6A;
   --accent-text-muted: #0A100D; 
   --border-subtle: rgba(214, 213, 201, 0.1);
+  --img-inverse: invert(1);
 }
 
 .contactUs-page{
@@ -326,14 +328,14 @@ code {
   display: none;
 }
 
-/* Mobile Response with Button */
+/* Mobile Response with Toggle Button */
 @media (min-width: 320px){
   .theme-toggle{
     padding: 0.6rem;
     width: 45px;
     height: 45px;
     border-radius: 50px;
-    background-color: white;
+    background-color: var(--bg-form);
   }
 
   .toggle-text{

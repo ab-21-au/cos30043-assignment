@@ -1,5 +1,5 @@
 <script setup>
-import HelloWorld from './components/ContactUs.vue'
+import HelloWorld from './components/ThankYou.vue'
 
 import { useTheme } from './js/Theme.js';
 
