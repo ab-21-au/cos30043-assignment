@@ -171,9 +171,14 @@ code {
 :root {
   --bg-primary: #D6D5C9;
   --bg-surface: #B9BAA3;
+  --bg-input: #ffffff;
+  --bg-form: #eae8da;
+  --bg-form-text: black;
   --bg-dark: #0A100D;
+  --bg-button: var(--bg-primary);
   --accent: #A22C29;           
-  --accent-deep: #902923;      
+  --accent-deep: #902923;
+  --accent-deeper: #511613;     
   --text-primary: #0A100D;     
   --text-secondary: #4A4D40;
   --text-muted: #6B6D5B;
@@ -184,14 +189,24 @@ code {
 :root.dark {
   --bg-primary: #0A100D;       
   --bg-surface: #141B18;
+  --bg-input: #ffffff;
+  --bg-form: #1b201e;
+  --bg-form-text: black;
   --bg-dark: #050807;
+  --bg-button: var(--bg-primary);
   --accent: #A22C29;           
-  --accent-deep: #902923;      
+  --accent-deep: #902923;    
+  --accent-deeper: #511613;      
   --text-primary: #D6D5C9;     
   --text-secondary: #B9BAA3;   
   --text-muted: #7A7B6A;
   --accent-text-muted: #0A100D; 
   --border-subtle: rgba(214, 213, 201, 0.1);
+}
+
+.contactUs-page{
+  background-color: var(--bg-primary);
+  padding-bottom: 40px;
 }
 
 #center {
@@ -291,6 +306,45 @@ code {
   }
 }
 
+/* Temp Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1.2rem;
+  background: var(--bg-button);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.toggle-icon{
+  display: none;
+}
+
+/* Mobile Response with Button */
+@media (min-width: 320px){
+  .theme-toggle{
+    padding: 0.6rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 50px;
+    background-color: white;
+  }
+
+  .toggle-text{
+    display: none;
+  }
+
+  .toggle-icon{
+    display: block;
+  }
+}
+
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
@@ -330,10 +384,10 @@ code {
     padding: 20px;
     width: 90%;
     max-width: 250px;
-    margin: 20px auto;
-    background-color: white;
+    margin: 0 auto;
+    background-color: var(--bg-form);
     box-shadow: var(--shadow);
-    color: black;
+    color: var(--text-primary);
     input, textarea {
       padding: 10px;
       width: 100%;
@@ -343,8 +397,8 @@ code {
       border-radius: 25px;
       text-align: left;
       font-family: var(--sans);
-      color: black;
-      background-color: rgb(236, 236, 236);
+      color:var(--bg-form-text);
+      background-color: var(--bg-input);
     }
 
     textarea {
@@ -354,7 +408,7 @@ code {
     }
     button{
       background-color: var(--accent);
-      color: white;
+      color: var(--text-primary);
       border: none;
       padding: 10px 50px;
       border-radius: 25px;
@@ -365,16 +419,19 @@ code {
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: var(--accent-border);
+        background-color: var(--accent-deeper);
       }
     }
   }
   #intro{
     text-align: center;
-    margin-bottom: 20px;
-    margin-top: 20px;
+    padding-top: 40px;
+    padding-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
+        h1, p {
+      color: var(--text-primary);
+    }
   }
 }
 
@@ -383,20 +440,19 @@ code {
   .contactus-container {
     border: 1px solid var(--border);
     border-radius: 25px;
-    padding: 20px;
+    padding: 20px auto;
     max-width: 500px;
-    margin: 20px auto;
-    background-color: white;
+    background-color: var(--bg-form);
     box-shadow: var(--shadow);
-    color: black;
+    color: var(--text-primary);
     input, textarea {
       padding: 10px;
       border: 0px solid var(--border);
       box-sizing: border-box;
       border-radius: 25px;
       text-align: left;
-      color: black;
-      background-color: rgb(236, 236, 236);
+      color: var(--bg-form-text);
+      background-color: var(--bg-input);
     }
 
     #nameRow{
@@ -415,7 +471,7 @@ code {
     }
     button{
       background-color: var(--accent);
-      color: white;
+      color: var(--accent-text-muted);
       border: none;
       padding: 10px 50px;
       border-radius: 25px;
@@ -426,13 +482,13 @@ code {
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: var(--accent-border);
+        background-color: var(--accent-deep);
       }
     }
     #intro{
       text-align: center;
-      margin-bottom: 20px;
-      margin-top: 20px;
+      padding-top: 20px;
+      padding-bottom: 20px;
     }
   }
 
@@ -464,7 +520,7 @@ code {
 } */
 
 /* Alessandra colour palette */
-:root {
+/*:root {
   --bg-primary: #D6D5C9;
   --bg-surface: #B9BAA3;
   --bg-dark: #0A100D;
@@ -488,5 +544,5 @@ code {
   --text-muted: #7A7B6A;
   --accent-text-muted: #0A100D; 
   --border-subtle: rgba(214, 213, 201, 0.1);
-}
+}*/
 }

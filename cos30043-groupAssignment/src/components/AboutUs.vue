@@ -1,12 +1,5 @@
 <template>
   <main class="about-page">
-
-    <!-- Temporary Toggle Button -->
-    <button @click="toggleTheme" class="theme-toggle">
-        {{ isDark ? 'Light' : 'Dark' }} Mode
-    </button>
-
-
     <section class="about-hero">
       <p class="eyebrow">Who we are</p>
       <h1>Made by film people,<br>for film people.</h1>
@@ -48,11 +41,6 @@
 </template>
 
 <script setup>
-import { useTheme } from '../js/Theme.js';
-
-const { isDark, toggleTheme } = useTheme();
-
-
 const team = [
   { initials: 'AL', 
     name: 'Anabelle', 
@@ -223,24 +211,6 @@ p.about-text {
   line-height: 1.7;
   margin: 0;
 }
-
-/* Temp Toggle Button */
-.theme-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 100;
-  padding: 0.6rem 1.2rem;
-  background: var(--bg-dark);
-  color: var(--accent);
-  border: 2px solid var(--accent);
-  cursor: pointer;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-}
-
-
 
 
 @media (min-width: 768px) and (max-width: 1459px) {

@@ -87,6 +87,7 @@ export default {
 }
 </script>
 <template>
+<main class="contactUs-page">
     <div id="intro">
         <h1>Contact Us!</h1>
         <p>For any questions or concerns you may have. <br> Fill out the form below and we will keep in touch!</p>
@@ -108,4 +109,5 @@ export default {
 
         <button type="submit">Submit</button>
     </form>
+</main>
 </template>
