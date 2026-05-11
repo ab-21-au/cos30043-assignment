@@ -1,3 +1,66 @@
+<style>
+  .review-page {
+    padding: 20px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+  .hero-desc {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+  }
+  .hero-rating {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+  .hero-desc-long {
+    margin-top: 20px;
+  }
+  .text-desc-long {
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+  .fav-button {
+    background-color: var(--accent);
+    color: var(--text-primary);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .fav-button:hover {
+    background-color: var(--accent-deeper);
+  }
+  .star-rating {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  .post-btn {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .post-btn:hover {
+    background-color: var(--accent-deeper);
+  }
+  .section-label {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  .meta-text-review {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+</style>
 <template>
   <main class="review-page">
 
@@ -162,3 +225,10 @@ const reviews = ref([
 
 
 </script>
+
+<style>
+.review-page {
+  padding: 20px;
+}
+
+</style>
