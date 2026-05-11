@@ -156,7 +156,7 @@ code {
   }
 }
 
-#app {
+/* #app {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
@@ -165,7 +165,7 @@ code {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-}
+} */
 
 #center {
   display: flex;
@@ -408,4 +408,57 @@ code {
       margin-top: 20px;
     }
   }
+
+/* Sofi colour palette */
+/* :root {
+  --bg-primary: #F0E8D8;       
+  --bg-surface: #E0D4BE;
+  --bg-dark: #1a1814;
+  --accent: #F2C744;
+  --accent-deep: #C8922A;
+  --text-primary: #1a1814;
+  --text-secondary: #6B5B3E;
+  --text-muted: #8C7B5E;
+  --accent-text-muted: #6B5B3E;
+  --border-subtle: rgba(0,0,0,0.1);
+}
+
+:root.dark {
+  --bg-primary: #0d0d0d;
+  --bg-surface: #1a1814;
+  --bg-dark: #0d0d0d;
+  --accent: #F2C744;
+  --accent-deep: #C8922A;
+  --text-primary: #F0E8D8;
+  --text-secondary: #8C7B5E;
+  --text-muted: #6B5B3E;
+  --accent-text-muted: #1a1814;
+  --border-subtle: rgba(255,255,255,0.1);
+} */
+
+/* Alessandra colour palette */
+:root {
+  --bg-primary: #D6D5C9;
+  --bg-surface: #B9BAA3;
+  --bg-dark: #0A100D;
+  --accent: #A22C29;           
+  --accent-deep: #902923;      
+  --text-primary: #0A100D;     
+  --text-secondary: #4A4D40;
+  --text-muted: #6B6D5B;
+  --accent-text-muted: #D6D5C9;
+  --border-subtle: rgba(10, 16, 13, 0.15);
+}
+
+:root.dark {
+  --bg-primary: #0A100D;       
+  --bg-surface: #141B18;
+  --bg-dark: #050807;
+  --accent: #A22C29;           
+  --accent-deep: #902923;      
+  --text-primary: #D6D5C9;     
+  --text-secondary: #B9BAA3;   
+  --text-muted: #7A7B6A;
+  --accent-text-muted: #0A100D; 
+  --border-subtle: rgba(214, 213, 201, 0.1);
 }

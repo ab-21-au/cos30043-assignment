@@ -1,5 +1,5 @@
 <script setup>
-import HelloWorld from './components/ContactUs.vue' // temporary, will be removed when routing is set up
+import HelloWorld from './components/AboutUs.vue'
 </script>
 
 <template>
