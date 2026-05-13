@@ -1,0 +1,41 @@
+---
+config:
+  layout: elk
+---
+classDiagram
+direction TB
+    class MRS_Account {
+	    +INT account_id PK
+	    +VARCHAR username
+	    +VARCHAR email
+	    +VARCHAR password_hash
+	    +TIMESTAMP created_at
+    }
+
+    class MRS_Review {
+	    +INT review_id PK
+	    +INT account_id FK
+	    +INT tmdb_movie_id
+	    +INT rating
+	    +VARCHAR review_title
+	    +TEXT review_text
+	    +BOOLEAN contains_spoilers
+	    +TIMESTAMP created_at
+	    +TIMESTAMP updated_at
+    }
+
+    class MRS_UserMovieList {
+	    +INT user_movie_id PK
+	    +INT account_id FK
+	    +INT tmdb_movie_id
+	    +ENUM status
+	    +BOOLEAN is_favourite
+	    +TIMESTAMP created_at
+	    +TIMESTAMP updated_at
+    }
+
+	note for MRS_UserMovieList "MRS_UserMovieList.status can be:<br>- want_to_watch<br>- watching<br>- watched"
+	note "Movie details are loaded from TMDB using tmdb_movie_id.<br>No movie details are stored locally.<br><br>MRS_Review has UNIQUE(account_id, tmdb_movie_id).<br>This means one user can only review each movie once.<br><br>MRS_UserMovieList has UNIQUE(account_id, tmdb_movie_id).<br>This means one user can only have one list status for each movie.<br><br>ON DELETE CASCADE is used for Account relationships.<br>If an Account is deleted, related reviews and list entries are also deleted."
+
+    MRS_Account "1" --> "0..*" MRS_Review : writes
+    MRS_Account "1" --> "0..*" MRS_UserMovieList : has
