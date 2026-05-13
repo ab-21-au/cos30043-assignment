@@ -28,6 +28,7 @@ function loadDatabaseConfigPath() {
     sendDatabaseError();
 }
 
+// Database connection helper function
 function connectDatabase() {
     require loadDatabaseConfigPath();
 
