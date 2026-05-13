@@ -8,20 +8,10 @@ CREATE TABLE IF NOT EXISTS MRS_Account (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS MRS_Movie (
-    movie_id INT AUTO_INCREMENT PRIMARY KEY,
-    tmdb_id INT NOT NULL UNIQUE,
-    title VARCHAR(255) NOT NULL,
-    release_date DATE,
-    poster_path VARCHAR(255),
-    overview TEXT,
-    cached_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE IF NOT EXISTS MRS_Review (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     account_id INT NOT NULL,
-    movie_id INT NOT NULL,
+    tmdb_movie_id INT NOT NULL,
     rating INT NOT NULL,
     review_title VARCHAR(255),
     review_text TEXT,
@@ -34,19 +24,14 @@ CREATE TABLE IF NOT EXISTS MRS_Review (
         REFERENCES MRS_Account(account_id)
         ON DELETE CASCADE,
 
-    CONSTRAINT fk_review_movie
-        FOREIGN KEY (movie_id)
-        REFERENCES MRS_Movie(movie_id)
-        ON DELETE CASCADE,
-
     CONSTRAINT unique_account_movie_review
-        UNIQUE (account_id, movie_id)
+        UNIQUE (account_id, tmdb_movie_id)
 );
 
 CREATE TABLE IF NOT EXISTS MRS_UserMovieList (
     user_movie_id INT AUTO_INCREMENT PRIMARY KEY,
     account_id INT NOT NULL,
-    movie_id INT NOT NULL,
+    tmdb_movie_id INT NOT NULL,
     status ENUM('want_to_watch', 'watching', 'watched') NOT NULL DEFAULT 'want_to_watch',
     is_favourite BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -57,11 +42,6 @@ CREATE TABLE IF NOT EXISTS MRS_UserMovieList (
         REFERENCES MRS_Account(account_id)
         ON DELETE CASCADE,
 
-    CONSTRAINT fk_user_movie_movie
-        FOREIGN KEY (movie_id)
-        REFERENCES MRS_Movie(movie_id)
-        ON DELETE CASCADE,
-
     CONSTRAINT unique_account_movie_list
-        UNIQUE (account_id, movie_id)
+        UNIQUE (account_id, tmdb_movie_id)
 );

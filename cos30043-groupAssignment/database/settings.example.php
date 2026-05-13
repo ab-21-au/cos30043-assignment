@@ -13,6 +13,5 @@ $username = 'your_swinburne_id';
 $password = 'your_mariadb_password';
 
 $accountTable = 'MRS_Account';
-$movieTable = 'MRS_Movie';
 $reviewTable = 'MRS_Review';
 $userMovieListTable = 'MRS_UserMovieList';
