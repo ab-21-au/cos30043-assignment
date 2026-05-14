@@ -309,27 +309,33 @@ code {
 }
 
 /* Temp Toggle Button */
-.theme-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 100;
-  padding: 0.6rem 1.2rem;
-  background: var(--bg-button);
-  color: var(--accent);
-  border: 2px solid var(--accent);
-  cursor: pointer;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-}
+@media (max-width: 2048px) {
+  .theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    padding: 0.6rem 1.2rem;
+    background: var(--bg-button);
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
 
-.toggle-icon{
-  display: none;
+  .toggle-text{
+    display: block;
+  }
+
+  .toggle-icon{
+    display: none;
+  }
 }
 
 /* Mobile Response with Toggle Button */
-@media (min-width: 320px){
+@media (max-width: 360px){
   .theme-toggle{
     padding: 0.6rem;
     width: 45px;
