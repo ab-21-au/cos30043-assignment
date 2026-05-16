@@ -175,10 +175,13 @@ code {
   --bg-form: #eae8da;
   --bg-form-text: black;
   --bg-dark: #0A100D;
-  --bg-button: var(--bg-primary);
+  --bg-button: #0A100D;;
   --accent: #A22C29;           
   --accent-deep: #902923;
-  --accent-deeper: #511613;     
+  --accent-deeper: #511613;    
+  /* adding tmp for contrast */
+  --on-accent: #ffffff;
+  --on-accent-muted: #f0f0f0;
   --text-primary: #0A100D;     
   --text-secondary: #4A4D40;
   --text-muted: #6B6D5B;
@@ -194,10 +197,12 @@ code {
   --bg-form: #1b201e;
   --bg-form-text: black;
   --bg-dark: #050807;
-  --bg-button: var(--bg-primary);
+  --bg-button: #D6D5C9;;
   --accent: #A22C29;           
   --accent-deep: #902923;    
-  --accent-deeper: #511613;      
+  --accent-deeper: #511613;    
+  --on-accent: #ffffff;
+  --on-accent-muted: #dcdcdc;  
   --text-primary: #D6D5C9;     
   --text-secondary: #B9BAA3;   
   --text-muted: #7A7B6A;

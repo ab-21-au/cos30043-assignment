@@ -1,42 +1,104 @@
 <style>
   .review-page {
-    padding: 20px;
     background-color: var(--bg-primary);
     color: var(--text-primary);
+    padding-bottom: 3rem;
   }
 
   .hero-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
+  font-family: freight-sans-pro-ultra, sans-serif;
+  font-size: 3.5rem;
+  color: var(--text-primary);
+  line-height: 0.9;
+  text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
   }
+
+  .review-hero {
+  background: var(--accent);
+  padding: 5rem 2.5rem;
+  border-bottom: 8px solid var(--accent-deep);
+  color: var(--on-accent);
+}
+
+/* style font section label */
+.section-label {
+  color: var(--accent);
+  border-left: 4px solid var(--accent);
+  padding-left: 0.75rem;
+}
+
+.user-review-form {
+  background: var(--bg-surface);
+  padding: 15%;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.review-card, .card {
+  background: var(--bg-surface);
+  padding: 2rem;
+  margin: 0 3rem;
+}
+
+.form-select, .form-control {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.review-card, .card {
+  background: var(--bg-surface);
+  padding: 2rem;
+  margin: 0 3rem;
+}
+
+.rating-box {
+  background: var(--bg-primary);
+  padding: 1rem;
+  padding-bottom: 5rem;
+}
+
   .hero-desc {
     font-size: 1.2rem;
-    color: var(--text-secondary);
+    color: var(--on-accent-muted);
   }
   .hero-rating {
     font-size: 1.2rem;
-    color: var(--text-muted);
+    color: var(--on-accent-muted);
   }
   .hero-desc-long {
     margin-top: 20px;
   }
   .text-desc-long {
     font-size: 1rem;
-    color: var(--text-primary);
+    color: var(--on-accent);
   }
+
+  .card-title {
+    color: var(--accent)
+  }
+
   .fav-button {
-    background-color: var(--accent);
-    color: var(--text-primary);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .fav-button:hover {
-    background-color: var(--accent-deeper);
-  }
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.fav-button:hover {
+  transform: scale(1.1);
+  background-color: transparent;
+}
+
+.fav-button img {
+  filter: var(--img-inverse); 
+}
+  
   .star-rating {
     font-size: 1.5rem;
     margin-bottom: 10px;
@@ -60,18 +122,45 @@
     font-size: 0.9rem;
     color: var(--text-muted);
   }
+
+
+
+  .not-logged-in {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+}
+
+.login-prompt {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.login-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+
 </style>
+
 <template>
   <main class="review-page">
 
     <!-- Film Info || hero  -->
     <section class="review-hero">
-      <div>
+      <div class="d-flex align-items-center gap-3">
         <h1 class="hero-title"> {{ movie.title }} </h1>
-        <!-- tmp -->
-         <div>
-           <button class="fav-button">[tmp] Add to favs</button>
-         </div>
+        <button class="fav-button" @click = "isFavourited = !isFavourited">
+          <img :src="isFavourited ? heartFull : heartEmpty" alt="Favourite">
+        </button>
         <br>
       </div>
       <div>
@@ -100,22 +189,29 @@
 
 
     <!-- Review form -->
-    <section class="user-review-form">
-
-        <div>
+    <section class="user-review-form" v-if="currentUser">
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+          <div class="rating-box">
             <h2 class="star-rating"> Rate Plot:</h2>
             <!-- tmp add stars here -->
+          </div>
         </div>
 
-        <div>
-            <h2 class="star-rating"> Rate Acting:</h2>
-            <!-- tmp add stars here -->
+        <div class="col-12 col-md-4">
+            <div class="rating-box">
+              <h2 class="star-rating"> Rate Acting:</h2>
+              <!-- tmp add stars here -->
+            </div>
         </div>
 
-        <div>
+        <div class="col-12 col-md-4">
+          <div class="rating-box">
             <h2 class="star-rating"> Rate Pacing:</h2>
             <!-- tmp add stars here -->
+          </div>
         </div>
+      </div>
 
       <form>
         <div class="mb-3">
@@ -124,7 +220,7 @@
         </div>
 
         <div class="row g-3 mb-4">
-          <div>
+          <div class="col-12 col-md-4">
             <select v-model="newReview.rating" class="form-select">
               <option disabled value="">Choose rating</option>
               <option>Peak</option>
@@ -133,14 +229,14 @@
               <option>Trash</option>
             </select>
           </div>
-          <div>
+          <div class="col-12 col-md-4">
             <select v-model="newReview.rewatch" class="form-select">
               <option disabled value="">Rewatch?</option>
               <option>First time watch</option>
               <option>Rewatch</option>
             </select>
           </div>
-          <div>
+          <div class="col-12 col-md-4">
             <select v-model="newReview.expectations" class="form-select">
               <option disabled value="">Met expectations?</option>
               <option>Yes</option>
@@ -154,10 +250,21 @@
       </form>
     </section>
 
+    <!-- Not logged in state -->
+    <section class="user-review-form not-logged-in" v-else>
+      <p class="login-prompt">
+        You're not signed in! Please
+        <RouterLink to="/login" class="login-link">login</RouterLink>
+        to write a review.
+      </p>
+    </section>
+
+
+
 
 
       <section class="user-reviews">
-      <h2 class="section-label">User Reviews</h2>
+      <h3 class="section-label">User Reviews</h3>
       <div class="row g-4">
         <div v-for="(review, index) in reviews" :key="index" class="col-md-6">
           <div class="card">
@@ -182,8 +289,11 @@
 
 <script setup>
 import { ref } from 'vue';
-const isFavorited = ref(false);
+import heartEmpty from '../assets/heart.png';
+import heartFull from '../assets/heart_fav_true.png';
+const isFavourited = ref(false);
 const userRating = ref(null);
+const currentUser = ref(true)
 
 
 // Tmp Film Data change later
@@ -225,10 +335,3 @@ const reviews = ref([
 
 
 </script>
-
-<style>
-.review-page {
-  padding: 20px;
-}
-
-</style>
