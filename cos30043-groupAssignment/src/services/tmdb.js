@@ -32,6 +32,7 @@ export const tmdb = {
     return shuffle([...movies]).slice(0, limit);
   },
   
+
   async getAllGenresWithRandomMovies(limit = 20) {  
     const rows = [];
     for (const genre of GENRES) {

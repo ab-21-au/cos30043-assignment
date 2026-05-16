@@ -89,7 +89,11 @@ async function doSearch() {
   loading.value = true
   try {
     const results = await tmdb.searchMovies(searchQuery.value)
-    genreRows.value = [{ genre: { name: `Search: "${searchQuery.value}"` }, movies: results.slice(0, 20) }]
+    genreRows.value = [{
+      genre: { name: `Search: "${searchQuery.value}"` },
+      movies: results.slice(0, 20),
+      useGrid: true  // Single flag for grid layout
+    }]
   } catch (err) {
     console.error(err)
   } finally {
@@ -107,7 +111,11 @@ async function doFilter() {
   try {
     const genre = GENRES.find(g => g.name == selectedGenre.value)
     const movies = await tmdb.getRandomMoviesByGenre(genre.id, 20)
-    genreRows.value = [{ genre: { name: selectedGenre.value }, movies }]
+    genreRows.value = [{
+      genre: { name: selectedGenre.value },
+      movies: movies,
+      useGrid: true  // Same flag for grid layout
+    }]
   } catch (err) {
     console.error(err)
   } finally {
@@ -126,7 +134,6 @@ onMounted(() => loadData())
 
 <template>
   <div class="catalogue">
-    <!-- Header -->
     <header class="header">
       <div class="logo">Better Than Letterboxd</div>
       <div class="header-right">
@@ -193,13 +200,24 @@ onMounted(() => loadData())
     </section>
 
     <div v-if="loading" class="loading">Loading movies...</div>
-    
+
     <div v-else class="genre-rows">
       <section v-for="(row, idx) in genreRows" :key="idx" class="genre-row">
         <div class="genre-header">
           <h2 class="genre-title">{{ row.genre.name }}</h2>
         </div>
-        <div class="movie-scroll" :id="`scroll-${idx}`">
+    
+        <div v-if="row.useGrid" class="results-grid">
+          <div v-for="movie in row.movies" :key="movie.id" class="movie-card">
+            <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
+            <div class="movie-info">
+              <h4>{{ movie.title }}</h4>
+              <span class="rating">★ {{ movie.vote_average?.toFixed(1) }}/10</span>
+            </div>
+          </div>
+        </div>
+        
+        <div v-else class="movie-scroll" :id="`scroll-${idx}`">
           <div v-for="movie in row.movies" :key="movie.id" class="movie-card">
             <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
             <div class="movie-info">
@@ -431,6 +449,27 @@ body {
   border: none;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+  padding: 10px 0;
+}
+
+@media (max-width: 768px) {
+  .results-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .results-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 12px;
+  }
 }
 
 .clear-btn {
