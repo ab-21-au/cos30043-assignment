@@ -29,13 +29,21 @@
 
 .user-review-form {
   background: var(--bg-surface);
+  width: 90%;
+  margin-left: 5%;
+  padding : 2.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* .user-review-form {
+  background: var(--bg-surface);
   padding: 15%;
   margin-left: 5%;
   margin-right: 5%;
   margin-top: 2rem;
   margin-bottom: 2rem;
-}
-
+} */
 .review-card, .card {
   background: var(--bg-surface);
   padding: 2rem;
@@ -48,10 +56,22 @@
   border: 1px solid var(--border-subtle);
 }
 
+.form-control::placeholder {
+  color: var(--text-secondary);
+}
+
 .review-card, .card {
   background: var(--bg-surface);
   padding: 2rem;
   margin: 0 3rem;
+}
+
+
+.user-reviews-warning {
+  background: var(--bg-surface);
+  width: 90%;
+  margin-left: 5%;
+  padding : 2.5rem;
 }
 
 .rating-box {
@@ -117,6 +137,7 @@
   .section-label {
     font-size: 1.8rem;
     margin-bottom: 20px;
+    margin-left: 5%;
   }
   .meta-text-review {
     font-size: 0.9rem;
@@ -158,7 +179,7 @@
     <section class="review-hero">
       <div class="d-flex align-items-center gap-3">
         <h1 class="hero-title"> {{ movie.title }} </h1>
-        <button class="fav-button" @click = "isFavourited = !isFavourited">
+        <button class="fav-button" @click="toggleFavourite">
           <img :src="isFavourited ? heartFull : heartEmpty" alt="Favourite">
         </button>
         <br>
@@ -213,7 +234,7 @@
         </div>
       </div>
 
-      <form>
+      <form @submit.prevent="submitReview">
         <div class="mb-3">
           <label for="reviewText" class="form-label"></label>
           <textarea id="reviewText" v-model="newReview.text" class="form-control" rows="4" placeholder="Share your thoughts on the film" required></textarea>
@@ -265,11 +286,20 @@
 
       <section class="user-reviews">
       <h3 class="section-label">User Reviews</h3>
-      <div class="row g-4">
-        <div v-for="(review, index) in reviews" :key="index" class="col-md-6">
+
+        
+      <!-- checker 0 reviews -->
+      <div v-if="reviews.length === 0" class="user-reviews-warning">
+          <p>No reviews yet for this movie. Be the first!</p>
+      </div>
+
+
+      <div v-else class="row g-4 mx-auto">
+        <div v-for="review in reviews" :key="review.review_id" class="col-md-6">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{{ review.username }}</h5>
+              <p class="meta-text-review">{{ review.created_at ? review.created_at.substring(0, 4) : '' }}</p>
               <hr>
               <p class="card-text text-secondary">{{ review.content }}</p>
             </div>
@@ -281,6 +311,7 @@
           </div>
         </div>
       </div>
+
     </section>
 
   </main>
@@ -288,16 +319,22 @@
 
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted} from 'vue';
 import heartEmpty from '../assets/heart.png';
 import heartFull from '../assets/heart_fav_true.png';
+
 const isFavourited = ref(false);
 const userRating = ref(null);
+
+//set true for now, change later when have account login system
 const currentUser = ref(true)
+
+
 
 
 // Tmp Film Data change later
 const movie = ref({
+  id: 27205,
   title: "Inception",
   year: "2010",
   genre: "Sci-Fi",
@@ -307,31 +344,51 @@ const movie = ref({
   tags: ["testing123","Mind-bending", "Classic", "Must Watch"]
 });
 
-// Form data
-const newReview = ref({
-  text: '',
-  rating: '',
-  rewatch: '',
-  expectations: ''
-});
+// // Form data
+// const newReview = ref({
+//   text: '',
+//   rating: '',
+//   rewatch: '',
+//   expectations: ''
+// });
 
-// Tmp Reviews
-const reviews = ref([
-  { 
-    username: "tmpUser123", 
-    content: "This is indeed a movie. Yes it is. I can confirm that this movie is a movie.",
-    rating: "Peak", 
-    rewatch: "Rewatch", 
-    expectations: "Yes" 
-  },
-  { 
-    username: "tmpUser456", 
-    content: "There were no birds in the movie.",
-    rating: "Mid at best", 
-    rewatch: "First time watch", 
-    expectations: "No" 
+// // Tmp Reviews
+// const reviews = ref([
+//   { 
+//     username: "tmpUser123", 
+//     content: "This is indeed a movie. Yes it is. I can confirm that this movie is a movie.",
+//     rating: "Peak", 
+//     rewatch: "Rewatch", 
+//     expectations: "Yes" 
+//   },
+//   { 
+//     username: "tmpUser456", 
+//     content: "There were no birds in the movie.",
+//     rating: "Mid at best", 
+//     rewatch: "First time watch", 
+//     expectations: "No" 
+//   }
+// ]);
+
+const reviews = ref([]);
+const newReview = ref({ text: '', rating: '', rewatch: '', expectations: '' });
+
+
+
+
+// fetch reviews here
+const getReviews = async () => {
+  try {
+    const response = await fetch(`../api/get_reviews.php?movie_id=${movie.value.id}`);
+    reviews.value = await response.json();
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
   }
-]);
+};
+
+onMounted(() => {
+  getReviews();
+});
 
 
 </script>
