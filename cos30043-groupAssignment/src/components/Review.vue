@@ -203,9 +203,6 @@
       <div>
         <span v-for="tag in movie.tags" v-bind:key="tag">{{ tag }} • </span>
       </div>
-
-
-      
     </section>
 
 
@@ -214,22 +211,22 @@
       <div class="row g-3 mb-4">
         <div class="col-12 col-md-4">
           <div class="rating-box">
-            <h2 class="star-rating"> Rate Plot:</h2>
-            <!-- tmp add stars here -->
+            <h2 class="star-rating"> Rate Plot: {{ newReview.plotRating }}/5</h2>
+            <StarRating v-model="newReview.plotRating" />
           </div>
         </div>
 
         <div class="col-12 col-md-4">
             <div class="rating-box">
-              <h2 class="star-rating"> Rate Acting:</h2>
-              <!-- tmp add stars here -->
+              <h2 class="star-rating"> Rate Acting: {{ newReview.actRating }}/5</h2>
+              <StarRating v-model="newReview.actRating" />
             </div>
         </div>
 
         <div class="col-12 col-md-4">
           <div class="rating-box">
-            <h2 class="star-rating"> Rate Pacing:</h2>
-            <!-- tmp add stars here -->
+            <h2 class="star-rating"> Rate Pacing: {{ newReview.paceRating }}/5</h2>
+            <StarRating v-model="newReview.paceRating" />
           </div>
         </div>
       </div>
@@ -280,14 +277,10 @@
       </p>
     </section>
 
-
-
-
-
+    <!-- User Reviews -->
       <section class="user-reviews">
       <h3 class="section-label">User Reviews</h3>
-
-        
+ 
       <!-- checker 0 reviews -->
       <div v-if="reviews.length === 0" class="user-reviews-warning">
           <p>No reviews yet for this movie. Be the first!</p>
@@ -305,8 +298,9 @@
             </div>
             <div class="card-footer bg-transparent border-top-0">
               <p class="meta-text-review">
-                {{ review.rating }} | {{ review.rewatch }} | Expectations: {{ review.expectations }}
+               Rating: {{ review.rating }} • Rewatch: {{ review.rewatch }} • Meet Expectations? {{ review.expectations }}
               </p>
+              <p class="meta-text-review"> Plot: {{ review.plot }} • Acting:  {{ review.acting }} • Pacing: {{  review.pacing }}</p>
             </div>
           </div>
         </div>
@@ -322,9 +316,10 @@
 import { ref, onMounted} from 'vue';
 import heartEmpty from '../assets/heart.png';
 import heartFull from '../assets/heart_fav_true.png';
+import StarRating from '../components/StarRating.vue'
 
 const isFavourited = ref(false);
-const userRating = ref(null);
+// const userRating = ref(null);
 
 //set true for now, change later when have account login system
 const currentUser = ref(true)
@@ -371,9 +366,14 @@ const movie = ref({
 // ]);
 
 const reviews = ref([]);
-const newReview = ref({ text: '', rating: '', rewatch: '', expectations: '' });
-
-
+const newReview = ref({ 
+  text: '', rating: '', 
+  rewatch: '', 
+  expectations: '',
+  plotRating: 0,
+  actRating: 0,
+  paceRating: 0
+});
 
 
 // fetch reviews here
@@ -390,5 +390,42 @@ onMounted(() => {
   getReviews();
 });
 
+const submitReview = async () => {
+
+  try {
+    const response = await fetch('../api/post_reviews.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        account_id: 3, // TMP UPDATE WITH ACCOUNT DETAILS LATER
+        tmdb_movie_id: movie.value.id,
+        rating_plot: newReview.value.plotRating,
+        rating_acting: newReview.value.actRating,
+        rating_pacing: newReview.value.paceRating,
+        rating: newReview.value.rating,
+        review_text: newReview.value.text,
+        rewatch_status: newReview.value.rewatch,
+        met_expectations: newReview.value.expectations
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      // reset vars
+      newReview.value = { text: '', rating: '', rewatch: '', expectations: '', plotRating: 0, actRating: 0, paceRating: 0 };
+      
+      // refresh review feed
+      await getReviews(); 
+    } else {
+      alert("Submission failed: " + result.error);
+    }
+  } catch (error) {
+    console.error("Network submission error:", error);
+    alert("An error occurred while transmitting your review.");
+  }
+};
 
 </script>

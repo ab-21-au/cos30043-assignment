@@ -15,8 +15,17 @@ if ($movie_id <= 0) {
 }
 
 $conn = connectDatabase();
+// backup old, based on 'old' database
+// $sql = "SELECT r.review_id, r.rating, r.review_title, r.review_text, r.created_at, a.username 
+//         FROM MRS_Review r
+//         JOIN MRS_Account a ON r.account_id = a.account_id
+//         WHERE r.tmdb_movie_id = ?
+//         ORDER BY r.created_at DESC";
 
-$sql = "SELECT r.review_id, r.rating, r.review_title, r.review_text, r.created_at, a.username 
+
+$sql = "SELECT r.review_id, r.rating, r.rating_plot, r.rating_acting, r.rating_pacing, 
+               r.review_title, r.review_text, r.rewatch_status, r.met_expectations, 
+               r.created_at, a.username 
         FROM MRS_Review r
         JOIN MRS_Account a ON r.account_id = a.account_id
         WHERE r.tmdb_movie_id = ?
@@ -37,7 +46,12 @@ if ($stmt) {
             'title' => $row['review_title'],
             'content' => $row['review_text'],
             'rating' => $row['rating'],
-            'created_at' => $row['created_at']
+            'created_at' => $row['created_at'],
+            'plot'          => $row['rating_plot'],
+            'acting'        => $row['rating_acting'],
+            'pacing'        => $row['rating_pacing'],
+            'rewatch'       => $row['rewatch_status'],
+            'expectations'  => $row['met_expectations']
         ];
     }
     
