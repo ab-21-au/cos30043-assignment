@@ -1,9 +1,11 @@
 <script setup>
 import HelloWorld from './components/Catalogue.vue'
+import PoliciesLayout from './components/policies/PoliciesLayout.vue';
+import TermsOfService from './components/policies/TermsOfService.vue';
 </script>
 
 <template>
-  <HelloWorld />
+  <router-view />
 </template>
 
-<!--Test to see if push works-->
+<!--CHANGE LATER, just used to see if it was working correctly-->
