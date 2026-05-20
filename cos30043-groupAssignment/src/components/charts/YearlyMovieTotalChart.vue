@@ -1,8 +1,14 @@
 <script setup>
 import {computed} from 'vue'
 
+const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-deep').trim()
+const barBackground = getComputedStyle(document.documentElement).getPropertyValue('--barbackground').trim()
+
 const props = defineProps({
-    yearlyMovieTotal: Number // define better when set up database
+    yearlyMovieTotal: {
+        type: Array,
+        default: () => []
+    }
 })
 
 import VChart from 'vue-echarts'
@@ -14,7 +20,8 @@ echarts.use([BarChart])
 const option = {
   xAxis: {},
   yAxis: {
-    data: ['December', 'November', 'October', 'September', 'August', 'July', 'June', 'May', 'April', 'March', 'February', 'January']
+    inverse: true,
+    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   },
   series: [
     {
@@ -23,26 +30,19 @@ const option = {
         10,
         22,
         28,
-        {
-          value: 43,
-
-          itemStyle: {
-            color: '#91cc75',
-            shadowColor: '#91cc75',
-            borderType: 'dashed',
-            opacity: 0.5
-          }
-        },
+        43,
         49
       ],
       itemStyle: {
-        barBorderRadius: 5,
-        borderWidth: 1,
-        borderType: 'solid',
-        borderColor: '#73c0de',
-        shadowColor: '#5470c6',
-        shadowBlur: 3
-      }
+        color: accent, // insert root
+        borderRadius: 15,
+      },
+      showBackground: true,
+      barWidth: '80%',
+      backgroundStyle: {
+            color: barBackground, // insert root
+            borderRadius: 15
+        },
     }
   ]
 };
@@ -58,6 +58,8 @@ const option = {
 <style>
 .bar-chart {
     width: 100%;
-    height: 400px;
+    height: 500px;
+    display: block;
+    margin: 0 auto;
 }  
 </style>

@@ -49,21 +49,41 @@ onMounted(() => {
 
 <template>
     <div class="container">
-        <h3>Watching Insights</h3>
+        <h3>Watch Insights</h3>
         <div class="row">
             <div class="col-6">
-                <GenrePieChart/>
+                <div class="genre-pie-chart">
+                    <!--List of Genres-->
+                    <GenrePieChart/>
+                </div>
             </div>
             <div class="col-6">
-                <!--List of Average Rating on Films-->
-                <AverageReview/>
+                <div class="average-review">
+                    <!--List of Average Rating on Films-->
+                    <AverageReview/>
+                </div>
             </div>
         </div>
         <div class="row">
-            <!--List of Movies throughout Years-->
-            <YearlyFilms/>
+            <div class="totalMovies">
+                <!--List of Movies throughout Years-->
+                <YearlyFilms/>
+            </div>
         </div>
     </div>
 </template>
 <style>
+h3{
+    text-align: center;
+    margin: 50px 0;
+}
+
+.genre-pie-chart, .average-review, .totalMovies{
+    margin: 20px 0;
+    box-shadow: var(--shadow);
+    background-color: var(--bg-primary);
+    padding: 20px;
+    border-radius: 10px; 
+    color: var(--text-primary);
+}
 </style>
