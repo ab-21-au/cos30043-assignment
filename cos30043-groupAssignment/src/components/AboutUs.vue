@@ -65,7 +65,7 @@ const team = [
   { initials: 'MB', 
     name: 'Matt', 
     tasks: ['User dashboard', 'Database setup'], 
-    about: 'tmp' },
+    about: 'Majors in Software Engineering. I enjoy music, rugby, footy and building things. I always find my weekends are taken up by one of these things.' },
 ]
 </script>
 
