@@ -51,12 +51,12 @@ onMounted(() => {
     <div class="container">
         <h3>Watching Insights</h3>
         <div class="row">
-            <div class="col-4">
+            <div class="col-6">
                 <GenrePieChart/>
             </div>
-            <div class="col-8">
+            <div class="col-6">
                 <!--List of Average Rating on Films-->
-                <!--<AverageReview/>-->
+                <AverageReview/>
             </div>
         </div>
         <div class="row">
@@ -65,3 +65,5 @@ onMounted(() => {
         </div>
     </div>
 </template>
+<style>
+</style>
