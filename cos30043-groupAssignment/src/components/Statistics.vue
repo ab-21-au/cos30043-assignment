@@ -61,7 +61,7 @@ onMounted(() => {
         </div>
         <div class="row">
             <!--List of Movies throughout Years-->
-            <!--<YearlyFilms/>-->
+            <YearlyFilms/>
         </div>
     </div>
 </template>
