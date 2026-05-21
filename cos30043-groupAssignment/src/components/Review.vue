@@ -170,6 +170,33 @@
 }
 
 
+
+.pagination-btn {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
 </style>
 
 <template>
@@ -178,7 +205,7 @@
     <!-- Film Info || hero  -->
     <section class="review-hero">
       <div class="d-flex align-items-center gap-3">
-        <h1 class="hero-title"> {{ movie.title }} </h1>
+        <h1 class="hero-title"> {{ movieHardcoded.title }} </h1>
         <button class="fav-button" @click="toggleFavourite">
           <img :src="isFavourited ? heartFull : heartEmpty" alt="Favourite">
         </button>
@@ -186,7 +213,7 @@
       </div>
       <div>
         <p class="hero-desc">
-          {{ movie.year }} • {{ movie.genre }} • {{ movie.runtime }}
+          {{ movieHardcoded.year }} • {{ movieHardcoded.genre }} • {{ movieHardcoded.runtime }}
         </p>
         <p class="hero-rating">
           <!-- tmp -->
@@ -196,12 +223,12 @@
 
       <div class="hero-desc-long">
         <p class="text-desc-long">
-          {{ movie.desc }}
+          {{ movieHardcoded.desc }}
         </p>
       </div>
 
       <div>
-        <span v-for="tag in movie.tags" v-bind:key="tag">{{ tag }} • </span>
+        <span v-for="tag in movieHardcoded.tags" v-bind:key="tag">{{ tag }} • </span>
       </div>
     </section>
 
@@ -212,21 +239,45 @@
         <div class="col-12 col-md-4">
           <div class="rating-box">
             <h2 class="star-rating"> Rate Plot: {{ newReview.plotRating }}/5</h2>
-            <StarRating v-model="newReview.plotRating" />
+            <!-- <StarRating v-model="newReview.plotRating" /> -->
+             <v-rating
+              v-model="newReview.plotRating"
+              hover
+              :length="5"
+              :size="32"
+              color="var(--accent)"
+              active-color="var(--accent)"
+            />
           </div>
         </div>
 
         <div class="col-12 col-md-4">
             <div class="rating-box">
               <h2 class="star-rating"> Rate Acting: {{ newReview.actRating }}/5</h2>
-              <StarRating v-model="newReview.actRating" />
+              <!-- <StarRating v-model="newReview.actRating" /> -->
+               <v-rating
+                v-model="newReview.actRating"
+                hover
+                :length="5"
+                :size="32"
+                color="var(--accent)"
+                active-color="var(--accent)"
+              />
             </div>
         </div>
 
         <div class="col-12 col-md-4">
           <div class="rating-box">
             <h2 class="star-rating"> Rate Pacing: {{ newReview.paceRating }}/5</h2>
-            <StarRating v-model="newReview.paceRating" />
+            <!-- <StarRating v-model="newReview.paceRating" /> -->
+             <v-rating
+              v-model="newReview.paceRating"
+              hover
+              :length="5"
+              :size="32"
+              color="var(--accent)"
+              active-color="var(--accent)"
+            />
           </div>
         </div>
       </div>
@@ -272,6 +323,7 @@
     <section class="user-review-form not-logged-in" v-else>
       <p class="login-prompt">
         You're not signed in! Please
+        <!-- TMP UPDATE PROPER -->
         <RouterLink to="/login" class="login-link">login</RouterLink>
         to write a review.
       </p>
@@ -288,7 +340,7 @@
 
 
       <div v-else class="row g-4 mx-auto">
-        <div v-for="review in reviews" :key="review.review_id" class="col-md-6">
+        <div v-for="review in paginatedReviews" :key="review.review_id" class="col-md-6">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{{ review.username }}</h5>
@@ -306,6 +358,28 @@
         </div>
       </div>
 
+      <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+          <button 
+            @click="prevPage" 
+            class="pagination-btn" 
+            :disabled="currentPage === 1"
+          >
+            Prev
+          </button>
+          
+          <span class="pagination-info">
+            Page {{ currentPage }} of {{ totalPages }}
+          </span>
+          
+          <button 
+            @click="nextPage" 
+            class="pagination-btn" 
+            :disabled="currentPage === totalPages"
+          >
+            Next
+          </button>
+        </div>
+
     </section>
 
   </main>
@@ -313,10 +387,11 @@
 
 
 <script setup>
-import { ref, onMounted} from 'vue';
+import { ref, onMounted, computed} from 'vue';
 import heartEmpty from '../assets/heart.png';
 import heartFull from '../assets/heart_fav_true.png';
-import StarRating from '../components/StarRating.vue'
+// import StarRating from '../components/StarRating.vue'
+// import { tmdb } from '../services/tmdb.js';
 
 const isFavourited = ref(false);
 // const userRating = ref(null);
@@ -325,10 +400,15 @@ const isFavourited = ref(false);
 const currentUser = ref(true)
 
 
-
+const props = defineProps({
+  id: {
+    type: String,
+    required: true
+  }
+});
 
 // Tmp Film Data change later
-const movie = ref({
+const movieHardcoded = ref({
   id: 27205,
   title: "Inception",
   year: "2010",
@@ -337,6 +417,16 @@ const movie = ref({
   globalRating: "8.8",
   desc: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
   tags: ["testing123","Mind-bending", "Classic", "Must Watch"]
+});
+
+const movie = ref({
+  id: null,
+  title: "Loading...",
+  year: "",
+  genre: "",
+  runtime: "",
+  desc: "",
+  tags: []
 });
 
 // // Form data
@@ -374,6 +464,31 @@ const newReview = ref({
   actRating: 0,
   paceRating: 0
 });
+
+
+
+//pagination
+const currentPage = ref(1);
+const reviewsPerPage = 10;
+
+const totalPages = computed(() => {
+  return Math.ceil(reviews.value.length / reviewsPerPage) || 1;
+});
+
+const paginatedReviews = computed(() => {
+  const startIndex = (currentPage.value - 1) * reviewsPerPage;
+  const endIndex = startIndex + reviewsPerPage;
+  return reviews.value.slice(startIndex, endIndex);
+});
+
+// Navigation controls
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
 
 
 // fetch reviews here
