@@ -1,9 +1,38 @@
 <script setup>
-import {computed} from 'vue'
+import {ref, computed, onMounted} from 'vue'
+import { tmdb, GENRES } from '../../services/tmdb.js'
 
 const props = defineProps({
-    genres: Array // define better when set up database
+    genres: {
+        type: Array,
+        default: () => [] // default to empty array if no genres are passed
+    }
 })
+
+const chartData = ref([])
+
+const genreMap = Object.fromEntries(
+    GENRES.map(g => [g.id, g.name])
+)
+
+onMounted(async () => {
+    const genreCounts = {}
+
+    const movies = await Promise.all(props.genres.map(id => tmdb.getMovieById(id)))
+
+    movies.forEach(movie => {
+        const movieGenres = movie.genres || []
+
+        movieGenres.forEach(g => {
+            const genreName = genreMap[g.id] || g.name || 'Unknown'
+            genreCounts[genreName] = (genreCounts[genreName] || 0) + 1
+        })
+    })
+
+    chartData.value = Object.entries(genreCounts).map(([name, value]) => ({ name, value }))
+    console.log('Genre counts:', chartData.value)
+})
+
 
 // listing pie chart colours from Root
 const accent_1 = getComputedStyle(document.documentElement).getPropertyValue('--piechart-colors').split(',')[0].trim()
@@ -55,14 +84,8 @@ const option = computed(() => ({
             fontWeight: 'bold'
             }
         },
-        data: [
-            { value: 335, name: 'A' },
-            { value: 310, name: 'B' },
-            { value: 234, name: 'C' },
-            { value: 135, name: 'D' },
-            { value: 1548, name: 'E' }
-        ],
-        color: [accent_1, accent_2, accent_3, accent_4, accent_5] // change to root colours later
+        data: chartData.value,
+        color: [accent_5, accent_2, accent_3, accent_4, accent_1] // change to root colours later
         }
     ]
 }))

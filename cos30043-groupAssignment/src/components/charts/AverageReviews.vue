@@ -1,11 +1,23 @@
 <script setup>
-import {ref, onMounted} from 'vue'
+import {ref, computed, onMounted} from 'vue'
 
-const averageRating = ref(3.5) // testing
+const props = defineProps({
+    reviews: {
+        type: Array,
+        default: () => [] // default to empty array if no reviews are passed
+    }
+})
+
+const averageRating = computed(() => {
+    const reviews = props.reviews 
+
+    const sum = reviews.reduce((acc, rating) =>  { return acc + (rating ?? 0) }, 0)
+
+    return sum / reviews.length
+})
 
 const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-deep').trim()
 
-// set up logic so that it fetches from database all ratings and calculates average
 
 </script>
 <template class="average-rating">
@@ -13,15 +25,13 @@ const accent = getComputedStyle(document.documentElement).getPropertyValue('--ac
         half-increments
         readonly
         :length="5"
-        size="40"
+        size="45"
         :model-value="averageRating"
         active-color="accent"
         color="accent"
         background-color="yellow darken-3"
     />
     <h4>{{ averageRating.toFixed(1) }}</h4>
-    <!-- set up with rooting colours -->
-    <p>Your average rating of the last year!!</p>
 </template>
 <style>
 

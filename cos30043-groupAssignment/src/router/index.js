@@ -7,6 +7,9 @@ import ContactUs from '../components/ContactUs.vue'
 import ThankYou from '../components/redirects/ThankYou.vue'
 import error from '../components/redirects/Error404.vue'
 
+// remove later
+import analytics from '../components/Statistics.vue'
+
 const routes = [
     
     // Nav bar for a guest on the webpage
@@ -18,6 +21,7 @@ const routes = [
     //{ path: '/sign-up', component: AboutUs},
     { path: '/thankyou', component: ThankYou},
     { path: '/:pathMatch(.*)*', component: error }, // catch-all route for 404 errors
+    { path: '/analytics', component: analytics }, //REMOVE LATER
     
     // Nav bar for a user with an account
     {

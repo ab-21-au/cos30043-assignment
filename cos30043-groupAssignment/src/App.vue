@@ -30,6 +30,7 @@ const isOpen = ref(false)
           </button>
 
           <nav>
+            <router-link to="/analytics">Analytics  </router-link> <!--REMOVE LATER-->
             <router-link to="/films">Films</router-link>
             <router-link to="/about-us">About Us</router-link>
             <router-link to="/contact-us">Contact Us</router-link>
