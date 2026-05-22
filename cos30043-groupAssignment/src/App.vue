@@ -2,7 +2,11 @@
 import { ref, Transition } from 'vue'
 import { useTheme } from './js/Theme.js';
 
+import { useAuth } from './assets/UseAuth.js';
+
 const { isDark, hamburgerIcon, crossIcon, logo, toggleTheme } = useTheme();
+
+const auth = useAuth();
 
 const isOpen = ref(false)
 
@@ -33,8 +37,17 @@ const isOpen = ref(false)
             <router-link to="/films">Films</router-link>
             <router-link to="/about-us">About Us</router-link>
             <router-link to="/contact-us">Contact Us</router-link>
-            <router-link to="/login">Login</router-link>
-            <router-link to="/sign-up">Sign Up</router-link> 
+
+            <template v-if="!auth.isAuthenticated.value">
+              <router-link to="/login" >Login</router-link>
+              <router-link to="/sign-up" >Sign Up</router-link> 
+            </template>
+            
+            <template v-else>
+              <router-link to="/account" >Account Summary</router-link>
+              <router-link to="/user/account" >Settings</router-link>
+              <a href="#" @click.prevent="auth.logout(); isOpen = false">Sign Out</a>
+            </template>
           </nav>
         </aside>
       </transition>
