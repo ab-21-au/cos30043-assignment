@@ -187,7 +187,6 @@ code {
   --text-muted: #6B6D5B;
   --accent-text-muted: #D6D5C9;
   --border-subtle: rgba(10, 16, 13, 0.15);
-  --img-inverse: invert(0);
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   --barbackground: rgba(220, 220, 220, 0.8);
   --piechart-colors: #A22C29, #902923, #511613, #adada3, #B9BAA3;
@@ -211,7 +210,6 @@ code {
   --text-muted: #7A7B6A;
   --accent-text-muted: #0A100D; 
   --border-subtle: rgba(214, 213, 201, 0.1);
-  --img-inverse: invert(1);
   --shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
   --barbackground: rgba(220, 220, 220, 0.8);
 }
