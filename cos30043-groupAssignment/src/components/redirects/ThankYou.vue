@@ -2,7 +2,7 @@
   <main class="thank-you">
     <h1>Thank you</h1>
     <p>We will get you shortly</p>
-    <button>Check out your favourite films</button>
+    <button @click="$router.push('/films')">Check out your favourite films</button>
   </main>
 </template>
 <style>

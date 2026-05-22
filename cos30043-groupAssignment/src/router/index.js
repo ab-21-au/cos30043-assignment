@@ -4,6 +4,8 @@ import Review from '../components/Review.vue'
 import AboutUs from '../components/AboutUs.vue'
 import Catalogue from '../components/Catalogue.vue'
 import ContactUs from '../components/ContactUs.vue'
+import ThankYou from '../components/redirects/ThankYou.vue'
+import error from '../components/redirects/Error404.vue'
 
 const routes = [
     
@@ -13,7 +15,9 @@ const routes = [
     { path: '/about-us', component: AboutUs},
     { path: '/contact-us', component: ContactUs},  
     //{ path: '/login', component: AboutUs},
-    //{ path: '/sign-up', component: AboutUs},    
+    //{ path: '/sign-up', component: AboutUs},
+    { path: '/thankyou', component: ThankYou},
+    { path: '/:pathMatch(.*)*', component: error }, // catch-all route for 404 errors
     
     // Nav bar for a user with an account
     {

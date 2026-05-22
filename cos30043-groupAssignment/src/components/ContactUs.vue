@@ -40,10 +40,9 @@ export default {
                 const result = await response.json()
                 if (result.success) {
                     alert('Form submitted successfully!')
-                    //this.$router.push({
-                        //path: '/thankyou' // redirect to ThankYou.vue
-                    //})
-                    // will uncomment when routing is set up
+                    this.$router.push({
+                        path: '/thankyou' // redirect to ThankYou.vue
+                    })
                 } else {
                     alert('Failed to submit form. Please try again.')
                 }
