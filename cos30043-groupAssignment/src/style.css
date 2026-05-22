@@ -175,14 +175,15 @@ code {
   --bg-form: #eae8da;
   --bg-form-text: black;
   --bg-dark: #0A100D;
-  --bg-button: #0A100D;;
-  --accent: #A22C29;           
+  --bg-button: #0A100D;
+  ;
+  --accent: #A22C29;
   --accent-deep: #902923;
-  --accent-deeper: #511613;    
+  --accent-deeper: #511613;
   /* adding tmp for contrast */
   --on-accent: #ffffff;
   --on-accent-muted: #f0f0f0;
-  --text-primary: #0A100D;     
+  --text-primary: #0A100D;
   --text-secondary: #4A4D40;
   --text-muted: #6B6D5B;
   --accent-text-muted: #D6D5C9;
@@ -193,28 +194,29 @@ code {
 }
 
 :root.dark {
-  --bg-primary: #0A100D;       
+  --bg-primary: #0A100D;
   --bg-surface: #141B18;
   --bg-input: #ffffff;
   --bg-form: #1b201e;
   --bg-form-text: black;
   --bg-dark: #050807;
-  --bg-button: #D6D5C9;;
-  --accent: #A22C29;           
-  --accent-deep: #902923;    
-  --accent-deeper: #511613;    
+  --bg-button: #D6D5C9;
+  ;
+  --accent: #A22C29;
+  --accent-deep: #902923;
+  --accent-deeper: #511613;
   --on-accent: #ffffff;
-  --on-accent-muted: #dcdcdc;  
-  --text-primary: #D6D5C9;     
-  --text-secondary: #B9BAA3;   
+  --on-accent-muted: #dcdcdc;
+  --text-primary: #D6D5C9;
+  --text-secondary: #B9BAA3;
   --text-muted: #7A7B6A;
-  --accent-text-muted: #0A100D; 
+  --accent-text-muted: #0A100D;
   --border-subtle: rgba(214, 213, 201, 0.1);
   --shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
   --barbackground: rgba(220, 220, 220, 0.8);
 }
 
-.contactUs-page{
+.contactUs-page {
   background-color: var(--bg-primary);
   padding-bottom: 40px;
 }
@@ -238,9 +240,10 @@ code {
   border-top: 1px solid var(--border);
   text-align: left;
 
-  & > div {
+  &>div {
     flex: 1 1 0;
     padding: 32px;
+
     @media (max-width: 1024px) {
       padding: 24px 20px;
     }
@@ -293,6 +296,7 @@ code {
     &:hover {
       box-shadow: var(--shadow);
     }
+
     .button-icon {
       height: 18px;
       width: 18px;
@@ -334,18 +338,18 @@ code {
     border-radius: 5px;
   }
 
-  .toggle-text{
+  .toggle-text {
     display: block;
   }
 
-  .toggle-icon{
+  .toggle-icon {
     display: none;
   }
 }
 
 /* Mobile Response with Toggle Button */
-@media (max-width: 360px){
-  .theme-toggle{
+@media (max-width: 360px) {
+  .theme-toggle {
     top: 15px;
     left: 20px;
     padding: 0.6rem;
@@ -355,11 +359,11 @@ code {
     background-color: var(--bg-form);
   }
 
-  .toggle-text{
+  .toggle-text {
     display: none;
   }
 
-  .toggle-icon{
+  .toggle-icon {
     display: block;
   }
 }
@@ -367,6 +371,7 @@ code {
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
+
   @media (max-width: 1024px) {
     height: 48px;
   }
@@ -388,6 +393,7 @@ code {
     left: 0;
     border-left-color: var(--border);
   }
+
   &::after {
     right: 0;
     border-right-color: var(--border);
@@ -407,7 +413,9 @@ code {
     background-color: var(--bg-form);
     box-shadow: var(--shadow);
     color: var(--text-primary);
-    input, textarea {
+
+    input,
+    textarea {
       padding: 10px;
       width: 100%;
       margin-bottom: 20px;
@@ -416,7 +424,7 @@ code {
       border-radius: 25px;
       text-align: left;
       font-family: var(--sans);
-      color:var(--bg-form-text);
+      color: var(--bg-form-text);
       background-color: var(--bg-input);
     }
 
@@ -425,7 +433,8 @@ code {
       width: 100%;
       margin: 20px 0;
     }
-    button{
+
+    button {
       background-color: var(--accent);
       color: var(--text-primary);
       border: none;
@@ -442,13 +451,16 @@ code {
       }
     }
   }
-  #intro{
+
+  #intro {
     text-align: center;
     padding-top: 40px;
     padding-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
-        h1, p {
+
+    h1,
+    p {
       color: var(--text-primary);
     }
   }
@@ -464,7 +476,9 @@ code {
     background-color: var(--bg-form);
     box-shadow: var(--shadow);
     color: var(--text-primary);
-    input, textarea {
+
+    input,
+    textarea {
       padding: 10px;
       border: 0px solid var(--border);
       box-sizing: border-box;
@@ -474,21 +488,24 @@ code {
       background-color: var(--bg-input);
     }
 
-    #nameRow{
+    #nameRow {
       margin-bottom: 10px;
       border: 0 solid var(--border);
     }
 
-    #email, #ponumber{
+    #email,
+    #ponumber {
       width: 100%;
       margin-bottom: 20px;
     }
+
     textarea {
       height: 200px;
       width: 100%;
       margin: 20px 0;
     }
-    button{
+
+    button {
       background-color: var(--accent);
       color: var(--accent-text-muted);
       border: none;
@@ -504,15 +521,16 @@ code {
         background-color: var(--accent-deep);
       }
     }
-    #intro{
+
+    #intro {
       text-align: center;
       padding-top: 20px;
       padding-bottom: 20px;
     }
-  }  
+  }
 
-/* Sofi colour palette */
-/* :root {
+  /* Sofi colour palette */
+  /* :root {
   --bg-primary: #F0E8D8;       
   --bg-surface: #E0D4BE;
   --bg-dark: #1a1814;
@@ -538,8 +556,8 @@ code {
   --border-subtle: rgba(255,255,255,0.1);
 } */
 
-/* Alessandra colour palette */
-/*:root {
+  /* Alessandra colour palette */
+  /*:root {
   --bg-primary: #D6D5C9;
   --bg-surface: #B9BAA3;
   --bg-dark: #0A100D;
@@ -568,7 +586,7 @@ code {
 
 /* Navigation Pop-out */
 @media (max-width: 2048px) {
-  
+
   #menu {
     position: fixed;
     top: 40px;
@@ -591,6 +609,7 @@ code {
     width: 400px;
     background-color: var(--bg-surface);
     border-radius: 5px;
+
     a {
       text-decoration: none;
       display: block;
@@ -605,6 +624,7 @@ code {
       color: var(--bg-button);
       font-size: 18px;
     }
+
     nav a:first-child {
       margin-top: 100px;
     }
@@ -651,6 +671,7 @@ code {
     width: 200px;
     background-color: var(--bg-surface);
     border-radius: 5px;
+
     a {
       text-decoration: none;
       display: block;
@@ -665,6 +686,7 @@ code {
       color: var(--bg-button);
       font-size: 14px;
     }
+
     nav a:first-child {
       margin-top: 30px;
     }
@@ -678,15 +700,18 @@ code {
     background-color: var(--accent);
     height: fit-content;
     padding-bottom: 20px;
+
     h3 {
       margin-top: 20px;
       color: var(--bg-form);
       font-weight: bold;
     }
+
     a {
       text-decoration: none;
       color: var(--bg-surface);
     }
+
     #logo {
       width: 300px;
       margin-top: 35px;
@@ -702,18 +727,21 @@ code {
   .footer {
     background-color: var(--accent);
     height: fit-content;
+
     h3 {
       margin-top: 20px;
       color: var(--bg-form);
       font-weight: bold;
       font-size: 16px;
     }
+
     a {
       text-decoration: none;
       color: var(--bg-surface);
       font-size: 12px;
       margin-bottom: 10px;
     }
+
     #logo {
       width: 100px;
       margin-top: 60px;
