@@ -85,12 +85,12 @@ const option = computed(() => ({
             }
         },
         data: chartData.value,
-        color: [accent_5, accent_2, accent_3, accent_4, accent_1] // change to root colours later
+        color: [accent_1, accent_2, accent_3, accent_4, accent_5] // change to root colours later
         }
     ]
 }))
 </script>
-<template>
+<template class="col-6">
     <p>Most watched genres</p>
     <VChart
     class="pie-chart"
@@ -105,5 +105,12 @@ const option = computed(() => ({
     /*Add more later*/
     display: block;
     margin: 0 auto;
+}
+
+@media (max-width: 360px){
+    .pie-chart text {
+        font-size: 12px;
+        margin: 0;
+    }
 }
 </style>

@@ -5,10 +5,30 @@ const accent = getComputedStyle(document.documentElement).getPropertyValue('--ac
 const barBackground = getComputedStyle(document.documentElement).getPropertyValue('--barbackground').trim()
 
 const props = defineProps({
-    yearlyMovieTotal: {
+    movieData: {
         type: Array,
         default: () => []
     }
+})
+
+const monthCounts =  computed(() => {
+    
+  const counts = Array(12).fill(0) // sets it to be a 12 month array with 0s until it increments
+  const currentYear = new Date().getFullYear()
+
+    props.movieData.forEach(timestamp => {
+        
+      const releaseDate = new Date(timestamp)
+
+        if (releaseDate.getFullYear() === currentYear) {
+            const month = releaseDate.getMonth()
+            counts[month]++
+        }
+    })
+
+    console.log('Monthly movie counts:', counts)
+
+    return counts
 })
 
 import VChart from 'vue-echarts'
@@ -18,21 +38,19 @@ import {BarChart} from 'echarts/charts'
 echarts.use([BarChart])
 
 const option = {
-  xAxis: {},
+  xAxis: {
+    type: 'value',
+    minInterval: 1
+  },
   yAxis: {
+    type: 'category',
     inverse: true,
     data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   },
   series: [
     {
       type: 'bar',
-      data: [
-        10,
-        22,
-        28,
-        43,
-        49
-      ],
+      data: monthCounts.value,
       itemStyle: {
         color: accent, // insert root
         borderRadius: 15,
@@ -48,7 +66,7 @@ const option = {
 };
 
 </script>
-<template>
+<template class="col-6">
     <p>Number of movies watched each month throughout the year</p>
     <VChart
     class="bar-chart"

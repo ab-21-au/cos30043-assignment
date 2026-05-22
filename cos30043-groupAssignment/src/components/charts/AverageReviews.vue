@@ -20,7 +20,7 @@ const accent = getComputedStyle(document.documentElement).getPropertyValue('--ac
 
 
 </script>
-<template class="average-rating">
+<template>
     <v-rating
         half-increments
         readonly
@@ -30,13 +30,32 @@ const accent = getComputedStyle(document.documentElement).getPropertyValue('--ac
         active-color="accent"
         color="accent"
         background-color="yellow darken-3"
+        class="responsive-rating"
     />
     <h4>{{ averageRating.toFixed(1) }}</h4>
 </template>
 <style>
 
-.average-rating {
-    display: block;
-    margin: 0 auto;
+.responsive-rating {
+    transform: scale(1);
+}
+
+@media (max-width: 768px) {
+    .responsive-rating {
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 360px){
+    /* .responsive-rating {
+        transform: scale(0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    } */
+
+    .average-rating h4 {
+        font-size: 1rem;
+    }
 }
 </style>

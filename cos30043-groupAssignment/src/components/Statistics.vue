@@ -42,12 +42,14 @@ onMounted(() => {
                     ratingsPlot.value = data.map(r => Number(r.plot ?? 0))
                     ratingsActing.value = data.map(r => Number(r.acting ?? 0))
                     ratingsPacing.value = data.map(r => Number(r.pacing ?? 0))
+                    movieTotal.value = data.map(r => r.created_at)
                 })
                 
                 console.log('Genres:', genres.value)
                 console.log('Plot Ratings:', ratingsPlot.value)
                 console.log('Acting Ratings:', ratingsActing.value)
                 console.log('Pacing Ratings:', ratingsPacing.value)
+                console.log('Movie Total:', movieTotal.value)
             }
         })
         .catch(error => {
@@ -63,7 +65,7 @@ onMounted(() => {
         <div v-if="err" class="alert alert-danger">{{ err }}</div>
         <div v-else>
             <div class="row">
-                <div class="col-6">
+                <div class="col-12 col-sm-6">
                     <div v-if="genres.length > 0" class="genre-pie-chart">
                         <!--List of Genres-->
                         <GenrePieChart :genres="genres"/>
@@ -72,38 +74,37 @@ onMounted(() => {
                         <p>No genre data available.</p>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div v-if="ratingsPlot.length > 0" class="average-review">
-                        <!--List of Average Rating on Films-->
-                        <h4>Average Plot Rating</h4>
-                        <AverageReview :reviews="ratingsPlot"/>
+                <div class="col-12 col-sm-6">
+                    <div v-if="movieTotal.length > 0" class="totalMovies">
+                        <!--List of Movies throughout Years-->
+                        <YearlyFilms :movieData="movieTotal"/>
                     </div>
-                    <div v-if="ratingsActing.length > 0" class="average-review">
-                        <!--List of Average Acting Rating on Films-->
-                        <h4>Average Acting Rating</h4>
-                        <AverageReview :reviews="ratingsActing"/>
-                    </div>
-                    <div v-if="ratingsPacing.length > 0" class="average-review">
-                        <!--List of Average Pacing Rating on Films-->
-                        <h4>Average Pacing Rating</h4>
-                        <AverageReview :reviews="ratingsPacing"/>
-                    </div>
-                    <div v-else class="average-review">
-                        <p>No reviews found for this account.</p>
+                    <div v-else class="totalMovies">
+                        <p>No movie data available.</p>
+                        <button @click="$router.push('/films')">Head over to our catalogue to Review now!</button>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div v-if="movieTotal.length > 0" class="totalMovies">
-                    <!--List of Movies throughout Years-->
-                    <!--<YearlyFilms :movieData="movieTotal"/>-->
+                <div v-if="ratingsActing.length > 0" class="col-4 average-review">
+                    <!--List of Average Acting Rating on Films-->
+                    <h4>Average Acting Rating</h4>
+                    <AverageReview :reviews="ratingsActing"/>
                 </div>
-                <div v-else class="totalMovies">
-                    <p>No movie data available.</p>
-                    <button @click="$router.push('/films')">Head over to our catalogue to Review now!</button>
+                <div v-if="ratingsPacing.length > 0" class="col-4 average-review">
+                    <!--List of Average Pacing Rating on Films-->
+                    <h4>Average Pacing Rating</h4>
+                    <AverageReview :reviews="ratingsPacing"/>
+                </div>
+                <div v-if="ratingsPlot.length > 0" class="col-4 average-review">
+                    <!--List of Average Rating on Films-->
+                    <h4>Average Plot Rating</h4>
+                    <AverageReview :reviews="ratingsPlot"/>
+                </div>
+                <div v-else class="average-review">
+                    <p>No reviews found for this account.</p>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -117,10 +118,27 @@ h3{
     margin: 20px 0;
     box-shadow: var(--shadow);
     background-color: var(--bg-primary);
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px; 
     color: var(--text-primary);
     text-align: center;
+}
+
+.average-review h4 {
+    margin: 20px;
+}
+
+.average-review {
+    margin: 20px ;
+    width: 30%;
+}
+
+@media (max-width: 360px){
+    .average-review {
+        width: 90%;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
 }
 
 button{
