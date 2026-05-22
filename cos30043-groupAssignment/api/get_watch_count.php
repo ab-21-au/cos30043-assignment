@@ -18,26 +18,29 @@ if (!isset($_GET['username']) || empty(trim($_GET['username']))) {
 
 $username = trim($_GET['username']);
 
-try {
-    // Count records where status is strictly 'watched' for this user
-    $sql = "SELECT COUNT(*) AS total_watched 
-            FROM MRS_UserMovieList m
-            JOIN MRS_Account a ON m.account_id = a.account_id
-            WHERE a.username = :username AND m.status = 'watched'";
+$conn = connectDatabase();
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['username' => $username]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+// 2. Use MySQLi syntax for the prepared statement
+$sql = "SELECT COUNT(*) AS watch_count FROM MRS_UserMovieList WHERE username = ?";
+$stmt = mysqli_prepare($conn, $sql);
 
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
+    
+    // Fetch the calculated count out of the result set
+    $result = mysqli_stmt_get_result($stmt);
+    $row = mysqli_fetch_assoc($result);
+    
     echo json_encode([
         "success" => true,
-        "count" => (int)$result['total_watched']
+        "watch_count" => (int)($row['watch_count'] ?? 0)
     ]);
-
-} catch (PDOException $e) {
+    
+    mysqli_stmt_close($stmt);
+} else {
     http_response_code(500);
-    echo json_encode([
-        "success" => false,
-        "error" => "Database error: " . $e->getMessage()
-    ]);
+    echo json_encode(["success" => false, "error" => "Failed to fetch user list metrics."]);
 }
+
+mysqli_close($conn);

@@ -21,40 +21,34 @@ if (!isset($_GET['username']) || empty(trim($_GET['username']))) {
 
 $username = trim($_GET['username']);
 
-try {
+// 1. Run your team's helper function
+$conn = connectDatabase();
+
+// 2. Setup the MySQLi statement to grab this specific user's custom reviews
+$sql = "SELECT * FROM MRS_Review WHERE username = ? ORDER BY review_id DESC";
+$stmt = mysqli_prepare($conn, $sql);
+
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
     
-    $sql = "SELECT 
-                r.review_id,
-                r.tmdb_movie_id,
-                r.rating_plot,
-                r.rating_acting,
-                r.rating_pacing,
-                r.rating,
-                r.rewatch_status,
-                r.met_expectations,
-                r.review_title,
-                r.review_text,
-                r.contains_spoilers,
-                r.created_at
-            FROM MRS_Review r
-            JOIN MRS_Account a ON r.account_id = a.account_id
-            WHERE a.username = :username
-            ORDER BY r.created_at DESC";
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['username' => $username]);
-    $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    $result = mysqli_stmt_get_result($stmt);
+    $reviews = [];
+    
+    // Loop through the data rows and append them into your collection array
+    while ($row = mysqli_fetch_assoc($result)) {
+        $reviews[] = $row;
+    }
     
     echo json_encode([
         "success" => true,
         "reviews" => $reviews
     ]);
-
-} catch (PDOException $e) {
+    
+    mysqli_stmt_close($stmt);
+} else {
     http_response_code(500);
-    echo json_encode([
-        "success" => false,
-        "error" => "Database error occurred while fetching reviews: " . $e->getMessage()
-    ]);
+    echo json_encode(["success" => false, "error" => "Failed to load user reviews collection database."]);
 }
+
+mysqli_close($conn);
