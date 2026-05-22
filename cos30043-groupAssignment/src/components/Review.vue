@@ -205,7 +205,7 @@
     <!-- Film Info || hero  -->
     <section class="review-hero">
       <div class="d-flex align-items-center gap-3">
-        <h1 class="hero-title"> {{ movieHardcoded.title }} </h1>
+        <h1 class="hero-title"> {{ movie.title }} </h1>
         <button class="fav-button" @click="toggleFavourite">
           <img :src="isFavourited ? heartFull : heartEmpty" alt="Favourite">
         </button>
@@ -213,22 +213,21 @@
       </div>
       <div>
         <p class="hero-desc">
-          {{ movieHardcoded.year }} • {{ movieHardcoded.genre }} • {{ movieHardcoded.runtime }}
+          {{ movie.year }} • Runtime: {{ movie.runtime }}m
         </p>
         <p class="hero-rating">
-          <!-- tmp -->
-           Global Rating 88 || User Rating 90
+          Global Rating: {{ movie.globalRating }}
         </p>
       </div>
 
       <div class="hero-desc-long">
         <p class="text-desc-long">
-          {{ movieHardcoded.desc }}
+          {{ movie.desc }}
         </p>
       </div>
 
       <div>
-        <span v-for="tag in movieHardcoded.tags" v-bind:key="tag">{{ tag }} • </span>
+        <span v-for="tag in movie.tags" v-bind:key="tag">{{ tag }} • </span>
       </div>
     </section>
 
@@ -388,11 +387,12 @@
 
 <script setup>
 import { ref, onMounted, computed} from 'vue';
+import { useRoute } from 'vue-router';
+import { tmdb } from '../services/tmdb.js';
 import heartEmpty from '../assets/heart.png';
 import heartFull from '../assets/heart_fav_true.png';
-// import StarRating from '../components/StarRating.vue'
-// import { tmdb } from '../services/tmdb.js';
 
+const route = useRoute()
 const isFavourited = ref(false);
 // const userRating = ref(null);
 
@@ -400,12 +400,12 @@ const isFavourited = ref(false);
 const currentUser = ref(true)
 
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-});
+// const props = defineProps({
+//   id: {
+//     type: String,
+//     required: true
+//   }
+// });
 
 // Tmp Film Data change later
 const movieHardcoded = ref({
@@ -420,11 +420,12 @@ const movieHardcoded = ref({
 });
 
 const movie = ref({
-  id: null,
+  id: route.params.id,
   title: "Loading...",
   year: "",
   genre: "",
   runtime: "",
+  globalRating: "0.0",
   desc: "",
   tags: []
 });
@@ -465,7 +466,28 @@ const newReview = ref({
   paceRating: 0
 });
 
-
+const fetchMovieDetails = async () => {
+  try {
+    const movieId = route.params.id;
+    const data = await tmdb.getMovieDetails(movieId);
+    
+    if (data) {
+      movie.value = {
+        id: data.id,
+        title: data.title,
+        year: data.release_date ? data.release_date.split('-')[0] : 'N/A',
+        genre: data.genres?.map(g => g.name).join(', ') || 'N/A',
+        runtime: data.runtime || 'Unknown',
+        globalRating: data.vote_average ? data.vote_average.toFixed(1) : 'N/A',
+        desc: data.overview || 'No overview available.',
+        tags: data.genres?.map(g => g.name) || []
+      };
+    }
+  } catch (error) {
+    console.error("Error pulling TMDB details:", error);
+    movie.value.title = "Failed to load movie info";
+  }
+};
 
 //pagination
 const currentPage = ref(1);
@@ -501,7 +523,8 @@ const getReviews = async () => {
   }
 };
 
-onMounted(() => {
+onMounted(async() => {
+  await fetchMovieDetails();
   getReviews();
 });
 

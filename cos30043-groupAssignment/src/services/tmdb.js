@@ -23,6 +23,13 @@ async function fetchAPI(endpoint) {
   return data.results || [];
 }
 
+async function fetchSingleAPI(endpoint) {
+  const separator = endpoint.includes('?') ? '&' : '?';
+  const res = await fetch(`${BASE_URL}${endpoint}${separator}api_key=${API_KEY}`);
+  const data = await res.json();
+  return data;
+}
+
 export const tmdb = {
   getRecentMovies: (page = 1) => fetchAPI(`/movie/now_playing?page=${page}`),
   
@@ -41,5 +48,7 @@ export const tmdb = {
     return rows;
   },
   
-  searchMovies: (query) => fetchAPI(`/search/movie?query=${encodeURIComponent(query)}`)
+  searchMovies: (query) => fetchAPI(`/search/movie?query=${encodeURIComponent(query)}`),
+
+  getMovieDetails: (movieId) => fetchSingleAPI(`/movie/${movieId}?append_to_response=images`)
 };

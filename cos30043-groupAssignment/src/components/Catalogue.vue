@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { tmdb, GENRES } from '../services/tmdb.js'
+import { useRouter } from 'vue-router'
 
 // State
 const recentMovies = ref([])
@@ -9,6 +10,9 @@ const searchQuery = ref('')
 const selectedGenre = ref('')
 const loading = ref(true)
 const currentIndex = ref(0)
+
+//router
+const router = useRouter()
 
 // Load all data
 async function loadData() {
@@ -130,6 +134,11 @@ function clearAll() {
 }
 
 onMounted(() => loadData())
+
+// Nav to review page w/ movie id
+function goToReview(movieId) {
+  router.push({ path: `/films/${movieId}` })
+}
 </script>
 
 <template>
@@ -158,6 +167,7 @@ onMounted(() => loadData())
               class="carousel-movie"
               :style="getStyle(i)"
               :class="{ center: i == currentIndex }"
+              @click="goToReview(movie.id)"
             >
               <img 
                 :src="movie.poster_path ? `https://image.tmdb.org/t/p/w342${movie.poster_path}` : 'https://via.placeholder.com/342x513?text=No+Poster'" 
@@ -174,7 +184,7 @@ onMounted(() => loadData())
       </div>
       
       <div class="center-movie-info" v-if="recentMovies[currentIndex]">
-        <h2>{{ recentMovies[currentIndex].title }}</h2>
+        <h2 @click="goToReview(recentMovies[currentIndex].id)">{{ recentMovies[currentIndex].title }}</h2>
         <p class="year">{{ recentMovies[currentIndex].release_date?.split('-')[0] }}</p>
         <p class="overview">{{ recentMovies[currentIndex].overview?.substring(0, 150) }}...</p>
         <div class="rating">★ {{ recentMovies[currentIndex].vote_average?.toFixed(2) }}/10</div>
@@ -208,7 +218,7 @@ onMounted(() => loadData())
         </div>
     
         <div v-if="row.useGrid" class="results-grid">
-          <div v-for="movie in row.movies" :key="movie.id" class="movie-card">
+          <div v-for="movie in row.movies" :key="movie.id" class="movie-card" @click="goToReview(movie.id)">
             <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
             <div class="movie-info">
               <h4>{{ movie.title }}</h4>
@@ -218,7 +228,7 @@ onMounted(() => loadData())
         </div>
         
         <div v-else class="movie-scroll" :id="`scroll-${idx}`">
-          <div v-for="movie in row.movies" :key="movie.id" class="movie-card">
+          <div v-for="movie in row.movies" :key="movie.id" class="movie-card" @click="goToReview(movie.id)">
             <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
             <div class="movie-info">
               <h4>{{ movie.title }}</h4>
