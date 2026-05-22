@@ -24,3 +24,8 @@ database/settings.php
 *.njsproj
 *.sln
 *.sw?
+
+# go away ds :(
+**/.DS_Store
+.DS_Store
+*/.DS_Store
