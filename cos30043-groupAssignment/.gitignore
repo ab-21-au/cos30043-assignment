@@ -8,10 +8,13 @@ pnpm-debug.log*
 lerna-debug.log*
 
 .env
-node_modules
+node_modules/
 dist
 dist-ssr
 *.local
+database/settings.php
+vite.config.js 
+# Ignore the Vite config file, unless need to add plugins
 
 # Editor directories and files
 .vscode/*
@@ -23,3 +26,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# go away ds :(
+**/.DS_Store
+.DS_Store
+*/.DS_Store
