@@ -17,7 +17,6 @@ const routes = [
     //{ path: '/login', component: AboutUs},
     //{ path: '/sign-up', component: AboutUs},
     { path: '/thankyou', component: ThankYou},
-    { path: '/:pathMatch(.*)*', component: error }, // catch-all route for 404 errors
     
     // Nav bar for a user with an account
     {
@@ -50,10 +49,11 @@ const routes = [
 
     // Review from clicking a movie
     { path: '/films/:id', component: Review }, //could replace with title if its more appropriate lol
+    { path: '/:pathMatch(.*)*', component: error }, // catch-all route for 404 errors
 ]
 
 const router = createRouter({
-    history: createWebHistory('/cos30043/s104551544/Assign2/'),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 })
 
