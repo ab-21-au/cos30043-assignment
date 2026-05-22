@@ -47,13 +47,6 @@ const accent = getComputedStyle(document.documentElement).getPropertyValue('--ac
 }
 
 @media (max-width: 360px){
-    /* .responsive-rating {
-        transform: scale(0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    } */
-
     .average-rating h4 {
         font-size: 1rem;
     }

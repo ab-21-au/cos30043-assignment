@@ -26,6 +26,13 @@
     }
 }
 
+img{
+    width: 200px;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 10px;
+}
+
 .errorPage {
     background-color: var(--bg-primary);
     display: flex;
@@ -34,7 +41,6 @@
     justify-content: center;
     height: 100vh;
     text-align: center;
-    padding: 10%;
     color: var(--text-primary);
 
     button{
