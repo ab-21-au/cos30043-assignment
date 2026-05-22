@@ -6,4 +6,13 @@ import vuetify from 'vite-plugin-vuetify'
 export default defineConfig({
   base: '*/', // Please change to your user when hosting on mercury
   plugins: [vue(), vuetify()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost/cos30043-assignment/cos30043-groupAssignment',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    }
+  }
 })
