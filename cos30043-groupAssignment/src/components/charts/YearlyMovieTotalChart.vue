@@ -1,6 +1,7 @@
 <script setup>
 import {computed} from 'vue'
 
+// root colours
 const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-deep').trim()
 const barBackground = getComputedStyle(document.documentElement).getPropertyValue('--barbackground').trim()
 
@@ -52,13 +53,13 @@ const option = {
       type: 'bar',
       data: monthCounts.value,
       itemStyle: {
-        color: accent, // insert root
+        color: accent, 
         borderRadius: 15,
       },
       showBackground: true,
       barWidth: '80%',
       backgroundStyle: {
-            color: barBackground, // insert root
+            color: barBackground, 
             borderRadius: 15
         },
     }
