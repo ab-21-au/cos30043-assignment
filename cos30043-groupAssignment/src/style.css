@@ -171,7 +171,17 @@ code {
 :root {
   --bg-primary: #D6D5C9;
   --bg-surface: #B9BAA3;
+  --bg-carousel-btn: #ccc;
+  --bg-movie-info: #f5f5f5;
+  --bg-movie-info-year: #666;
+  --color-hero-content: #555;
+  --bg-movie-info-overview: #444;
+  --bg-search-wrapper: #333;
+  --bg-movie-info-rating: #e50914;
+  --border-search-wrapper : #ddd;
+  --movie-scroll: #eee;
   --bg-input: #ffffff;
+  --bg-header: #ffffff;
   --bg-form: #eae8da;
   --bg-form-text: black;
   --bg-dark: #0A100D;
@@ -194,8 +204,18 @@ code {
 
 :root.dark {
   --bg-primary: #0A100D;       
-  --bg-surface: #141B18;
+  --bg-surface: #141b18;
+  --bg-carousel-btn: #424242;
+  --bg-movie-info: #131313;
+  --bg-movie-info-year: #afafaf;
+  --color-hero-content: #b6b6b6;
+  --bg-movie-info-overview: #bebebe;
+  --bg-search-wrapper: #2c2c2c;
+  --bg-movie-info-rating: #ff323c;
+  --border-search-wrapper : #292929;
+  --movie-scroll: #eee;
   --bg-input: #ffffff;
+  --bg-header: #000000;
   --bg-form: #1b201e;
   --bg-form-text: black;
   --bg-dark: #050807;
@@ -444,7 +464,7 @@ code {
   }
   #intro{
     text-align: center;
-    padding-top: 40px;
+    padding-top: 60px;
     padding-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
@@ -573,7 +593,7 @@ code {
     position: fixed;
     top: 40px;
     right: 40px;
-    z-index: 101;
+    z-index: 104;
     border: 3px solid var(--bg-form);
     border-radius: 8px;
     padding: 10px;
@@ -584,10 +604,9 @@ code {
 
   .nav-links {
     position: fixed;
-    top: 10px;
     right: 0;
-    z-index: 100;
-    height: 57%;
+    z-index: 103;
+    height: 100%;
     width: 400px;
     background-color: var(--bg-surface);
     border-radius: 5px;
@@ -631,9 +650,9 @@ code {
 
   #menu {
     position: fixed;
-    top: 15px;
+    top: 10px;
     right: 15px;
-    z-index: 101;
+    z-index: 110;
     border: 3px solid var(--bg-form);
     border-radius: 8px;
     padding: 5px;
@@ -644,11 +663,11 @@ code {
 
   .nav-links {
     position: fixed;
-    top: 5px;
+    top: 15px;
     right: 0;
-    z-index: 100;
-    height: 46%;
+    z-index: 109;
     width: 200px;
+    height: 50%;
     background-color: var(--bg-surface);
     border-radius: 5px;
     a {
@@ -657,7 +676,7 @@ code {
       text-align: center;
       border: 1px solid var(--accent);
       background-color: var(--bg-form);
-      margin-top: 15px;
+      margin-top: 20px;
       margin-left: 10%;
       margin-right: 10%;
       border-radius: 5px;

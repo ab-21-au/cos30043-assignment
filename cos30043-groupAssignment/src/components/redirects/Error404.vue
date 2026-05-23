@@ -22,6 +22,7 @@
         justify-content: center;
         height: 100vh;
         text-align: center;
+        padding: 20px;
         color: var(--text-primary);
     }
 }
