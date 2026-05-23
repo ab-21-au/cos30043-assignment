@@ -21,6 +21,7 @@ if (!$data) {
     exit;
 }
 
+// extract and validate fields
 $account_id       = isset($data['account_id']) ? intval($data['account_id']) : 0;
 $tmdb_movie_id    = isset($data['tmdb_movie_id']) ? intval($data['tmdb_movie_id']) : 0;
 $rating_plot      = isset($data['rating_plot']) ? intval($data['rating_plot']) : 0;
@@ -45,6 +46,7 @@ $sql = "INSERT INTO MRS_Review (account_id, tmdb_movie_id, rating_plot, rating_a
 
 $stmt = mysqli_prepare($conn, $sql);
 
+//inject safely into db
 if ($stmt) {
     mysqli_stmt_bind_param(
         $stmt, 

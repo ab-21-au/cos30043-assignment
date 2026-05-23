@@ -1,3 +1,321 @@
+<template>
+  <main class="review-page">
+
+    <!-- Film Info || hero  -->
+    <section class="review-hero" aria-label="Movie details">
+      <div class="d-flex align-items-center gap-3">
+        <h1 class="hero-title"> {{ movie.title }} </h1>
+        <br>
+      </div>
+      <div>
+        <p class="hero-desc">
+          {{ movie.year }} • Runtime: {{ movie.runtime }}m
+        </p>
+        <p class="hero-rating">
+          Global Rating: {{ movie.globalRating }}
+        </p>
+      </div>
+
+      <div class="hero-desc-long">
+        <p class="text-desc-long">
+          {{ movie.desc }}
+        </p>
+      </div>
+
+      <div>
+        <span v-for="tag in movie.tags" v-bind:key="tag">{{ tag }} • </span>
+      </div>
+    </section>
+
+
+    <!-- Review form -->
+    <section class="user-review-form" v-if="currentUser" aria-label="Post a review">
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+          <div class="rating-box">
+            <h2 class="star-rating"> Rate Plot: {{ newReview.plotRating }}/5</h2>
+             <v-rating
+              v-model="newReview.plotRating"
+              hover
+              :length="5"
+              :size="32"
+              color="var(--accent)"
+              active-color="var(--accent)"
+            />
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="rating-box">
+              <h2 class="star-rating"> Rate Acting: {{ newReview.actRating }}/5</h2>
+               <v-rating
+                v-model="newReview.actRating"
+                hover
+                :length="5"
+                :size="32"
+                color="var(--accent)"
+                active-color="var(--accent)"
+              />
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <div class="rating-box">
+            <h2 class="star-rating"> Rate Pacing: {{ newReview.paceRating }}/5</h2>
+             <v-rating
+              v-model="newReview.paceRating"
+              hover
+              :length="5"
+              :size="32"
+              color="var(--accent)"
+              active-color="var(--accent)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <form @submit.prevent="submitReview">
+        <div class="mb-3">
+          <label for="reviewText" class="form-label"></label>
+          <textarea id="reviewText" v-model="newReview.text" class="form-control" rows="4" placeholder="Share your thoughts on the film" required></textarea>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-4">
+            <select v-model="newReview.rating" class="form-select" aria-label="Overall movie rating">
+              <option disabled value="">Choose rating</option>
+              <option>Peak</option>
+              <option>So bad it's good</option>
+              <option>Mid at best</option>
+              <option>Trash</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4">
+            <select v-model="newReview.rewatch" class="form-select" aria-label="If it's a rewatch">
+              <option disabled value="">Rewatch?</option>
+              <option>First time watch</option>
+              <option>Rewatch</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4">
+            <select v-model="newReview.expectations" class="form-select" aria-label="If it met expectations">
+              <option disabled value="">Met expectations?</option>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div>
+            <button type="submit" class="post-btn">Post Review</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Not logged in state -->
+    <section class="user-review-form not-logged-in" v-else>
+      <p class="login-prompt" aria-label="Login notice, need to login to review">
+        You're not signed in! Please
+        <RouterLink to="/login" class="login-link">login</RouterLink>
+        to write a review.
+      </p>
+    </section>
+
+    <!-- User Reviews -->
+      <section class="user-reviews">
+      <h3 class="section-label">User Reviews</h3>
+ 
+      <!-- checker 0 reviews -->
+      <div v-if="reviews.length === 0" class="user-reviews-warning" aria-label="No reviews for this movie">
+          <p>No reviews yet for this movie. Be the first!</p>
+      </div>
+
+
+      <div v-else class="row g-4 mx-auto">
+        <div v-for="review in paginatedReviews" :key="review.review_id" class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ review.username }}</h5>
+              <p class="meta-text-review">{{ review.created_at ? review.created_at.substring(0, 4) : '' }}</p>
+              <hr>
+              <p class="card-text text-secondary">{{ review.content }}</p>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+              <p class="meta-text-review">
+               Rating: {{ review.rating }} • Rewatch: {{ review.rewatch }} • Meet Expectations? {{ review.expectations }}
+              </p>
+              <p class="meta-text-review"> Plot: {{ review.plot }} • Acting:  {{ review.acting }} • Pacing: {{  review.pacing }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center align-items-center gap-3 mt-4" aria-label="Reviews pages controls">
+          <button 
+            @click="prevPage" 
+            class="pagination-btn" 
+            :disabled="currentPage === 1"
+            aria-label="Go to previous page"
+          >
+            Prev
+          </button>
+          
+          <span class="pagination-info">
+            Page {{ currentPage }} of {{ totalPages }}
+          </span>
+          
+          <button 
+            @click="nextPage" 
+            class="pagination-btn" 
+            :disabled="currentPage === totalPages"
+            aria-label="Go to next page"
+          >
+            Next
+          </button>
+        </div>
+
+    </section>
+
+  </main>
+</template>
+
+
+<script setup>
+import { ref, onMounted, computed} from 'vue';
+import { useRoute } from 'vue-router';
+import { tmdb } from '../services/tmdb.js';
+
+
+const route = useRoute()
+const isFavourited = ref(false);
+
+//set true for now, change later when have account login system
+const currentUser = ref(true)
+
+const movie = ref({
+  id: route.params.id,
+  title: "Loading...",
+  year: "",
+  genre: "",
+  runtime: "",
+  globalRating: "0.0",
+  desc: "",
+  tags: []
+});
+
+const reviews = ref([]);
+const newReview = ref({ 
+  text: '', rating: '', 
+  rewatch: '', 
+  expectations: '',
+  plotRating: 0,
+  actRating: 0,
+  paceRating: 0
+});
+
+//fetch movie details from TMDB
+const fetchMovieDetails = async () => {
+  try {
+    const movieId = route.params.id;
+    const data = await tmdb.getMovieDetails(movieId);
+    
+    if (data) {
+      movie.value = {
+        id: data.id,
+        title: data.title,
+        year: data.release_date ? data.release_date.split('-')[0] : 'N/A',
+        genre: data.genres?.map(g => g.name).join(', ') || 'N/A',
+        runtime: data.runtime || 'Unknown',
+        globalRating: data.vote_average ? data.vote_average.toFixed(1) : 'N/A',
+        desc: data.overview || 'No overview available.',
+        tags: data.genres?.map(g => g.name) || []
+      };
+    }
+  } catch (error) {
+    console.error("Error pulling TMDB details:", error);
+    movie.value.title = "Failed to load movie info";
+  }
+};
+
+//pagination
+const currentPage = ref(1);
+const reviewsPerPage = 10;
+
+const totalPages = computed(() => {
+  return Math.ceil(reviews.value.length / reviewsPerPage) || 1;
+});
+
+const paginatedReviews = computed(() => {
+  const startIndex = (currentPage.value - 1) * reviewsPerPage;
+  const endIndex = startIndex + reviewsPerPage;
+  return reviews.value.slice(startIndex, endIndex);
+});
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
+
+
+// fetch reviews here
+const getReviews = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.BASE_URL}api/get_reviews.php?movie_id=${movie.value.id}`);
+    reviews.value = await response.json();
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+  }
+};
+
+//submit review here
+const submitReview = async () => {
+
+  try {
+    const response = await fetch(`${import.meta.env.BASE_URL}api/post_reviews.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        account_id: 3, // TMP UPDATE WITH ACCOUNT DETAILS LATER
+        tmdb_movie_id: movie.value.id,
+        rating_plot: newReview.value.plotRating,
+        rating_acting: newReview.value.actRating,
+        rating_pacing: newReview.value.paceRating,
+        rating: newReview.value.rating,
+        review_text: newReview.value.text,
+        rewatch_status: newReview.value.rewatch,
+        met_expectations: newReview.value.expectations
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      // reset vars
+      newReview.value = { text: '', rating: '', rewatch: '', expectations: '', plotRating: 0, actRating: 0, paceRating: 0 };
+      
+      // refresh review feed
+      await getReviews(); 
+    } else {
+      alert("Submission failed: " + result.error);
+    }
+  } catch (error) {
+    console.error("Network submission error:", error);
+    alert("An error occurred while transmitting your review.");
+  }
+};
+
+
+onMounted(async() => {
+  await fetchMovieDetails();
+  getReviews();
+});
+</script>
+
+
 <style>
   .review-page {
     background-color: var(--bg-primary);
@@ -36,14 +354,6 @@
   margin-bottom: 2rem;
 }
 
-/* .user-review-form {
-  background: var(--bg-surface);
-  padding: 15%;
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-} */
 .review-card, .card {
   background: var(--bg-surface);
   padding: 2rem;
@@ -58,12 +368,6 @@
 
 .form-control::placeholder {
   color: var(--text-secondary);
-}
-
-.review-card, .card {
-  background: var(--bg-surface);
-  padding: 2rem;
-  margin: 0 3rem;
 }
 
 
@@ -99,25 +403,6 @@
   .card-title {
     color: var(--accent)
   }
-
-  .fav-button {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: transform 0.2s ease;
-}
-
-.fav-button:hover {
-  transform: scale(1.1);
-  background-color: transparent;
-}
-
-.fav-button img {
-  filter: var(--img-inverse); 
-}
   
   .star-rating {
     font-size: 1.5rem;
@@ -198,349 +483,3 @@
   font-weight: 500;
 }
 </style>
-
-<template>
-  <main class="review-page">
-
-    <!-- Film Info || hero  -->
-    <section class="review-hero">
-      <div class="d-flex align-items-center gap-3">
-        <h1 class="hero-title"> {{ movieHardcoded.title }} </h1>
-        <button class="fav-button" @click="toggleFavourite">
-          <img :src="isFavourited ? heartFull : heartEmpty" alt="Favourite">
-        </button>
-        <br>
-      </div>
-      <div>
-        <p class="hero-desc">
-          {{ movieHardcoded.year }} • {{ movieHardcoded.genre }} • {{ movieHardcoded.runtime }}
-        </p>
-        <p class="hero-rating">
-          <!-- tmp -->
-           Global Rating 88 || User Rating 90
-        </p>
-      </div>
-
-      <div class="hero-desc-long">
-        <p class="text-desc-long">
-          {{ movieHardcoded.desc }}
-        </p>
-      </div>
-
-      <div>
-        <span v-for="tag in movieHardcoded.tags" v-bind:key="tag">{{ tag }} • </span>
-      </div>
-    </section>
-
-
-    <!-- Review form -->
-    <section class="user-review-form" v-if="currentUser">
-      <div class="row g-3 mb-4">
-        <div class="col-12 col-md-4">
-          <div class="rating-box">
-            <h2 class="star-rating"> Rate Plot: {{ newReview.plotRating }}/5</h2>
-            <!-- <StarRating v-model="newReview.plotRating" /> -->
-             <v-rating
-              v-model="newReview.plotRating"
-              hover
-              :length="5"
-              :size="32"
-              color="var(--accent)"
-              active-color="var(--accent)"
-            />
-          </div>
-        </div>
-
-        <div class="col-12 col-md-4">
-            <div class="rating-box">
-              <h2 class="star-rating"> Rate Acting: {{ newReview.actRating }}/5</h2>
-              <!-- <StarRating v-model="newReview.actRating" /> -->
-               <v-rating
-                v-model="newReview.actRating"
-                hover
-                :length="5"
-                :size="32"
-                color="var(--accent)"
-                active-color="var(--accent)"
-              />
-            </div>
-        </div>
-
-        <div class="col-12 col-md-4">
-          <div class="rating-box">
-            <h2 class="star-rating"> Rate Pacing: {{ newReview.paceRating }}/5</h2>
-            <!-- <StarRating v-model="newReview.paceRating" /> -->
-             <v-rating
-              v-model="newReview.paceRating"
-              hover
-              :length="5"
-              :size="32"
-              color="var(--accent)"
-              active-color="var(--accent)"
-            />
-          </div>
-        </div>
-      </div>
-
-      <form @submit.prevent="submitReview">
-        <div class="mb-3">
-          <label for="reviewText" class="form-label"></label>
-          <textarea id="reviewText" v-model="newReview.text" class="form-control" rows="4" placeholder="Share your thoughts on the film" required></textarea>
-        </div>
-
-        <div class="row g-3 mb-4">
-          <div class="col-12 col-md-4">
-            <select v-model="newReview.rating" class="form-select">
-              <option disabled value="">Choose rating</option>
-              <option>Peak</option>
-              <option>So bad it's good</option>
-              <option>Mid at best</option>
-              <option>Trash</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-4">
-            <select v-model="newReview.rewatch" class="form-select">
-              <option disabled value="">Rewatch?</option>
-              <option>First time watch</option>
-              <option>Rewatch</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-4">
-            <select v-model="newReview.expectations" class="form-select">
-              <option disabled value="">Met expectations?</option>
-              <option>Yes</option>
-              <option>No</option>
-            </select>
-          </div>
-          <div>
-            <button type="submit" class="post-btn">Post Review</button>
-          </div>
-        </div>
-      </form>
-    </section>
-
-    <!-- Not logged in state -->
-    <section class="user-review-form not-logged-in" v-else>
-      <p class="login-prompt">
-        You're not signed in! Please
-        <!-- TMP UPDATE PROPER -->
-        <RouterLink to="/login" class="login-link">login</RouterLink>
-        to write a review.
-      </p>
-    </section>
-
-    <!-- User Reviews -->
-      <section class="user-reviews">
-      <h3 class="section-label">User Reviews</h3>
- 
-      <!-- checker 0 reviews -->
-      <div v-if="reviews.length === 0" class="user-reviews-warning">
-          <p>No reviews yet for this movie. Be the first!</p>
-      </div>
-
-
-      <div v-else class="row g-4 mx-auto">
-        <div v-for="review in paginatedReviews" :key="review.review_id" class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ review.username }}</h5>
-              <p class="meta-text-review">{{ review.created_at ? review.created_at.substring(0, 4) : '' }}</p>
-              <hr>
-              <p class="card-text text-secondary">{{ review.content }}</p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-              <p class="meta-text-review">
-               Rating: {{ review.rating }} • Rewatch: {{ review.rewatch }} • Meet Expectations? {{ review.expectations }}
-              </p>
-              <p class="meta-text-review"> Plot: {{ review.plot }} • Acting:  {{ review.acting }} • Pacing: {{  review.pacing }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
-          <button 
-            @click="prevPage" 
-            class="pagination-btn" 
-            :disabled="currentPage === 1"
-          >
-            Prev
-          </button>
-          
-          <span class="pagination-info">
-            Page {{ currentPage }} of {{ totalPages }}
-          </span>
-          
-          <button 
-            @click="nextPage" 
-            class="pagination-btn" 
-            :disabled="currentPage === totalPages"
-          >
-            Next
-          </button>
-        </div>
-
-    </section>
-
-  </main>
-</template>
-
-
-<script setup>
-import { ref, onMounted, computed} from 'vue';
-import heartEmpty from '../assets/heart.png';
-import heartFull from '../assets/heart_fav_true.png';
-// import StarRating from '../components/StarRating.vue'
-// import { tmdb } from '../services/tmdb.js';
-
-const isFavourited = ref(false);
-// const userRating = ref(null);
-
-//set true for now, change later when have account login system
-const currentUser = ref(true)
-
-
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-});
-
-// Tmp Film Data change later
-const movieHardcoded = ref({
-  id: 27205,
-  title: "Inception",
-  year: "2010",
-  genre: "Sci-Fi",
-  runtime: "123",
-  globalRating: "8.8",
-  desc: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-  tags: ["testing123","Mind-bending", "Classic", "Must Watch"]
-});
-
-const movie = ref({
-  id: null,
-  title: "Loading...",
-  year: "",
-  genre: "",
-  runtime: "",
-  desc: "",
-  tags: []
-});
-
-// // Form data
-// const newReview = ref({
-//   text: '',
-//   rating: '',
-//   rewatch: '',
-//   expectations: ''
-// });
-
-// // Tmp Reviews
-// const reviews = ref([
-//   { 
-//     username: "tmpUser123", 
-//     content: "This is indeed a movie. Yes it is. I can confirm that this movie is a movie.",
-//     rating: "Peak", 
-//     rewatch: "Rewatch", 
-//     expectations: "Yes" 
-//   },
-//   { 
-//     username: "tmpUser456", 
-//     content: "There were no birds in the movie.",
-//     rating: "Mid at best", 
-//     rewatch: "First time watch", 
-//     expectations: "No" 
-//   }
-// ]);
-
-const reviews = ref([]);
-const newReview = ref({ 
-  text: '', rating: '', 
-  rewatch: '', 
-  expectations: '',
-  plotRating: 0,
-  actRating: 0,
-  paceRating: 0
-});
-
-
-
-//pagination
-const currentPage = ref(1);
-const reviewsPerPage = 10;
-
-const totalPages = computed(() => {
-  return Math.ceil(reviews.value.length / reviewsPerPage) || 1;
-});
-
-const paginatedReviews = computed(() => {
-  const startIndex = (currentPage.value - 1) * reviewsPerPage;
-  const endIndex = startIndex + reviewsPerPage;
-  return reviews.value.slice(startIndex, endIndex);
-});
-
-// Navigation controls
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) currentPage.value++;
-};
-
-const prevPage = () => {
-  if (currentPage.value > 1) currentPage.value--;
-};
-
-
-// fetch reviews here
-const getReviews = async () => {
-  try {
-    const response = await fetch(`${import.meta.env.BASE_URL}api/get_reviews.php?movie_id=${movie.value.id}`);
-    reviews.value = await response.json();
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-  }
-};
-
-onMounted(() => {
-  getReviews();
-});
-
-const submitReview = async () => {
-
-  try {
-    const response = await fetch(`${import.meta.env.BASE_URL}api/post_reviews.php`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        account_id: 3, // TMP UPDATE WITH ACCOUNT DETAILS LATER
-        tmdb_movie_id: movie.value.id,
-        rating_plot: newReview.value.plotRating,
-        rating_acting: newReview.value.actRating,
-        rating_pacing: newReview.value.paceRating,
-        rating: newReview.value.rating,
-        review_text: newReview.value.text,
-        rewatch_status: newReview.value.rewatch,
-        met_expectations: newReview.value.expectations
-      })
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      // reset vars
-      newReview.value = { text: '', rating: '', rewatch: '', expectations: '', plotRating: 0, actRating: 0, paceRating: 0 };
-      
-      // refresh review feed
-      await getReviews(); 
-    } else {
-      alert("Submission failed: " + result.error);
-    }
-  } catch (error) {
-    console.error("Network submission error:", error);
-    alert("An error occurred while transmitting your review.");
-  }
-};
-
-</script>

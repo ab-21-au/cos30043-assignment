@@ -1,11 +1,10 @@
 <?php
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *'); 
 
 require_once 'db.php';
 
-
+// get movie id as int
 $movie_id = isset($_GET['movie_id']) ? intval($_GET['movie_id']) : 0;
 
 if ($movie_id <= 0) {
@@ -15,14 +14,8 @@ if ($movie_id <= 0) {
 }
 
 $conn = connectDatabase();
-// backup old, based on 'old' database
-// $sql = "SELECT r.review_id, r.rating, r.review_title, r.review_text, r.created_at, a.username 
-//         FROM MRS_Review r
-//         JOIN MRS_Account a ON r.account_id = a.account_id
-//         WHERE r.tmdb_movie_id = ?
-//         ORDER BY r.created_at DESC";
 
-
+// get review tables from movie id
 $sql = "SELECT r.review_id, r.rating, r.rating_plot, r.rating_acting, r.rating_pacing, 
                r.review_title, r.review_text, r.rewatch_status, r.met_expectations, 
                r.created_at, a.username 
@@ -55,8 +48,8 @@ if ($stmt) {
         ];
     }
     
+    // pass to frontend as json
     echo json_encode($reviews);
-    
     mysqli_stmt_close($stmt);
 } else {
     http_response_code(500);

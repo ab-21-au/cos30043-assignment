@@ -1,11 +1,10 @@
 <?php
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *'); 
 
 require_once 'db.php';
 
-
+// get acc id as int
 $account_id = isset($_GET['account_id']) ? intval($_GET['account_id']) : 0;
 
 if ($account_id <= 0) {
@@ -15,16 +14,11 @@ if ($account_id <= 0) {
 }
 
 $conn = connectDatabase();
-// backup old, based on 'old' database
-// $sql = "SELECT r.review_id, r.rating, r.review_title, r.review_text, r.created_at, a.username 
-//         FROM MRS_Review r
-//         JOIN MRS_Account a ON r.account_id = a.account_id
-//         WHERE r.tmdb_movie_id = ?
-//         ORDER BY r.created_at DESC";
 
-
-$sql = "SELECT r.tmdb_movie_id, r.rating_plot, r.rating_acting, r.rating_pacing, 
-               r.created_at
+// get review tables parented to acc id
+$sql = "SELECT r.review_id, r.tmdb_movie_id, r.rating, r.rating_plot, r.rating_acting, r.rating_pacing, 
+               r.review_title, r.review_text, r.rewatch_status, r.met_expectations, 
+               r.created_at, a.username 
         FROM MRS_Review r
         JOIN MRS_Account a ON r.account_id = a.account_id
         WHERE r.account_id = ?
@@ -40,16 +34,22 @@ if ($stmt) {
     $reviews = [];
     while ($row = mysqli_fetch_assoc($result)) {
         $reviews[] = [
+            'review_id'     => $row['review_id'],
             'tmdb_movie_id' => $row['tmdb_movie_id'],
-            'created_at' => $row['created_at'],
+            'username'      => $row['username'],
+            'title'         => $row['review_title'],
+            'content'       => $row['review_text'],
+            'rating'        => $row['rating'],
+            'created_at'    => $row['created_at'],
             'plot'          => $row['rating_plot'],
             'acting'        => $row['rating_acting'],
-            'pacing'        => $row['rating_pacing']
+            'pacing'        => $row['rating_pacing'],
+            'rewatch'       => $row['rewatch_status'],
+            'expectations'  => $row['met_expectations']
         ];
     }
-    
+    // pass to frontend as json
     echo json_encode($reviews);
-    
     mysqli_stmt_close($stmt);
 } else {
     http_response_code(500);

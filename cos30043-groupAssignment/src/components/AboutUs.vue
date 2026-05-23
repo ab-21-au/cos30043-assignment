@@ -1,6 +1,6 @@
 <template>
   <main class="about-page">
-    <section class="about-hero">
+    <section class="about-hero" aria-label="About the project">
       <p class="eyebrow">Who we are</p>
       <h1>Made by film people,<br>for film people.</h1>
       <p class="hero-desc">
@@ -8,7 +8,7 @@
       </p>
     </section>
 
-<section class="about-body">
+<section class="about-body" aria-label="The team profiles">
   <h2 class="section-label">The team</h2>
   <div class="row g-4"> 
     <div class="col-12 col-md-12 col-xxl-4" v-for="member in team" :key="member.initials">
@@ -27,14 +27,15 @@
 </section>
 
 
-      <section class="inspo-quote">
-      <h2 class="section-label">Tmp Title</h2>
+    <section class="inspo-quote" aria-label="Project description">
+      <h2 class="section-label">Retrospect</h2>
       <div class="mission">
-        <p class="mission-quote">"Inspirational quote here"</p>
+        <p class="mission-quote">"What we built"</p>
         <p class="mission-body">
-          Blah blah blah. Temp paragraph about the mission statement of the project. This is just filler text to show how it would look like when it's filled with real content.
+          Our team collaborated to design and build a film review site powered by the TMDB API. Able to browse a catalogue of movies, users can create an account to write reviews and save their favourite films. 
+          Overall, we aimed to create a platform that film lovers can use to share their thoughts and discover new movies.
         </p>
-    </div>
+      </div>
     </section>
 
   </main>
@@ -44,20 +45,20 @@
 const team = [
   { initials: 'AL', 
     name: 'Anabelle', 
-    tasks: ['UI and Mobile Responsive', 'Contact Us page', 'Film API', 'ADVANCED TMP'],
+    tasks: ['UI and Mobile Responsive', 'Contact Us page', 'Film API', 'Advanced Feature - Analytics Dashboard'],
     about: 'Majoring in Software Development. Mostly reads and likes cryptic puzzles. Enjoys watching the footy but knows her team wont ever win (shes a saints supporter)'},
   { initials: 'SR', 
     name: 'Sofia', 
-    tasks: ['UI and Mobile Responsive', 'About Us page', 'Search & filter'], 
+    tasks: ['UI and Mobile Responsive', 'About Us page', 'Review page and component'], 
     about: 'Majoring in Software Dev. Growing up I loved film and animation. Watching Ghibli and Pixar movies made me love and want to create art.'},
   { initials: 'AM', 
     name: 'Alessandra', 
-    tasks: ['UI Team','Terms of Service page', 'Search & Filter', 'ADVANCED TMP','Routing'], 
+    tasks: ['UI Team','Terms of Service page', 'Search & Filter','Routing'], 
     about: 'Majors in Software Design. She enjoys spending time playing games or bouldering, especially when she is able to do these activities with loved ones or friends' },
   { initials: 'CS', 
     name: 'Cole', 
     tasks: ['Account Settings', 'Account Deletion', 'Favourite Movies','Login/Sign Up'], 
-    about: 'tmp' },
+    about: 'Im majoring in software dev, my favourite movie is fellowship of the ring, my fav animal is a panda and a hobby of mine is golf.' },
   { initials: 'TF', 
     name: 'Theodore', 
     tasks: ['Advanced Feature - Movie Recommendaiton Algorithm','Catalogue'], 
