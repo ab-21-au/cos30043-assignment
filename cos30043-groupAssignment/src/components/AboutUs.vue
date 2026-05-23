@@ -1,6 +1,6 @@
 <template>
   <main class="about-page">
-    <section class="about-hero">
+    <section class="about-hero" aria-label="About the project">
       <p class="eyebrow">Who we are</p>
       <h1>Made by film people,<br>for film people.</h1>
       <p class="hero-desc">
@@ -8,7 +8,7 @@
       </p>
     </section>
 
-<section class="about-body">
+<section class="about-body" aria-label="The team profiles">
   <h2 class="section-label">The team</h2>
   <div class="row g-4"> 
     <div class="col-12 col-md-12 col-xxl-4" v-for="member in team" :key="member.initials">
@@ -27,7 +27,7 @@
 </section>
 
 
-    <section class="inspo-quote">
+    <section class="inspo-quote" aria-label="Project description">
       <h2 class="section-label">Retrospect</h2>
       <div class="mission">
         <p class="mission-quote">"What we built"</p>

@@ -2,7 +2,7 @@
   <main class="review-page">
 
     <!-- Film Info || hero  -->
-    <section class="review-hero">
+    <section class="review-hero" aria-label="Movie details">
       <div class="d-flex align-items-center gap-3">
         <h1 class="hero-title"> {{ movie.title }} </h1>
         <br>
@@ -29,7 +29,7 @@
 
 
     <!-- Review form -->
-    <section class="user-review-form" v-if="currentUser">
+    <section class="user-review-form" v-if="currentUser" aria-label="Post a review">
       <div class="row g-3 mb-4">
         <div class="col-12 col-md-4">
           <div class="rating-box">
@@ -82,7 +82,7 @@
 
         <div class="row g-3 mb-4">
           <div class="col-12 col-md-4">
-            <select v-model="newReview.rating" class="form-select">
+            <select v-model="newReview.rating" class="form-select" aria-label="Overall movie rating">
               <option disabled value="">Choose rating</option>
               <option>Peak</option>
               <option>So bad it's good</option>
@@ -91,14 +91,14 @@
             </select>
           </div>
           <div class="col-12 col-md-4">
-            <select v-model="newReview.rewatch" class="form-select">
+            <select v-model="newReview.rewatch" class="form-select" aria-label="If it's a rewatch">
               <option disabled value="">Rewatch?</option>
               <option>First time watch</option>
               <option>Rewatch</option>
             </select>
           </div>
           <div class="col-12 col-md-4">
-            <select v-model="newReview.expectations" class="form-select">
+            <select v-model="newReview.expectations" class="form-select" aria-label="If it met expectations">
               <option disabled value="">Met expectations?</option>
               <option>Yes</option>
               <option>No</option>
@@ -113,7 +113,7 @@
 
     <!-- Not logged in state -->
     <section class="user-review-form not-logged-in" v-else>
-      <p class="login-prompt">
+      <p class="login-prompt" aria-label="Login notice, need to login to review">
         You're not signed in! Please
         <RouterLink to="/login" class="login-link">login</RouterLink>
         to write a review.
@@ -125,7 +125,7 @@
       <h3 class="section-label">User Reviews</h3>
  
       <!-- checker 0 reviews -->
-      <div v-if="reviews.length === 0" class="user-reviews-warning">
+      <div v-if="reviews.length === 0" class="user-reviews-warning" aria-label="No reviews for this movie">
           <p>No reviews yet for this movie. Be the first!</p>
       </div>
 
@@ -149,11 +149,12 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+      <div class="d-flex justify-content-center align-items-center gap-3 mt-4" aria-label="Reviews pages controls">
           <button 
             @click="prevPage" 
             class="pagination-btn" 
             :disabled="currentPage === 1"
+            aria-label="Go to previous page"
           >
             Prev
           </button>
@@ -166,6 +167,7 @@
             @click="nextPage" 
             class="pagination-btn" 
             :disabled="currentPage === totalPages"
+            aria-label="Go to next page"
           >
             Next
           </button>

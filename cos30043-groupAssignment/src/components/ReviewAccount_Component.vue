@@ -28,11 +28,12 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+      <div class="d-flex justify-content-center align-items-center gap-3 mt-4" aria-label="Reviews pages controls">
           <button 
             @click="prevPage" 
             class="pagination-btn" 
             :disabled="currentPage === 1"
+            aria-label="Go to previous page"
           >
             Prev
           </button>
@@ -45,6 +46,7 @@
             @click="nextPage" 
             class="pagination-btn" 
             :disabled="currentPage === totalPages"
+            aria-label="Go to next page"
           >
             Next
           </button>
