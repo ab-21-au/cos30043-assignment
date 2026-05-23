@@ -40,6 +40,10 @@ export const tmdb = {
     }
     return rows;
   },
+
+  getMovieById: (id) => fetch(
+    `${BASE_URL}/movie/${id}?api_key=${API_KEY}`
+  ).then(res => res.json()), // for analytics board
   
   searchMovies: (query) => fetchAPI(`/search/movie?query=${encodeURIComponent(query)}`)
 };

@@ -494,7 +494,7 @@ const prevPage = () => {
 // fetch reviews here
 const getReviews = async () => {
   try {
-    const response = await fetch(`../api/get_reviews.php?movie_id=${movie.value.id}`);
+    const response = await fetch(`${import.meta.env.BASE_URL}api/get_reviews.php?movie_id=${movie.value.id}`);
     reviews.value = await response.json();
   } catch (error) {
     console.error("Error fetching reviews:", error);
@@ -508,7 +508,7 @@ onMounted(() => {
 const submitReview = async () => {
 
   try {
-    const response = await fetch('../api/post_reviews.php', {
+    const response = await fetch(`${import.meta.env.BASE_URL}api/post_reviews.php`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
