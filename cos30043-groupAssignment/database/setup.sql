@@ -12,7 +12,15 @@ CREATE TABLE IF NOT EXISTS MRS_Review (
     review_id INT AUTO_INCREMENT PRIMARY KEY,
     account_id INT NOT NULL,
     tmdb_movie_id INT NOT NULL,
-    rating INT NOT NULL,
+
+    -- update to reflect figma design
+    rating_plot INT NOT NULL DEFAULT 0,
+    rating_acting INT NOT NULL DEFAULT 0,
+    rating_pacing INT NOT NULL DEFAULT 0,
+    rating ENUM('Peak',  "So bad it\'s good", 'Mid at best', 'Trash') NOT NULL,
+    rewatch_status ENUM('First time watch', 'Rewatch') NOT NULL,
+    met_expectations ENUM('Yes', 'No') NOT NULL,
+
     review_title VARCHAR(255),
     review_text TEXT,
     contains_spoilers BOOLEAN DEFAULT FALSE,

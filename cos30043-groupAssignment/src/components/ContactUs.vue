@@ -39,8 +39,10 @@ export default {
 
                 const result = await response.json()
                 if (result.success) {
-                    // temp: redirect to new component after routing is set
                     alert('Form submitted successfully!')
+                    this.$router.push({
+                        path: '/thankyou' // redirect to ThankYou.vue
+                    })
                 } else {
                     alert('Failed to submit form. Please try again.')
                 }

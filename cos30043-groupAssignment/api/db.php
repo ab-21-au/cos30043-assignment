@@ -32,11 +32,24 @@ function loadDatabaseConfigPath() {
 function connectDatabase() {
     require loadDatabaseConfigPath();
 
+    // $conn = mysqli_connect(
+    //     $host ?? '',
+    //     $username ?? '',
+    //     $password ?? '',
+    //     $database ?? ''
+    // );
+    
+
+    $db_host     = isset($host) ? $host : '';
+    $db_user     = isset($username) ? $username : '';
+    $db_pass     = isset($password) ? $password : '';
+    $db_name     = isset($database) ? $database : '';
+    
     $conn = mysqli_connect(
-        $host ?? '',
-        $username ?? '',
-        $password ?? '',
-        $database ?? ''
+        $db_host,
+        $db_user,
+        $db_pass,
+        $db_name
     );
 
     if (!$conn) {

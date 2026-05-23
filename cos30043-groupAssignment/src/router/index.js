@@ -4,6 +4,8 @@ import Review from '../components/Review.vue'
 import AboutUs from '../components/AboutUs.vue'
 import Catalogue from '../components/Catalogue.vue'
 import ContactUs from '../components/ContactUs.vue'
+import ThankYou from '../components/redirects/ThankYou.vue'
+import error from '../components/redirects/Error404.vue'
 
 const routes = [
     
@@ -13,7 +15,8 @@ const routes = [
     { path: '/about-us', component: AboutUs},
     { path: '/contact-us', component: ContactUs},  
     //{ path: '/login', component: AboutUs},
-    //{ path: '/sign-up', component: AboutUs},    
+    //{ path: '/sign-up', component: AboutUs},
+    { path: '/thankyou', component: ThankYou},
     
     // Nav bar for a user with an account
     {
@@ -46,10 +49,11 @@ const routes = [
 
     // Review from clicking a movie
     { path: '/films/:id', component: Review }, //could replace with title if its more appropriate lol
+    { path: '/:pathMatch(.*)*', component: error }, // catch-all route for 404 errors
 ]
 
 const router = createRouter({
-    history: createWebHistory('/cos30043/s104551544/Assign2/'),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 })
 
