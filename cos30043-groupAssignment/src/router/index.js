@@ -6,6 +6,9 @@ import Catalogue from '../components/Catalogue.vue'
 import ContactUs from '../components/ContactUs.vue'
 import ThankYou from '../components/redirects/ThankYou.vue'
 import error from '../components/redirects/Error404.vue'
+import TermsOfService from "../components/policies/TermsOfService.vue"
+import PrivacyPolicy from "../components/policies/PrivacyPolicy.vue"
+import PoliciesLayout from "../components/policies/PoliciesLayout.vue"
 
 const routes = [
     
@@ -40,6 +43,16 @@ const routes = [
             //{ path: 'lists', component: Lists },
             //{ path: 'user-reviews', component: UserReviews },
             //{ path: 'settings', component: Settings },
+        ]
+    },
+
+    {
+        path: '/policies',
+        component: PoliciesLayout,
+        children: [
+            { path: 'terms-and-conditions', component: TermsOfService },
+            { path: 'privacy-policy', component: PrivacyPolicy },
+            { path: '', redirect: 'policies/terms-and-conditions'}
         ]
     },
 
