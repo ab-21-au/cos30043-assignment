@@ -16,6 +16,7 @@ const averageRating = computed(() => {
     return sum / reviews.length
 })
 
+// root colour
 const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent-deep').trim()
 
 
@@ -32,7 +33,7 @@ const accent = getComputedStyle(document.documentElement).getPropertyValue('--ac
         background-color="yellow darken-3"
         class="responsive-rating"
     />
-    <h4>{{ averageRating.toFixed(1) }}</h4>
+    <h4>{{ averageRating.toFixed(1) }}</h4> <!-- one decimal place -->
 </template>
 <style>
 

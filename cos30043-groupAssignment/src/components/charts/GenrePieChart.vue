@@ -11,6 +11,7 @@ const props = defineProps({
 
 const chartData = ref([])
 
+// gets genre names from tmdb
 const genreMap = Object.fromEntries(
     GENRES.map(g => [g.id, g.name])
 )
@@ -29,8 +30,8 @@ onMounted(async () => {
         })
     })
 
-    chartData.value = Object.entries(genreCounts).map(([name, value]) => ({ name, value }))
-    console.log('Genre counts:', chartData.value)
+    chartData.value = Object.entries(genreCounts).map(([name, value]) => ({ name, value })) // sets it up for pie chart
+    console.log('Genre counts:', chartData.value)   // error checking
 })
 
 
@@ -63,7 +64,7 @@ echarts.use([
 
 const option = computed(() => ({
     tooltip:{
-        trigger: 'item' //change??
+        trigger: 'item'
     },
     series: [
         {
@@ -85,7 +86,7 @@ const option = computed(() => ({
             }
         },
         data: chartData.value,
-        color: [accent_1, accent_2, accent_3, accent_4, accent_5] // change to root colours later
+        color: [accent_1, accent_2, accent_3, accent_4, accent_5]
         }
     ]
 }))
@@ -102,7 +103,6 @@ const option = computed(() => ({
 .pie-chart{
     height: 250px;
     width: 100%;
-    /*Add more later*/
     display: block;
     margin: 0 auto;
 }
