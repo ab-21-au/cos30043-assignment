@@ -237,6 +237,28 @@
     right: 0;
     border-right-color: var(--border);
   }
+} */
+
+:root {
+  --bg-primary: #D6D5C9;
+  --bg-surface: #B9BAA3;
+  --bg-input: #ffffff;
+  --bg-form: #eae8da;
+  --bg-form-text: black;
+  --bg-dark: #0A100D;
+  --bg-button: #0A100D;;
+  --accent: #A22C29;           
+  --accent-deep: #902923;
+  --accent-deeper: #511613;    
+  /* adding tmp for contrast */
+  --on-accent: #ffffff;
+  --on-accent-muted: #f0f0f0;
+  --text-primary: #0A100D;     
+  --text-secondary: #4A4D40;
+  --text-muted: #6B6D5B;
+  --accent-text-muted: #D6D5C9;
+  --border-subtle: rgba(10, 16, 13, 0.15);
+  --img-inverse: invert(0);
 }
 
 /* Navigation Pop-out */

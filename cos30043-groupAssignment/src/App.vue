@@ -87,3 +87,5 @@ const isOpen = ref(false)
   </div>
 
 </template>
+
+<!--CHANGE LATER, just used to see if it was working correctly-->
