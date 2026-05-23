@@ -4,7 +4,7 @@ header('Access-Control-Allow-Origin: *');
 
 require_once 'db.php';
 
-// get acc id
+// get acc id as int
 $account_id = isset($_GET['account_id']) ? intval($_GET['account_id']) : 0;
 
 if ($account_id <= 0) {
@@ -15,7 +15,7 @@ if ($account_id <= 0) {
 
 $conn = connectDatabase();
 
-
+// get review tables parented to acc id
 $sql = "SELECT r.review_id, r.tmdb_movie_id, r.rating, r.rating_plot, r.rating_acting, r.rating_pacing, 
                r.review_title, r.review_text, r.rewatch_status, r.met_expectations, 
                r.created_at, a.username 
@@ -48,7 +48,7 @@ if ($stmt) {
             'expectations'  => $row['met_expectations']
         ];
     }
-    
+    // pass to frontend as json
     echo json_encode($reviews);
     mysqli_stmt_close($stmt);
 } else {

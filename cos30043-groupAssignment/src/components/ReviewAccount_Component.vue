@@ -86,7 +86,6 @@ const getUserReviews = async () => {
   try {
 //testing only
 // const activeAccountId = props.accountId || 1;
-// console.log("Testing user reviews for Account ID:", activeAccountId);
 
     const response = await fetch(`../api/get_account_reviews.php?account_id=${props.accountId}`);
     // const response = await fetch(`../api/get_account_reviews.php?account_id=${activeAccountId}`);
