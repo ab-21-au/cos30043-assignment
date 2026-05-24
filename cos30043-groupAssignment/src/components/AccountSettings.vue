@@ -1,5 +1,5 @@
 <template>
-  <div :class="['user-account-page', { 'dark-mode': !currentIsDark }]">
+  <div :class="['user-account-page', { 'dark-mode': theme.isDark.value }]">
     
     <h1 class="page-main-title">User Account</h1>
 
@@ -33,7 +33,7 @@
       </aside>
 
       <main class="content-workspace">
-        <div v-if="auth.isAuthenticated" class="inner-settings-card">
+        <div v-if="auth.isAuthenticated.value" class="inner-settings-card">
           
           <div class="settings-inner-container">
             
@@ -45,10 +45,10 @@
                 
                 <button 
                   type="button"
-                  @click="handleThemeToggle" 
+                  @click="theme.toggleTheme()" 
                   class="theme-pill-btn unified-toggle-btn"
                 >
-                  {{ currentIsDark ? 'Light' : 'Dark' }}
+                  {{ theme.isDark.value ? 'Dark' : 'Light' }}
                 </button>
                 
               </div>
@@ -57,13 +57,6 @@
             <h4 class="section-subheading">Change Account Information:</h4>
 
             <form @submit.prevent class="info-modification-form">
-              
-              <div class="settings-row form-grid-row">
-                <label class="label-text">Preferred Name:</label>
-                <div class="input-pill-wrapper">
-                  <input type="text" v-model="profile.preferredName" class="figma-input" />
-                </div>
-              </div>
 
               <div class="settings-row form-grid-row">
                 <label class="label-text">Username:</label>
@@ -546,33 +539,56 @@ import { useAuth } from '../assets/UseAuth.js';
 import { useTheme } from '../js/Theme.js'; 
 
 export default {
-  data() {
+  setup() {
     return {
       auth: useAuth(),
-      theme: useTheme(), 
-      currentIsDark: false, 
+      theme: useTheme()
+    };
+  },
+  data() {
+    return {
       profile: {
-        preferredName: '',
         username: '',
         email: ''
       }
     };
   },
   mounted() {
-    if (this.auth.isAuthenticated) {
-      this.profile.username = this.auth.username;
-      this.profile.preferredName = this.auth.username;
-      this.profile.email = `${this.auth.username.toLowerCase()}@example.com`;
+    if (this.auth.isAuthenticated.value) {
+      const activeUser = this.auth.username.value;
+      this.profile.username = activeUser;
+      this.profile.email = `${activeUser.toLowerCase()}@example.com`;
     }
     this.currentIsDark = !!this.theme.isDark.value;
   },
   methods: {
     handleThemeToggle() {
       this.theme.toggleTheme();
-      this.currentIsDark = !this.currentIsDark;
     },
-    updateUsername() {
-      alert(`Details updated successfully!`);
+    async updateUsername() {
+      try {
+        const response = await fetch('/api/update_profile.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            username: this.profile.username,
+            email: this.profile.email
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          alert("Account information updated successfully!");
+          this.auth.login(this.profile.username);
+        } else {
+          alert(data.error || "Failed to update profile details.");
+        }
+      } catch (err) {
+        alert("Network error encountered while saving details.");
+        console.error(err);
+      }
     },
     async handleDeleteAccount() {
       const confirmed = confirm("Are you absolutely sure you want to permanently delete your account?");
@@ -582,7 +598,8 @@ export default {
         const response = await fetch('/api/delete_account.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: this.auth.username })
+          credentials: 'include', 
+          body: JSON.stringify({ username: this.auth.username.value })
         });
 
         const data = await response.json();

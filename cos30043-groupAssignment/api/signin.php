@@ -1,13 +1,16 @@
 <?php
 require __DIR__ . '/db.php';
 
-header("Access-Control-Allow-Origin: *"); 
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
 
+header("Access-Control-Allow-Origin: http://localhost:5173"); 
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header('Content-Type: application/json');
 
-
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -54,6 +57,9 @@ if (!password_verify($password, $user['password_hash'])) {
     mysqli_close($conn);
     exit;
 }
+
+session_start();
+$_SESSION['username'] = $user['username'];
 
 echo json_encode([
     'success' => true,
