@@ -1,5 +1,5 @@
 <template>
-  <div class="user-account-page">
+  <div :class="['user-account-page', { 'dark-mode': !currentIsDark }]">
     
     <h1 class="page-main-title">User Account</h1>
 
@@ -45,18 +45,10 @@
                 
                 <button 
                   type="button"
-                  @click="!theme.isDark.value && theme.toggleTheme()" 
-                  :class="['theme-pill-btn', { 'active-theme-pill': theme.isDark.value }]"
+                  @click="handleThemeToggle" 
+                  class="theme-pill-btn unified-toggle-btn"
                 >
-                  Dark
-                </button>
-                
-                <button 
-                  type="button"
-                  @click="theme.isDark.value && theme.toggleTheme()" 
-                  :class="['theme-pill-btn', { 'active-theme-pill': !theme.isDark.value }]"
-                >
-                  Light
+                  {{ currentIsDark ? 'Light' : 'Dark' }}
                 </button>
                 
               </div>
@@ -116,18 +108,15 @@
 </template>
 
 <style scoped>
-
-
 .theme-btn-group {
   display: flex;
   gap: 15px;
 }
 
-
 .theme-pill-btn {
   box-sizing: border-box;
   height: 48px;
-  padding: 0 25px;
+  padding: 0 35px;
   background: #FFFFFF;
   border: 3px solid #000000;
   border-radius: 25px;
@@ -136,19 +125,13 @@
   line-height: 30px;
   color: #000000;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, transform 0.1s;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s;
 }
 
 .theme-pill-btn:hover {
   background-color: #ededed;
   transform: scale(0.98);
 }
-
-.active-theme-pill {
-  background: #E3E3E3 !important;
-  font-weight: bold;
-}
-
 
 .user-account-page {
   box-sizing: border-box;
@@ -159,6 +142,7 @@
   font-family: 'Inter', sans-serif;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .page-main-title {
@@ -169,6 +153,7 @@
   line-height: 44px;
   color: #000000;
   margin: 0 0 50px 20px;
+  transition: color 0.3s ease;
 }
 
 .account-dashboard-layout {
@@ -190,6 +175,7 @@
   gap: 20px;
   position: relative;
   z-index: 1;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .sidebar-item {
@@ -203,6 +189,7 @@
   align-items: center;
   justify-content: flex-start; 
   padding-left: 35px; 
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .static-header {
@@ -234,6 +221,7 @@
   color: #000000;
   margin: 0;
   text-align: left;
+  transition: color 0.3s ease;
 }
 
 .sidebar-nav ul {
@@ -249,7 +237,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: -45px; 
+  margin-left: -48px; 
   position: relative;
   z-index: 10;
 }
@@ -261,6 +249,7 @@
   border: 3px solid #000000;
   border-radius: 45px;
   padding: 60px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .settings-inner-container {
@@ -272,6 +261,7 @@
   padding: 60px;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .settings-title {
@@ -283,6 +273,7 @@
   color: #000000;
   margin: 0 0 40px 0;
   text-align: center;
+  transition: color 0.3s ease;
 }
 
 .settings-row {
@@ -314,15 +305,7 @@
   font-size: 30px;
   line-height: 36px;
   color: #000000;
-}
-
-.theme-selection {
-  font-family: 'Inter', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 36px;
-  color: #000000;
+  transition: color 0.3s ease;
 }
 
 .section-subheading {
@@ -334,6 +317,7 @@
   color: #000000;
   margin: 20px 0 35px 0;
   text-align: center;
+  transition: color 0.3s ease;
 }
 
 .info-modification-form {
@@ -352,6 +336,7 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .figma-input {
@@ -365,6 +350,7 @@
   line-height: 30px;
   color: #000000;
   outline: none;
+  transition: color 0.3s ease;
 }
 
 .actions-button-group {
@@ -416,6 +402,45 @@
   min-height: 400px;
 }
 
+.user-account-page.dark-mode {
+  background: #121212;
+}
+
+.dark-mode .page-main-title,
+.dark-mode .sidebar-text,
+.dark-mode .settings-title,
+.dark-mode .label-text,
+.dark-mode .section-subheading,
+.dark-mode .figma-input {
+  color: #FFFFFF;
+}
+
+.dark-mode .dashboard-sidebar,
+.dark-mode .sidebar-item,
+.dark-mode .inner-settings-card,
+.dark-mode .settings-inner-container,
+.dark-mode .input-pill-wrapper {
+  background: #1E1E1E;
+  border-color: #FFFFFF;
+}
+
+.dark-mode .pill-button:hover {
+  background-color: #2c2c2c;
+}
+
+.dark-mode .active-setting {
+  background: #333333;
+}
+
+.dark-mode .theme-pill-btn {
+  background: #1E1E1E;
+  border-color: #FFFFFF;
+  color: #FFFFFF;
+}
+
+.dark-mode .theme-pill-btn:hover {
+  background-color: #2c2c2c;
+}
 
 @media screen and (max-width: 1150px) {
   .user-account-page {
@@ -428,12 +453,10 @@
     text-align: center;
   }
 
-  
   .account-dashboard-layout {
     flex-direction: column;
     gap: 30px;
   }
-
 
   .dashboard-sidebar {
     width: 100% !important;
@@ -453,7 +476,6 @@
     line-height: 22px;
   }
 
-  
   .content-workspace {
     margin-left: 0 !important;
     width: 100%;
@@ -472,13 +494,22 @@
   }
 
   .section-subheading,
-  .label-text,
-  .theme-selection {
+  .label-text {
     font-size: 20px;
     line-height: 26px;
   }
 
-  
+  .theme-btn-group {
+    gap: 10px;
+  }
+
+  .theme-pill-btn {
+    height: 40px;
+    padding: 0 15px;
+    font-size: 16px;
+    border-radius: 15px;
+  }
+
   .form-grid-row {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -494,7 +525,6 @@
     font-size: 18px;
   }
 
- 
   .actions-button-group {
     flex-direction: column;
     gap: 15px;
@@ -513,15 +543,14 @@
 
 <script>
 import { useAuth } from '../assets/UseAuth.js';
-// 💡 Import your team's global theme utility package
 import { useTheme } from '../js/Theme.js'; 
 
 export default {
   data() {
     return {
       auth: useAuth(),
-      // 💡 Bind the theme controller variables into your local component state
       theme: useTheme(), 
+      currentIsDark: false, 
       profile: {
         preferredName: '',
         username: '',
@@ -535,15 +564,40 @@ export default {
       this.profile.preferredName = this.auth.username;
       this.profile.email = `${this.auth.username.toLowerCase()}@example.com`;
     }
+    this.currentIsDark = !!this.theme.isDark.value;
   },
   methods: {
+    handleThemeToggle() {
+      this.theme.toggleTheme();
+      this.currentIsDark = !this.currentIsDark;
+    },
     updateUsername() {
       alert(`Details updated successfully!`);
     },
     async handleDeleteAccount() {
       const confirmed = confirm("Are you absolutely sure you want to permanently delete your account?");
       if (!confirmed) return;
-      // ... keep existing deletion logic exactly as it is ...
+
+      try {
+        const response = await fetch('/api/delete_account.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: this.auth.username })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          alert("Your account has been successfully deleted.");
+          this.auth.logout();
+          this.$router.push('/films');
+        } else {
+          alert(data.error || "Failed to complete account deletion.");
+        }
+      } catch (err) {
+        alert("Network connection error encountered while deleting account.");
+        console.error(err);
+      }
     }
   }
 };

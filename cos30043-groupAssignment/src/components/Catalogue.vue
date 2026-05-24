@@ -16,7 +16,7 @@ const loading = ref(true)
 const currentIndex = ref(0)
 
 //router
-const router = useRouter()
+//const router = useRouter()
 
 // Load all data
 async function loadData() {

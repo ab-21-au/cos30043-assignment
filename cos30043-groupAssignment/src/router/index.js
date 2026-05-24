@@ -9,6 +9,10 @@ import error from '../components/redirects/Error404.vue'
 import TermsOfService from "../components/policies/TermsOfService.vue"
 import PrivacyPolicy from "../components/policies/PrivacyPolicy.vue"
 import PoliciesLayout from "../components/policies/PoliciesLayout.vue"
+import SignIn from '../components/SignIn.vue'
+import SignUp from '../components/SignUp.vue'
+import AccountSettings from '../components/AccountSettings.vue'
+import Account from '../components/Account.vue'
 
 const routes = [
 
@@ -53,7 +57,7 @@ const routes = [
         children: [
             { path: 'terms-and-conditions', component: TermsOfService },
             { path: 'privacy-policy', component: PrivacyPolicy },
-            { path: '', redirect: 'policies/terms-and-conditions'}
+            { path: '', redirect: 'policies/terms-and-conditions' }
         ]
     },
 
