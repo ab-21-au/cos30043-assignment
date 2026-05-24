@@ -4,7 +4,7 @@ import vuetify from 'vite-plugin-vuetify'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '*/', // Please change to your user when hosting on mercury
+  base: '/cos30043/s104551544/Assign2/', // Please change to your user when hosting on mercury
   plugins: [vue(), vuetify()],
   server: {
     proxy: {

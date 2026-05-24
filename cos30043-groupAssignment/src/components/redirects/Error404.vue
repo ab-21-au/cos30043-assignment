@@ -22,8 +22,16 @@
         justify-content: center;
         height: 100vh;
         text-align: center;
+        padding: 20px;
         color: var(--text-primary);
     }
+}
+
+img{
+    width: 200px;
+    height: auto;
+    margin: 20px 0;
+    border-radius: 10px;
 }
 
 .errorPage {
@@ -34,7 +42,6 @@
     justify-content: center;
     height: 100vh;
     text-align: center;
-    padding: 10%;
     color: var(--text-primary);
 
     button{

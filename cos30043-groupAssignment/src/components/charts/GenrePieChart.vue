@@ -1,9 +1,39 @@
 <script setup>
-import {computed} from 'vue'
+import {ref, computed, onMounted} from 'vue'
+import { tmdb, GENRES } from '../../services/tmdb.js'
 
 const props = defineProps({
-    genres: Array // define better when set up database
+    genres: {
+        type: Array,
+        default: () => [] // default to empty array if no genres are passed
+    }
 })
+
+const chartData = ref([])
+
+// gets genre names from tmdb
+const genreMap = Object.fromEntries(
+    GENRES.map(g => [g.id, g.name])
+)
+
+onMounted(async () => {
+    const genreCounts = {}
+
+    const movies = await Promise.all(props.genres.map(id => tmdb.getMovieById(id)))
+
+    movies.forEach(movie => {
+        const movieGenres = movie.genres || []
+
+        movieGenres.forEach(g => {
+            const genreName = genreMap[g.id] || g.name || 'Unknown'
+            genreCounts[genreName] = (genreCounts[genreName] || 0) + 1
+        })
+    })
+
+    chartData.value = Object.entries(genreCounts).map(([name, value]) => ({ name, value })) // sets it up for pie chart
+    console.log('Genre counts:', chartData.value)   // error checking
+})
+
 
 // listing pie chart colours from Root
 const accent_1 = getComputedStyle(document.documentElement).getPropertyValue('--piechart-colors').split(',')[0].trim()
@@ -34,7 +64,7 @@ echarts.use([
 
 const option = computed(() => ({
     tooltip:{
-        trigger: 'item' //change??
+        trigger: 'item'
     },
     series: [
         {
@@ -55,19 +85,13 @@ const option = computed(() => ({
             fontWeight: 'bold'
             }
         },
-        data: [
-            { value: 335, name: 'A' },
-            { value: 310, name: 'B' },
-            { value: 234, name: 'C' },
-            { value: 135, name: 'D' },
-            { value: 1548, name: 'E' }
-        ],
-        color: [accent_1, accent_2, accent_3, accent_4, accent_5] // change to root colours later
+        data: chartData.value,
+        color: [accent_1, accent_2, accent_3, accent_4, accent_5]
         }
     ]
 }))
 </script>
-<template>
+<template class="col-6">
     <p>Most watched genres</p>
     <VChart
     class="pie-chart"
@@ -79,8 +103,14 @@ const option = computed(() => ({
 .pie-chart{
     height: 250px;
     width: 100%;
-    /*Add more later*/
     display: block;
     margin: 0 auto;
+}
+
+@media (max-width: 360px){
+    .pie-chart text {
+        font-size: 12px;
+        margin: 0;
+    }
 }
 </style>
