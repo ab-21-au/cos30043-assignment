@@ -29,6 +29,12 @@
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   --barbackground: rgba(220, 220, 220, 0.8);
   --piechart-colors: #A22C29, #902923, #511613, #adada3, #B9BAA3;
+  --rot-user-line: #5b51cf;
+  --rot-text: #0A100D;
+  --rot-grid:#00000012;
+  --rot-hover:#c5270b;
+  --rot-critic:#0F6E56;
+  --rot-dot-border:#858383;
 }
 
 :root.dark {
@@ -61,6 +67,12 @@
   --border-subtle: rgba(214, 213, 201, 0.1);
   --shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
   --barbackground: rgba(220, 220, 220, 0.8);
+  --rot-user-line: #7F77DD;
+  --rot-text:#D6D5C9;
+  --rot-grid:#ffffff12;
+  --rot-hover:#EF9F27;
+  --rot-critic:#5DCAA5;
+  --rot-dot-border:#858383;
 }
 
 
