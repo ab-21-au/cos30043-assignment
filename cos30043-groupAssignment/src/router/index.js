@@ -4,6 +4,12 @@ import Review from '../components/Review.vue'
 import AboutUs from '../components/AboutUs.vue'
 import Catalogue from '../components/Catalogue.vue'
 import ContactUs from '../components/ContactUs.vue'
+import AccountDashboard from '../components/AccountDashboard.vue'
+import AccountDashboardHome from '../components/AccountDashboardHome.vue'
+import Statistics from '../components/Statistics.vue'
+import AccountLists from '../components/AccountLists.vue'
+import ReviewAccount from '../components/ReviewAccount_Component.vue'
+import AccountSettings from '../components/AccountSettings.vue'
 import ThankYou from '../components/redirects/ThankYou.vue'
 import error from '../components/redirects/Error404.vue'
 import TermsOfService from "../components/policies/TermsOfService.vue"
@@ -37,12 +43,13 @@ const routes = [
     // User Account Dashboard routing
     {
         path: '/account',
-        //component: '' -- not sure if there will be a component that holds all of the routing for user account so i left this blank, can be deleted if not used
+        component: AccountDashboard,
         children: [
-            //{ path: 'stats', component: Stats },
-            //{ path: 'lists', component: Lists },
-            //{ path: 'user-reviews', component: UserReviews },
-            //{ path: 'settings', component: Settings },
+            { path: '', component: AccountDashboardHome },
+            { path: 'stats', component: Statistics },
+            { path: 'lists', component: AccountLists },
+            { path: 'reviews', component: ReviewAccount },
+            { path: 'settings', component: AccountSettings },
         ]
     },
 
