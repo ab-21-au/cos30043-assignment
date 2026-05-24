@@ -206,68 +206,8 @@ const movie = ref({
   tags: []
 });
 
-const reviews = ref([
-  {
-    review_id: 1,
-    username: "filmfan99",
-    content: "Absolutely blew me away on opening night, instant classic.",
-    rating: "Peak",
-    rewatch: "First time watch",
-    expectations: "Yes",
-    plot: 5, acting: 5, pacing: 4,
-    created_at: `${movie.value.year}-01-10`
-  },
-  {
-    review_id: 2,
-    username: "casually_watching",
-    content: "Pretty good but nothing special honestly.",
-    rating: "Mid at best",
-    rewatch: "First time watch",
-    expectations: "No",
-    plot: 3, acting: 3, pacing: 2,
-    created_at: `${movie.value.year}-01-14`
-  },
-  {
-    review_id: 3,
-    username: "moviecritique",
-    content: "Hype died down, still a solid watch though.",
-    rating: "Peak",
-    rewatch: "Rewatch",
-    expectations: "Yes",
-    plot: 4, acting: 5, pacing: 4,
-    created_at: `${movie.value.year}-02-20`
-  },
-  {
-    review_id: 4,
-    username: "retroreviewer",
-    content: "Watching this a year later — genuinely underrated.",
-    rating: "Peak",
-    rewatch: "Rewatch",
-    expectations: "Yes",
-    plot: 5, acting: 5, pacing: 5,
-    created_at: `${parseInt(movie.value.year) + 1}-03-15`
-  },
-  {
-    review_id: 5,
-    username: "midnight_popcorn",
-    content: "Aged like fine wine. A masterpiece in hindsight.",
-    rating: "Peak",
-    rewatch: "Rewatch",
-    expectations: "Yes",
-    plot: 5, acting: 5, pacing: 4,
-    created_at: `${parseInt(movie.value.year) + 2}-06-01`
-  },
-  {
-    review_id: 6,
-    username: "harshcritic",
-    content: "Still think it was overhyped but I get the appeal.",
-    rating: "So bad it's good",
-    rewatch: "First time watch",
-    expectations: "No",
-    plot: 3, acting: 4, pacing: 2,
-    created_at: `${parseInt(movie.value.year) + 2}-08-11`
-  }
-]);
+const reviews = ref([]);
+
 const newReview = ref({ 
   text: '', rating: '', 
   rewatch: '', 
