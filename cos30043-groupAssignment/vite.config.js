@@ -11,6 +11,10 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost/cos30043-assignment/cos30043-groupAssignment',
         changeOrigin: true,
+        secure: false,
+
+        cookieDomainRewrite: "localhost",
+
         rewrite: (path) => path.replace(/^\/api/, '/api')
       }
     }
