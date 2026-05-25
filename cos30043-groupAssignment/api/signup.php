@@ -18,14 +18,20 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
-$username = isset($data['username']) ? trim($data['username']) : '';
-$password = isset($data['password']) ? trim($data['password']) : '';
-$email    = isset($data['email']) ? trim($data['email']) : '';
 
-if (empty($username) || empty($password) || empty($email)) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'All registration fields are required.']);
-    exit;
+$first_name      = isset($data['first_name']) ? trim($data['first_name']) : '';
+$last_name       = isset($data['last_name']) ? trim($data['last_name']) : '';
+$date_of_birth   = isset($data['date_of_birth']) ? trim($data['date_of_birth']) : '';
+$gender          = isset($data['gender']) ? trim($data['gender']) : '';
+$favourite_genre = isset($data['favourite_genre']) ? trim($data['favourite_genre']) : null;
+$username        = isset($data['username']) ? trim($data['username']) : '';
+$password        = isset($data['password']) ? trim($data['password']) : '';
+$email           = isset($data['email']) ? trim($data['email']) : '';
+
+if (empty($first_name) || empty($last_name) || empty($date_of_birth) || empty($gender) || empty($username) || empty($password) || empty($email)) {
+    http_response_code(400); 
+    echo json_encode(['success' => false, 'error' => 'All structural fields are strictly required.']);
+    exit; 
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -46,8 +52,6 @@ if (strlen($password) < 6) {
     exit;
 }
 
-
-
 mysqli_report(MYSQLI_REPORT_OFF);
 $conn = connectDatabase();
 
@@ -66,8 +70,13 @@ if (mysqli_stmt_num_rows($check_stmt) > 0) {
 mysqli_stmt_close($check_stmt);
 
 $password_hash = password_hash($password, PASSWORD_BCRYPT);
-$insert_stmt = mysqli_prepare($conn, 'INSERT INTO MRS_Account (username, email, password_hash) VALUES (?, ?, ?)');
-mysqli_stmt_bind_param($insert_stmt, 'sss', $username, $email, $password_hash);
+
+$insert_stmt = mysqli_prepare(
+    $conn, 
+    'INSERT INTO MRS_Account (username, email, password_hash, first_name, last_name, date_of_birth, gender, favourite_genre) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+);
+
+mysqli_stmt_bind_param($insert_stmt, 'ssssssss', $username, $email, $password_hash, $first_name, $last_name, $date_of_birth, $gender, $favourite_genre);
 
 if (mysqli_stmt_execute($insert_stmt)) {
     echo json_encode(['success' => true]);
