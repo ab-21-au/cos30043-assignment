@@ -14,7 +14,7 @@ const movieTotal = ref([])
 const err=ref(null)
 
 onMounted(() => {
-    const getSQLApiURL = `${import.meta.env.BASE_URL}api/get_account_reviews.php?account_id=1` //+ this.accountid // idk if this is correct will change maybe later
+    const getSQLApiURL = `${import.meta.env.BASE_URL}api/get_account_reviews.php?account_id=1` //+ this.accountid (when routing set up will change)
 
     fetch(getSQLApiURL)
         .then(response => {
@@ -26,7 +26,7 @@ onMounted(() => {
         .then(data => {
             if(!Array.isArray(data)){
                 throw new Error('Unexpected data format: expected an array')
-                console.error('Received data:', data)
+                console.error('Received data:', data) //error checking
             }
             else{
                 genres.value = []
@@ -39,12 +39,13 @@ onMounted(() => {
 
                 data.forEach(review => {
                     genres.value = data.map(r => r.tmdb_movie_id)
-                    ratingsPlot.value = data.map(r => Number(r.plot ?? 0))
-                    ratingsActing.value = data.map(r => Number(r.acting ?? 0))
-                    ratingsPacing.value = data.map(r => Number(r.pacing ?? 0))
+                    ratingsPlot.value = data.map(r => Number(r.plot))
+                    ratingsActing.value = data.map(r => Number(r.acting))
+                    ratingsPacing.value = data.map(r => Number(r.pacing))
                     movieTotal.value = data.map(r => r.created_at)
                 })
                 
+                // error handling will remove soon
                 console.log('Genres:', genres.value)
                 console.log('Plot Ratings:', ratingsPlot.value)
                 console.log('Acting Ratings:', ratingsActing.value)

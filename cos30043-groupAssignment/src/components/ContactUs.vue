@@ -113,3 +113,129 @@ export default {
     </form>
 </main>
 </template>
+
+<style>
+/*ContactUs.Vue*/
+/*Phone (default)*/
+@media (min-width: 320px) {
+  .contactus-container {
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    padding: 20px;
+    width: 90%;
+    max-width: 250px;
+    margin: 0 auto;
+    background-color: var(--bg-form);
+    box-shadow: var(--shadow);
+    color: var(--text-primary);
+    input, textarea {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+      border: 0px solid var(--border);
+      box-sizing: border-box;
+      border-radius: 25px;
+      text-align: left;
+      font-family: var(--sans);
+      color:var(--bg-form-text);
+      background-color: var(--bg-input);
+    }
+
+    textarea {
+      height: 200px;
+      width: 100%;
+      margin: 20px 0;
+    }
+    button{
+      background-color: var(--accent);
+      color: var(--text-primary);
+      border: none;
+      padding: 10px 50px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      display: block;
+      margin: 0 auto;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: var(--accent-deeper);
+      }
+    }
+  }
+  #intro{
+    text-align: center;
+    padding-top: 60px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+        h1, p {
+      color: var(--text-primary);
+    }
+  }
+}
+
+/* Contact Us -- Laptop view*/
+@media (min-width: 1024px) {
+  .contactus-container {
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    padding: 20px auto;
+    max-width: 500px;
+    background-color: var(--bg-form);
+    box-shadow: var(--shadow);
+    color: var(--text-primary);
+    input, textarea {
+      padding: 10px;
+      border: 0px solid var(--border);
+      box-sizing: border-box;
+      border-radius: 25px;
+      text-align: left;
+      color: var(--bg-form-text);
+      background-color: var(--bg-input);
+    }
+
+    #nameRow{
+      margin-bottom: 10px;
+      border: 0 solid var(--border);
+    }
+
+    #email, #ponumber{
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    textarea {
+      height: 200px;
+      width: 100%;
+      margin: 20px 0;
+    }
+    button{
+      background-color: var(--accent);
+      color: var(--accent-text-muted);
+      border: none;
+      padding: 10px 50px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      display: block;
+      margin: 0 auto;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: var(--accent-deep);
+      }
+    }
+    #intro{
+      text-align: center;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  }  
+}
+
+.contactUs-page{
+  background-color: var(--bg-primary);
+  padding-bottom: 40px;
+}
+
+</style>

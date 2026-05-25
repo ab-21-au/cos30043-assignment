@@ -1,6 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { tmdb, GENRES } from '../services/tmdb.js'
+import { useRouter } from 'vue-router'
+import { useAuth } from '../assets/UseAuth.js'
+
+const router = useRouter()
+const auth = useAuth()
 
 // State
 const recentMovies = ref([])
@@ -9,6 +14,9 @@ const searchQuery = ref('')
 const selectedGenre = ref('')
 const loading = ref(true)
 const currentIndex = ref(0)
+
+//router
+//const router = useRouter()
 
 // Load all data
 async function loadData() {
@@ -129,16 +137,36 @@ function clearAll() {
   loadData()
 }
 
+function handleProfileClick() {
+  if (auth.isAuthenticated.value) {
+    router.push('/account') // Routes to dashboard if logged in
+  } else {
+    router.push('/login')    // Routes to login if guest
+  }
+}
+
 onMounted(() => loadData())
+
+// Nav to review page w/ movie id
+function goToReview(movieId) {
+  router.push({ path: `/films/${movieId}` })
+}
 </script>
 
 <template>
   <div class="catalogue">
     <header class="header">
-      <div class="logo">Better Than Letterboxd</div>
-      <div class="header-right">
-        <span class="icon">Login</span>
-      </div>
+      <div class="logo">Retrospect</div>
+      <!-- <div class="header-right">
+        <span class="icon" @click="handleProfileClick" style="cursor: pointer; user-select: none;">
+          <template v-if="auth.isAuthenticated.value">
+            {{ auth.username.value }}
+          </template>
+          <template v-else>
+            Login
+          </template>
+        </span>
+      </div> -->
     </header>
 
     <section class="hero-section">
@@ -148,7 +176,7 @@ onMounted(() => loadData())
       </div>
 
       <div class="carousel-wrapper">
-        <button class="carousel-btn prev" @click="goPrev">◀</button>
+        <button class="carousel-btn prev" @click="goPrev"><</button>
         
         <div class="carousel-container">
           <div class="carousel-track">
@@ -158,6 +186,7 @@ onMounted(() => loadData())
               class="carousel-movie"
               :style="getStyle(i)"
               :class="{ center: i == currentIndex }"
+              @click="goToReview(movie.id)"
             >
               <img 
                 :src="movie.poster_path ? `https://image.tmdb.org/t/p/w342${movie.poster_path}` : 'https://via.placeholder.com/342x513?text=No+Poster'" 
@@ -170,11 +199,11 @@ onMounted(() => loadData())
           </div>
         </div>
         
-        <button class="carousel-btn next" @click="goNext">▶</button>
+        <button class="carousel-btn next" @click="goNext">></button>
       </div>
       
       <div class="center-movie-info" v-if="recentMovies[currentIndex]">
-        <h2>{{ recentMovies[currentIndex].title }}</h2>
+        <h2 @click="goToReview(recentMovies[currentIndex].id)">{{ recentMovies[currentIndex].title }}</h2>
         <p class="year">{{ recentMovies[currentIndex].release_date?.split('-')[0] }}</p>
         <p class="overview">{{ recentMovies[currentIndex].overview?.substring(0, 150) }}...</p>
         <div class="rating">★ {{ recentMovies[currentIndex].vote_average?.toFixed(2) }}/10</div>
@@ -208,7 +237,7 @@ onMounted(() => loadData())
         </div>
     
         <div v-if="row.useGrid" class="results-grid">
-          <div v-for="movie in row.movies" :key="movie.id" class="movie-card">
+          <div v-for="movie in row.movies" :key="movie.id" class="movie-card" @click="goToReview(movie.id)">
             <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
             <div class="movie-info">
               <h4>{{ movie.title }}</h4>
@@ -218,7 +247,7 @@ onMounted(() => loadData())
         </div>
         
         <div v-else class="movie-scroll" :id="`scroll-${idx}`">
-          <div v-for="movie in row.movies" :key="movie.id" class="movie-card">
+          <div v-for="movie in row.movies" :key="movie.id" class="movie-card" @click="goToReview(movie.id)">
             <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
             <div class="movie-info">
               <h4>{{ movie.title }}</h4>
@@ -239,14 +268,14 @@ onMounted(() => loadData())
 }
 
 body {
-  background: white;
+  background: var(--bg-header);
 }
 
 .catalogue {
   width: 100%;
   min-height: 100vh;
-  background: white;
-  color: black;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   overflow-x: hidden;
 }
 
@@ -257,26 +286,21 @@ body {
   padding: 20px 5%;
   position: sticky;
   top: 0;
-  background: white;
-  border-bottom: 1px solid #eee;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--movie-scroll);
   z-index: 100;
 }
 
 .logo {
   font-size: 24px;
   font-weight: bold;
-  color: black;
-}
-
-.header-right {
-  display: flex;
-  gap: 20px;
+  color: var(--text-primary)
 }
 
 .icon {
   font-size: 20px;
   cursor: pointer;
-  color: black;
+  color: var(--text-primary);
 }
 
 .hero-section {
@@ -287,12 +311,12 @@ body {
 .hero-content h1 {
   font-size: clamp(28px, 5vw, 48px);
   margin-bottom: 10px;
-  color: black;
+  color: (var(--text-primary));
 }
 
 .hero-content p {
   font-size: clamp(14px, 3vw, 18px);
-  color: #555;
+  color: var(--color-hero-content);
 }
 
 /* Carousel */
@@ -329,11 +353,10 @@ body {
   cursor: pointer;
   border-radius: 12px;
   overflow: hidden;
-  background: #f0f0f0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .carousel-movie img {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   width: 100%;
   height: 330px;
   object-fit: cover;
@@ -341,24 +364,25 @@ body {
 
 .movie-badge {
   position: absolute;
-  top: 10px;
+  top: 25px;
   right: 10px;
-  background: #333;
-  color: white;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   padding: 4px 8px;
   border-radius: 20px;
   font-size: 12px;
 }
 
 .carousel-btn {
-  background: #ddd;
-  color: black;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   border: none;
   width: 45px;
   height: 45px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 30px;
+  font-style: bold;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -370,32 +394,31 @@ body {
 }
 
 .carousel-btn:hover {
-  background: #ccc;
+  background: var(--bg-carousel-btn);
 }
 
 .center-movie-info {
   text-align: center;
   padding: 30px;
-  background: #f5f5f5;
+  background: var(--bg-movie-info);
   border-radius: 20px;
-  margin-top: 20px;
 }
 
 .center-movie-info h2 {
   font-size: clamp(24px, 4vw, 36px);
   margin-bottom: 8px;
-  color: black;
+  color: var(--text-primary);
 }
 
 .center-movie-info .year {
   font-size: 14px;
-  color: #666;
+  color: var(--bg-movie-info-year);
   margin-bottom: 12px;
 }
 
 .center-movie-info .overview {
   font-size: 14px;
-  color: #444;
+  color: var(--bg-movie-info-overview);
   line-height: 1.6;
   max-width: 600px;
   margin: 0 auto 15px;
@@ -403,7 +426,7 @@ body {
 
 .center-movie-info .rating {
   font-size: 18px;
-  color: #e50914;
+  color: var(--bg-movie-info-rating);
   font-weight: bold;
 }
 
@@ -412,7 +435,7 @@ body {
   gap: 20px;
   padding: 30px 5%;
   flex-wrap: wrap;
-  background: #f5f5f5;
+  background: var(--bg-movie-info);
 }
 
 .search-group, .filter-group {
@@ -424,7 +447,7 @@ body {
   display: block;
   font-size: 14px;
   margin-bottom: 8px;
-  color: black;
+  color: var(--text-primary);
 }
 
 .search-wrapper {
@@ -435,17 +458,17 @@ body {
 .search-wrapper input, .filter-group select {
   flex: 1;
   padding: 14px;
-  background: white;
-  border: 1px solid #ddd;
+  background: var(--bg-header);
+  border: 1px solid var(--border-search-wrapper);
   border-radius: 10px;
   font-size: 14px;
-  color: black;
+  color: var(--text-primary);
 }
 
 .search-wrapper button {
   padding: 14px 24px;
-  background: #333;
-  color: white;
+  background: var(--bg-search-wrapper);
+  color: var(--bg-input);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -474,8 +497,8 @@ body {
 
 .clear-btn {
   padding: 14px 24px;
-  background: #ddd;
-  color: black;
+  background: var(--bg-search-wrapper);
+  color: var(--bg-input);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -499,8 +522,8 @@ body {
 .genre-title {
   font-size: clamp(20px, 3vw, 28px);
   padding-left: 15px;
-  color: black;
-  border-left: 4px solid #e50914;
+  color: var(--text-primary);
+  border-left: 4px solid var(--bg-movie-info-rating);
 }
 
 .movie-scroll {
@@ -515,22 +538,22 @@ body {
 }
 
 .movie-scroll::-webkit-scrollbar-track {
-  background: #eee;
+  background: var(--movie-scroll);
 }
 
 .movie-scroll::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: var(--bg-carousel-btn);
   border-radius: 10px;
 }
 
 .movie-card {
   flex: 0 0 auto;
   width: 160px;
-  background: white;
+  background: var(--bg-header);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid #eee;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transition: transform 0.3s;
 }
 
@@ -541,6 +564,7 @@ body {
 .movie-card img {
   width: 100%;
   height: 240px;
+  margin-top: 0;
   object-fit: cover;
 }
 
@@ -554,19 +578,19 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: black;
+  color:var(--text-primary);
 }
 
 .movie-info .rating {
   font-size: 12px;
-  color: #e50914;
+  color: var(--bg-movie-info-rating);
 }
 
 .loading {
   text-align: center;
   padding: 60px;
   font-size: 18px;
-  color: #666;
+  color: var(--bg-movie-info-year);
 }
 
 /* Responsive */
