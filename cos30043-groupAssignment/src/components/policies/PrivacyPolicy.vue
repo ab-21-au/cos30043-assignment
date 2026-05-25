@@ -31,7 +31,7 @@
                 Sensitive information is defined in the Privacy Act to include information or opinion about such things as 
                 an individual's racial or ethnic origin, political opinions, membership of a political association, religious 
                 or philosophical beliefs, membership of a trade union or other professional body, criminal record or health information.<br>
-                Sensitive information will be used by us only:
+                Sensitive information will be used by us only: </p>
                 <ul>
                     <li>
                         For the primary purpose for which it was obtained
@@ -43,7 +43,7 @@
                         With your consent; or where required or authorized by law.
                     </li>
                 </ul>
-            </p>
+            
 
         <h2>Third Parties</h2>
             <p>
@@ -54,7 +54,7 @@
 
         <h2>Disclosure of Personal Information</h2>
             <p>
-                Your Personal Information may be disclosed in a number of circumstances including the following:
+                Your Personal Information may be disclosed in a number of circumstances including the following: </p>
                 <ul>
                     <li>
                         Third parties where you consent to the use or disclosure; and
@@ -63,7 +63,7 @@
                         Where required or authorized by law.
                     </li>
                 </ul>
-            </p>
+            
             
         <h2>Security of Personal Information</h2>
             <p>

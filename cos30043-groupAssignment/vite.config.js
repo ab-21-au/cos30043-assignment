@@ -6,4 +6,17 @@ import vuetify from 'vite-plugin-vuetify'
 export default defineConfig({
   base: '/cos30043/s104551544/Assign2/', // Please change to your user when hosting on mercury
   plugins: [vue(), vuetify()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost/cos30043-assignment/cos30043-groupAssignment',
+        changeOrigin: true,
+        secure: false,
+
+        cookieDomainRewrite: "localhost",
+
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    }
+  }
 })

@@ -21,7 +21,7 @@
 
         <h2>3. Prohibited Conduct</h2>
             <p>By agreeing to these Terms, you are agreeing that you will not violate any applicable laws, and you are responsible for your actions while using our Site. Alongside
-                these conditions, you also must not:
+                these conditions, you also must not:</p>
                 <ul>
                     <li>
                         Engage in any form of harassment, discrimination, hate, violence, threatening, predatory or stalking behavior, towards anyone including based on race, age,
@@ -44,11 +44,11 @@
                         Attempt to recreate our site by using our Terms, Conditions, Privacy Policy and source code, to act as a competitor or to make your own business
                     </li>
                     <li>
-                        Directly or indirectly attempt to go against the stated Terms aND Conditions
+                        Directly or indirectly attempt to go against the stated Terms and Conditions
                     </li>
                 </ul>
 
-            </p><br>
+            <br>
 
         <h2>4. User Accounts</h2>
             <p>Users of this Service can create an account, allowing them to write reviews for movies. These reviews are visible in a user's personal dashboard 

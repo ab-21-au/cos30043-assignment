@@ -15,13 +15,14 @@
   --bg-form: #eae8da;
   --bg-form-text: black;
   --bg-dark: #0A100D;
-  --bg-button: #0A100D;;
-  --accent: #A22C29;           
+  --bg-button: #0A100D;
+  ;
+  --accent: #A22C29;
   --accent-deep: #902923;
   --accent-deeper: #511613;    
   --on-accent: #ffffff;
   --on-accent-muted: #f0f0f0;
-  --text-primary: #0A100D;     
+  --text-primary: #0A100D;
   --text-secondary: #4A4D40;
   --text-muted: #6B6D5B;
   --accent-text-muted: #D6D5C9;
@@ -29,6 +30,12 @@
   --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   --barbackground: rgba(220, 220, 220, 0.8);
   --piechart-colors: #A22C29, #902923, #511613, #adada3, #B9BAA3;
+  --rot-user-line: #5b51cf;
+  --rot-text: #0A100D;
+  --rot-grid:#00000012;
+  --rot-hover:#c5270b;
+  --rot-critic:#0F6E56;
+  --rot-dot-border:#858383;
 }
 
 :root.dark {
@@ -48,19 +55,26 @@
   --bg-form: #1b201e;
   --bg-form-text: black;
   --bg-dark: #050807;
-  --bg-button: #D6D5C9;;
-  --accent: #A22C29;           
-  --accent-deep: #902923;    
-  --accent-deeper: #511613;    
+  --bg-button: #D6D5C9;
+  ;
+  --accent: #A22C29;
+  --accent-deep: #902923;
+  --accent-deeper: #511613;
   --on-accent: #ffffff;
-  --on-accent-muted: #dcdcdc;  
-  --text-primary: #D6D5C9;     
-  --text-secondary: #B9BAA3;   
+  --on-accent-muted: #dcdcdc;
+  --text-primary: #D6D5C9;
+  --text-secondary: #B9BAA3;
   --text-muted: #7A7B6A;
-  --accent-text-muted: #0A100D; 
+  --accent-text-muted: #0A100D;
   --border-subtle: rgba(214, 213, 201, 0.1);
   --shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
   --barbackground: rgba(220, 220, 220, 0.8);
+  --rot-user-line: #7F77DD;
+  --rot-text:#D6D5C9;
+  --rot-grid:#ffffff12;
+  --rot-hover:#EF9F27;
+  --rot-critic:#5DCAA5;
+  --rot-dot-border:#858383;
 }
 
 
@@ -83,9 +97,10 @@
   border-top: 1px solid var(--border);
   text-align: left;
 
-  & > div {
+  &>div {
     flex: 1 1 0;
     padding: 32px;
+
     @media (max-width: 1024px) {
       padding: 24px 20px;
     }
@@ -138,6 +153,7 @@
     &:hover {
       box-shadow: var(--shadow);
     }
+
     .button-icon {
       height: 18px;
       width: 18px;
@@ -179,18 +195,18 @@
     border-radius: 5px;
   }
 
-  .toggle-text{
+  .toggle-text {
     display: block;
   }
 
-  .toggle-icon{
+  .toggle-icon {
     display: none;
   }
 }
 
 /* Mobile Response with Toggle Button */
-@media (max-width: 360px){
-  .theme-toggle{
+@media (max-width: 360px) {
+  .theme-toggle {
     top: 15px;
     left: 20px;
     padding: 0.6rem;
@@ -200,11 +216,11 @@
     background-color: var(--bg-form);
   }
 
-  .toggle-text{
+  .toggle-text {
     display: none;
   }
 
-  .toggle-icon{
+  .toggle-icon {
     display: block;
   }
 }
@@ -212,6 +228,7 @@
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
+
   @media (max-width: 1024px) {
     height: 48px;
   }
@@ -233,6 +250,7 @@
     left: 0;
     border-left-color: var(--border);
   }
+
   &::after {
     right: 0;
     border-right-color: var(--border);
@@ -241,7 +259,7 @@
 
 /* Navigation Pop-out */
 @media (max-width: 2048px) {
-  
+
   #menu {
     position: fixed;
     top: 40px;
@@ -263,6 +281,7 @@
     width: 400px;
     background-color: var(--bg-surface);
     border-radius: 5px;
+
     a {
       text-decoration: none;
       display: block;
@@ -277,6 +296,7 @@
       color: var(--bg-button);
       font-size: 18px;
     }
+
     nav a:first-child {
       margin-top: 100px;
     }
@@ -323,6 +343,7 @@
     height: 50%;
     background-color: var(--bg-surface);
     border-radius: 5px;
+
     a {
       text-decoration: none;
       display: block;
@@ -337,6 +358,7 @@
       color: var(--bg-button);
       font-size: 14px;
     }
+
     nav a:first-child {
       margin-top: 30px;
     }
@@ -350,15 +372,18 @@
     background-color: var(--accent);
     height: fit-content;
     padding-bottom: 20px;
+
     h3 {
       margin-top: 20px;
       color: var(--bg-form);
       font-weight: bold;
     }
+
     a {
       text-decoration: none;
       color: var(--bg-surface);
     }
+
     #logo {
       width: 300px;
       margin-top: 35px;
@@ -374,18 +399,21 @@
   .footer {
     background-color: var(--accent);
     height: fit-content;
+
     h3 {
       margin-top: 20px;
       color: var(--bg-form);
       font-weight: bold;
       font-size: 16px;
     }
+
     a {
       text-decoration: none;
       color: var(--bg-surface);
       font-size: 12px;
       margin-bottom: 10px;
     }
+
     #logo {
       width: 100px;
       margin-top: 60px;

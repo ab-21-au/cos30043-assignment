@@ -1,61 +1,70 @@
 <?php
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Access-Control-Allow-Methods: POST, OPTIONS');
 
+require __DIR__ . '/db.php';
+
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header('Content-Type: application/json');
+
+// Handle preflight OPTIONS requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-require_once 'db.php';
-
-$raw_json = file_get_contents('php://input');
-$data = json_decode($raw_json, true);
-
-// val before connect
-if (!$data) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Empty JSON data']);
-    exit;
+// Ensure this endpoint only responds to POST requests
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(["success" => false, "error" => "Method Not Allowed. Use POST."]);
+    exit();
 }
 
-// extract and validate fields
-$account_id = isset($data['account_id']) ? intval($data['account_id']) : 0;
+// Read the raw JSON payload passed from Vue
+$inputData = json_decode(file_get_contents("php://input"), true);
+$username  = isset($inputData['username']) ? trim($inputData['username']) : '';
 
-//checker for missing fields
-if ($account_id <= 0) {
+
+if (empty($username)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Invalid Account ID']);
-    exit;
+    echo json_encode(["success" => false, "error" => "Incomplete request. Username is required for deletion."]);
+    exit();
 }
+
 
 $conn = connectDatabase();
 
-$sql = "DELETE FROM MRS_Account WHERE account_id = ?";
+
+$sql = "DELETE FROM MRS_Account WHERE username = ?";
 $stmt = mysqli_prepare($conn, $sql);
 
-//inject safely into db
 if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "i", $account_id);
+    
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
 
-    if (mysqli_stmt_execute($stmt)) {
-        if (mysqli_stmt_affected_rows($stmt) === 0) {
-            http_response_code(404);
-            echo json_encode(['success' => false, 'error' => 'Account not found']);
-        } else {
-            echo json_encode(['success' => true, 'message' => 'Account deleted successfully']);
-        }
+    // Check if an actual record matched that username string and was deleted
+    if (mysqli_stmt_affected_rows($stmt) > 0) {
+        echo json_encode([
+            "success" => true,
+            "message" => "Account associated with '" . $username . "' was permanently deleted successfully."
+        ]);
     } else {
-        http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'Unable to delete account']);
+        http_response_code(404);
+        echo json_encode([
+            "success" => false,
+            "error" => "Account record not found or already deleted."
+        ]);
     }
-
+    
     mysqli_stmt_close($stmt);
 } else {
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Database query failed']);
+    echo json_encode([
+        "success" => false,
+        "error" => "Failed to prepare database deletion statement."
+    ]);
 }
 
+
 mysqli_close($conn);
-?>
