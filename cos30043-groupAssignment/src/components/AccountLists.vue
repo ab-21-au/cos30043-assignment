@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import AccountWelcomeCard from './AccountWelcomeCard.vue'
 
 const props = defineProps({
@@ -35,6 +35,10 @@ const listGroups = computed(() => {
 })
 
 const getMovies = async () => {
+  if (!props.accountId) {
+    return
+  }
+
   isLoading.value = true
   error.value = ''
 
@@ -55,9 +59,11 @@ const getMovies = async () => {
   }
 }
 
-onMounted(() => {
-  getMovies()
-})
+watch(
+  () => props.accountId,
+  getMovies,
+  { immediate: true }
+)
 </script>
 
 <template>

@@ -7,10 +7,11 @@
  * settings.php file outside the public htdocs directory where possible.
  */
 
-$host = 'localhost';
-$database = 'test for assignment account';
-$username = 'root';
-$password = '';
+$host = 'feenix-mariadb.swin.edu.au';
+$database = 's102146171_db';
+$username = 's102146171';
+$password = 'COS30020!';
+
 
 $accountTable = 'MRS_Account';
 $reviewTable = 'MRS_Review';

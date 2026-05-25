@@ -1,11 +1,14 @@
 <script setup>
-import { onMounted, reactive } from 'vue'
+import { reactive, watch } from 'vue'
+import { useAuth } from '../assets/UseAuth.js'
+
+const auth = useAuth()
 
 const account = reactive({
-  id: 1,
-  name: 'demo_user',
-  username: 'demo_user',
-  email: 'demo.user@example.com',
+  id: null,
+  name: '',
+  username: '',
+  email: '',
   created_at: '',
 })
 
@@ -18,21 +21,38 @@ const setAccount = (accountData) => {
 }
 
 const getAccount = async () => {
+  if (!auth.isAuthenticated.value) {
+    setAccount({
+      account_id: null,
+      username: '',
+      email: '',
+      created_at: '',
+    })
+    return
+  }
+
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}api/get_account.php?account_id=${account.id}`)
+    const query = auth.accountId.value
+      ? `account_id=${encodeURIComponent(auth.accountId.value)}`
+      : `username=${encodeURIComponent(auth.username.value)}`
+
+    const response = await fetch(`${import.meta.env.BASE_URL}api/get_account.php?${query}`)
     const result = await response.json()
 
     if (result.success) {
       setAccount(result.account)
+      auth.login(result.account.username, result.account.account_id)
     }
   } catch (error) {
     console.error('Error fetching account details:', error)
   }
 }
 
-onMounted(() => {
-  getAccount()
-})
+watch(
+  [auth.isAuthenticated, auth.username, auth.accountId],
+  getAccount,
+  { immediate: true }
+)
 
 const navItems = [
   { label: 'Account Dashboard', to: '/account' },
@@ -48,7 +68,11 @@ const navItems = [
     <div class="container account-container">
       <h1 class="account-title mb-4">User Account</h1>
 
-      <div class="row account-shell g-0">
+      <div v-if="auth.isRestoringSession.value" class="account-access-denied">
+        <p class="mb-0">Loading your account...</p>
+      </div>
+
+      <div v-else-if="auth.isAuthenticated.value" class="row account-shell g-0">
         <aside class="col-lg-3 account-sidebar">
           <nav class="nav flex-column gap-2" aria-label="Account navigation">
             <router-link
@@ -74,6 +98,13 @@ const navItems = [
           </router-view>
         </section>
       </div>
+
+      <div v-else class="account-access-denied">
+        <h2 class="h4">Access Denied</h2>
+        <p>Please sign in to view your account dashboard.</p>
+        <router-link to="/login" class="btn btn-primary">Go to Sign In</router-link>
+      </div>
+
     </div>
   </main>
 </template>
@@ -103,6 +134,15 @@ const navItems = [
   background-color: var(--bg-form);
   box-shadow: var(--shadow);
   overflow: hidden;
+}
+
+.account-access-denied {
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background-color: var(--bg-form);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  text-align: center;
 }
 
 .account-sidebar {

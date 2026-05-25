@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
-$credential = trim($data['credential'] ?? '');
-$password = trim($data['password'] ?? '');
+$credential = isset($data['credential']) ? trim($data['credential']) : '';
+$password = isset($data['password']) ? trim($data['password']) : '';
 
 if (!$credential || !$password) {
     http_response_code(400);
@@ -32,7 +32,7 @@ mysqli_report(MYSQLI_REPORT_OFF);
 $conn = connectDatabase();
 
 $stmt = mysqli_prepare($conn, '
-    SELECT username, email, password_hash
+    SELECT account_id, username, email, password_hash
     FROM MRS_Account
     WHERE username = ? OR email = ?
     LIMIT 1
@@ -63,6 +63,7 @@ $_SESSION['username'] = $user['username'];
 
 echo json_encode([
     'success' => true,
+    'account_id' => (int)$user['account_id'],
     'username' => $user['username'],
 ]);
 

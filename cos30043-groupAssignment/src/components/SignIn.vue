@@ -1,7 +1,7 @@
 <template>
     <div id="centered-box">
         
-        <form v-if="!auth.isAuthenticated" @submit.prevent="submitForm" class="figma-login-form">
+        <form v-if="!auth.isAuthenticated.value" @submit.prevent="submitForm" class="figma-login-form">
             <div class="input-group">
                 <label for="Credential">Username or Email</label>
                 <input type="text" name="Credential" id="Credential" v-model="credential">
@@ -17,7 +17,7 @@
         </form>
 
         <div v-else class="welcome-box">
-            <p>You are already signed in as <strong>{{ auth.username }}</strong>.</p>
+            <p>You are already signed in as <strong>{{ auth.username.value }}</strong>.</p>
             <button @click="auth.logout()">Sign Out</button>
         </div>
     </div>
@@ -115,6 +115,7 @@ export default {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({
                         credential: this.credential,
                         password: this.password
@@ -138,13 +139,13 @@ export default {
                 }
 
                 if (result.success) {
-                    this.auth.login(result.username);
+                    this.auth.login(result.username, result.account_id);
                     
                     // Clear form inputs
                     this.credential = '';
                     this.password = '';
 
-                    this.$router.push('/films');
+                    this.$router.push('/account');
                 } else {
                     this.errorMessage = result.error || 'Unable to sign in.';
                 }

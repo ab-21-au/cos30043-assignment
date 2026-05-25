@@ -1,101 +1,58 @@
 <template>
-  <div :class="['user-account-page', { 'dark-mode': theme.isDark.value }]">
-    
-    <h1 class="page-main-title">User Account</h1>
+  <div :class="['account-settings-panel', { 'dark-mode': theme.isDark.value }]">
+    <div v-if="auth.isAuthenticated.value" class="inner-settings-card">
+      <div class="settings-inner-container">
+        <h3 class="settings-title">Account Settings</h3>
 
-    <div class="account-dashboard-layout">
-      
-      <aside class="dashboard-sidebar">
-        
-        <div class="sidebar-item static-header" @click="$router.push('/account')">
-          <h4 class="sidebar-text">Account Dashboard</h4>
-        </div>
-        
-        <nav class="sidebar-nav">
-          <ul>
-            <li @click="$router.push('/account')" class="sidebar-item pill-button">
-              <h4 class="sidebar-text">Stats</h4>
-            </li>
-
-            <li @click="$router.push('/account')" class="sidebar-item pill-button">
-              <h4 class="sidebar-text">Lists</h4>
-            </li>
-
-            <li @click="$router.push('/account')" class="sidebar-item pill-button">
-              <h4 class="sidebar-text">Reviews</h4>
-            </li>
-
-            <li class="sidebar-item pill-button active-setting">
-              <h4 class="sidebar-text">Settings</h4>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
-      <main class="content-workspace">
-        <div v-if="auth.isAuthenticated.value" class="inner-settings-card">
-          
-          <div class="settings-inner-container">
-            
-            <h3 class="settings-title">Account Settings</h3>
-
-            <div class="settings-row flex-row">
-              <span class="label-text">Theme:</span>
-              <div class="theme-btn-group">
-                
-                <button 
-                  type="button"
-                  @click="theme.toggleTheme()" 
-                  class="theme-pill-btn unified-toggle-btn"
-                >
-                  {{ theme.isDark.value ? 'Dark' : 'Light' }}
-                </button>
-                
-              </div>
-            </div>
-
-            <h4 class="section-subheading">Change Account Information:</h4>
-
-            <form @submit.prevent class="info-modification-form">
-
-              <div class="settings-row form-grid-row">
-                <label class="label-text">Username:</label>
-                <div class="input-pill-wrapper">
-                  <input type="text" v-model="profile.username" class="figma-input" />
-                </div>
-              </div>
-
-              <div class="settings-row form-grid-row">
-                <label class="label-text">Email Address:</label>
-                <div class="input-pill-wrapper">
-                  <input type="email" v-model="profile.email" class="figma-input" />
-                </div>
-              </div>
-
-              <div class="actions-button-group">
-                <button type="button" @click="updateUsername" class="btn-figma btn-change-details">
-                  Change Details
-                </button>
-                
-                <button type="button" @click="handleDeleteAccount" class="btn-figma btn-delete-account">
-                  Delete Account
-                </button>
-              </div>
-
-            </form>
-
+        <div class="settings-row flex-row">
+          <span class="label-text">Theme:</span>
+          <div class="theme-btn-group">
+            <button 
+              type="button"
+              @click="theme.toggleTheme()" 
+              class="theme-pill-btn unified-toggle-btn"
+            >
+              {{ theme.isDark.value ? 'Dark' : 'Light' }}
+            </button>
           </div>
         </div>
 
-        <div v-else class="inner-settings-card error-card">
-          <h3 class="settings-title">Access Denied</h3>
-          <p class="label-text">Please sign in to view your account settings.</p>
-          <button @click="$router.push('/login')" class="btn-figma btn-change-details" style="margin-top: 20px;">
-            Go to Sign In
-          </button>
-        </div>
-      </main>
+        <h4 class="section-subheading">Change Account Information:</h4>
 
+        <form @submit.prevent class="info-modification-form">
+          <div class="settings-row form-grid-row">
+            <label class="label-text">Username:</label>
+            <div class="input-pill-wrapper">
+              <input type="text" v-model="profile.username" class="figma-input" />
+            </div>
+          </div>
+
+          <div class="settings-row form-grid-row">
+            <label class="label-text">Email Address:</label>
+            <div class="input-pill-wrapper">
+              <input type="email" v-model="profile.email" class="figma-input" />
+            </div>
+          </div>
+
+          <div class="actions-button-group">
+            <button type="button" @click="updateUsername" class="btn-figma btn-change-details">
+              Change Details
+            </button>
+            
+            <button type="button" @click="handleDeleteAccount" class="btn-figma btn-delete-account">
+              Delete Account
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div v-else class="inner-settings-card error-card">
+      <h3 class="settings-title">Access Denied</h3>
+      <p class="label-text">Please sign in to view your account settings.</p>
+      <button @click="$router.push('/login')" class="btn-figma btn-change-details" style="margin-top: 20px;">
+        Go to Sign In
+      </button>
     </div>
   </div>
 </template>
@@ -126,113 +83,12 @@
   transform: scale(0.98);
 }
 
-.user-account-page {
+.account-settings-panel {
   box-sizing: border-box;
-  min-height: 100vh;
   width: 100%;
   background: #FFFFFF;
-  padding: 60px 40px;
   font-family: 'Inter', sans-serif;
-  display: flex;
-  flex-direction: column;
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.page-main-title {
-  font-family: 'Inter', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 36px;
-  line-height: 44px;
-  color: #000000;
-  margin: 0 0 50px 20px;
-  transition: color 0.3s ease;
-}
-
-.account-dashboard-layout {
-  display: flex;
-  width: 100%;
-  align-items: flex-start;
-}
-
-.dashboard-sidebar {
-  box-sizing: border-box;
-  width: 530px; 
-  min-width: 530px;
-  background: #FFFFFF;
-  border: 3px solid #000000;
-  border-radius: 45px;
-  padding: 30px 45px 30px 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  position: relative;
-  z-index: 1;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.sidebar-item {
-  box-sizing: border-box;
-  height: 90.56px; 
-  width: 100%;
-  background: #FFFFFF;
-  border: 3px solid #000000;
-  border-radius: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; 
-  padding-left: 35px; 
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.static-header {
-  cursor: pointer;
-  margin-bottom: 15px;
-}
-
-.pill-button {
-  cursor: pointer;
-  transition: transform 0.1s ease, background-color 0.2s ease;
-}
-
-.pill-button:hover {
-  background-color: #f7f7f7;
-  transform: scale(0.99);
-}
-
-.active-setting {
-  background: #E3E3E3; 
-  cursor: default;
-}
-
-.sidebar-text {
-  font-family: 'Inter', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 29px;
-  color: #000000;
-  margin: 0;
-  text-align: left;
-  transition: color 0.3s ease;
-}
-
-.sidebar-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 20px; 
-}
-
-.content-workspace {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-left: -48px; 
-  position: relative;
-  z-index: 10;
 }
 
 .inner-settings-card {
@@ -395,12 +251,10 @@
   min-height: 400px;
 }
 
-.user-account-page.dark-mode {
+.account-settings-panel.dark-mode {
   background: #121212;
 }
 
-.dark-mode .page-main-title,
-.dark-mode .sidebar-text,
 .dark-mode .settings-title,
 .dark-mode .label-text,
 .dark-mode .section-subheading,
@@ -408,21 +262,11 @@
   color: #FFFFFF;
 }
 
-.dark-mode .dashboard-sidebar,
-.dark-mode .sidebar-item,
 .dark-mode .inner-settings-card,
 .dark-mode .settings-inner-container,
 .dark-mode .input-pill-wrapper {
   background: #1E1E1E;
   border-color: #FFFFFF;
-}
-
-.dark-mode .pill-button:hover {
-  background-color: #2c2c2c;
-}
-
-.dark-mode .active-setting {
-  background: #333333;
 }
 
 .dark-mode .theme-pill-btn {
@@ -436,44 +280,6 @@
 }
 
 @media screen and (max-width: 1150px) {
-  .user-account-page {
-    padding: 30px 15px; 
-  }
-
-  .page-main-title {
-    font-size: 28px;
-    margin-bottom: 25px;
-    text-align: center;
-  }
-
-  .account-dashboard-layout {
-    flex-direction: column;
-    gap: 30px;
-  }
-
-  .dashboard-sidebar {
-    width: 100% !important;
-    min-width: 100% !important;
-    padding: 20px;
-    border-radius: 30px;
-  }
-
-  .sidebar-item {
-    height: 70px; 
-    padding-left: 20px;
-    border-radius: 20px;
-  }
-  
-  .sidebar-text {
-    font-size: 18px;
-    line-height: 22px;
-  }
-
-  .content-workspace {
-    margin-left: 0 !important;
-    width: 100%;
-  }
-
   .inner-settings-card,
   .settings-inner-container {
     padding: 20px;
