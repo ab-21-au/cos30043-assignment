@@ -36,7 +36,7 @@
   justify-content: center; 
   align-items: center; 
   height: 100vh;
-  background-color: #fafafa; 
+  background-color: var(--bg-primary); 
 }
 
 .figma-login-form {
@@ -53,14 +53,15 @@
   min-width: 320px;
   height: 355px; 
 
-  background: #FFFFFF;
-  border: 1px solid #000000;
+  background: var(--bg-form);
+  border: 1px solid var(--border);
   border-radius: 23px;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
+  color: var(--text-primary);
   width: 100%;
   gap: 6px;
 }
@@ -68,19 +69,28 @@
 .input-group input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  background-color: var(--bg-input);
+  color: black;
+  border: 1px solid var(--bg-carousel-btn);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .signin-btn {
   width: 100%;
   padding: 10px;
-  background-color: #333;
-  color: white;
+  background-color: var(--bg-search-wrapper);
+  color: var(--bg-header);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+}
+
+.signin-btn:hover {
+  background-color: var(--accent);
 }
 
 
@@ -89,12 +99,12 @@
   text-align: center;
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
-  color: #555;
+  color: var(--color-hero-content);
   margin-top: -8px; 
 }
 
 .register-link {
-  color: #0066cc;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 500;
 }
@@ -108,7 +118,7 @@
 }
 
 .form-error {
-  color: #c00;
+  color: var(--rot-hover);
   font-size: 0.85rem;
   width: 100%;
   text-align: center;

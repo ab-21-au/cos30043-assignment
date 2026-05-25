@@ -94,7 +94,7 @@
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
-  background-color: #fafafa; 
+  background-color: var(--bg-primary);
 }
 
 .figma-signup-form {
@@ -109,8 +109,8 @@
   min-width: 440px;
   height: 600px;
   max-height: calc(100vh - 40px);
-  background: #FFFFFF;
-  border: 1px solid #000000;
+  background: var(--bg-form);
+  border: 1px solid var(--border);
   border-radius: 23px;
 }
 
@@ -119,7 +119,7 @@
   font-size: 1.6rem;
   font-weight: 600;
   margin: 0 0 2px 0;
-  color: #333;
+  color: var(--text-primary);
   width: 100%;
   text-align: center;
   flex-shrink: 0;
@@ -130,7 +130,7 @@
   font-size: 0.95rem;
   font-weight: 600;
   margin: 4px 0 2px 0;
-  color: #555;
+  color: var(--text-primary);
   width: 100%;
 }
 
@@ -162,26 +162,30 @@
 .input-group label {
   font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .input-group input, .figma-select {
   width: 100%;
   padding: 6px 10px;
-  border: 1px solid #ccc;
+  background-color: var(--bg-input);
+  color: black;
   border-radius: 6px;
   box-sizing: border-box;
   font-size: 0.9rem;
 }
 
 .figma-select {
-  background-color: white;
+  background-color: var(--bg-input);
+  color: black;
   height: 32px;
 }
 
 .checkbox-group {
   display: flex;
   align-items: center;
+  border-radius: 25px;
   gap: 10px;
   width: 100%;
   margin-top: 2px;
@@ -200,13 +204,13 @@
   font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   line-height: 1.3;
-  color: #555;
+  color: var(--text-primary);
   cursor: pointer;
   user-select: none;
 }
 
 .terms-link {
-  color: #0066cc;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 500;
 }
@@ -218,8 +222,8 @@
 .signup-btn {
   width: 100%;
   padding: 8px;
-  background-color: #333;
-  color: white;
+  background-color: var(--bg-search-wrapper);
+  color: var(--bg-header);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -230,11 +234,11 @@
 }
 
 .signup-btn:hover {
-  background-color: #444;
+  background-color: var(--accent);
 }
 
 .form-error {
-  color: #c00;
+  color: var(--rot-hover);
   font-size: 0.8rem;
   margin: 0;
   width: 100%;
@@ -243,7 +247,7 @@
 }
 
 .form-success {
-  color: #090;
+  color: var(--rot-critic);
   font-size: 0.8rem;
   margin: 0;
   width: 100%;
@@ -251,18 +255,12 @@
   flex-shrink: 0;
 }
 
-@media screen and (max-height: 640px) {
-  #centered-box {
-    align-items: flex-start;
-    padding: 10px;
-  }
+@media(max-width: 480px) {
   .figma-signup-form {
+    width: 100%;
+    min-width: unset;
     height: auto;
-    max-height: none;
-  }
-  .form-scroll-container {
-    overflow-y: visible;
-    flex-grow: 0;
+    max-height: unset;
   }
 }
 </style>

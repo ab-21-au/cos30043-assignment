@@ -16,7 +16,6 @@
   --bg-form-text: black;
   --bg-dark: #0A100D;
   --bg-button: #0A100D;
-  ;
   --accent: #A22C29;
   --accent-deep: #902923;
   --accent-deeper: #511613;    
@@ -56,7 +55,6 @@
   --bg-form-text: black;
   --bg-dark: #050807;
   --bg-button: #D6D5C9;
-  ;
   --accent: #A22C29;
   --accent-deep: #902923;
   --accent-deeper: #511613;
@@ -205,7 +203,7 @@
 }
 
 /* Mobile Response with Toggle Button */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .theme-toggle {
     top: 15px;
     left: 20px;
@@ -319,7 +317,7 @@
 }
 
 /* Mobile Navigation Pop-out */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
 
   #menu {
     position: fixed;
@@ -395,7 +393,7 @@
 }
 
 /* Mobile Footer */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .footer {
     background-color: var(--accent);
     height: fit-content;
