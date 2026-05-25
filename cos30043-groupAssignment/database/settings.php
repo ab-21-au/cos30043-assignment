@@ -8,9 +8,9 @@
  */
 
 $host = 'feenix-mariadb.swin.edu.au';
-$database = 's102146171_db';
-$username = 's102146171';
-$password = 'COS30020!';
+$database = 'your_assigned_database_name';
+$username = 'your_swinburne_id';
+$password = 'your_mariadb_password';
 
 
 $accountTable = 'MRS_Account';
