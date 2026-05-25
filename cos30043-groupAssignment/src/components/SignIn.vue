@@ -24,16 +24,16 @@
 </template>
 
 <style scoped>
-/* Main outer viewport wrapper to push the login card into the middle of the page */
+
 #centered-box {
   display: flex;
   justify-content: center; 
   align-items: center; 
   height: 100vh;
-  background-color: #fafafa; /* Light backdrop subtle contrast */
+  background-color: #fafafa; 
 }
 
-/* 💡 YOUR EXACT FIGMA CSS COMPONENT SPECIFICATIONS: */
+
 .figma-login-form {
   box-sizing: border-box;
 
@@ -53,7 +53,6 @@
   border-radius: 23px;
 }
 
-/* Form Helper Layouts to ensure text inputs take up full card width */
 .input-group {
   display: flex;
   flex-direction: column;
@@ -77,7 +76,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  margin-top: auto; /* Pushes button to bottom of container if spacing permits */
+  margin-top: auto; 
 }
 
 .welcome-box {

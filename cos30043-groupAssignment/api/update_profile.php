@@ -10,9 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 session_start();
-
 require_once __DIR__ . '/db.php'; 
-
 $conn = connectDatabase();
 
 if (!isset($_SESSION['username'])) {
@@ -22,8 +20,29 @@ if (!isset($_SESSION['username'])) {
 
 $current_username = $_SESSION['username'];
 
-$data = json_decode(file_get_contents('php://input'), true);
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $stmt = $conn->prepare("SELECT username, email FROM MRS_Account WHERE username = ? LIMIT 1");
+    $stmt->bind_param("s", $current_username);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if ($result) {
+        echo json_encode([
+            'success' => true, 
+            'username' => $result['username'], 
+            'email' => $result['email']
+        ]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Account details not found.']);
+    }
+    $conn->close();
+    exit;
+}
+
+
+$data = json_decode(file_get_contents('php://input'), true);
 if (!$data) {
     echo json_encode(['success' => false, 'error' => 'No data provided.']);
     exit;
@@ -36,7 +55,6 @@ if (empty($new_username) || empty($email)) {
     echo json_encode(['success' => false, 'error' => 'All fields are required.']);
     exit;
 }
-
 
 $stmt = $conn->prepare("UPDATE MRS_Account SET username = ?, email = ? WHERE username = ?");
 $stmt->bind_param("sss", $new_username, $email, $current_username);

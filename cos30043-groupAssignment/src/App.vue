@@ -45,7 +45,7 @@ const isOpen = ref(false)
             
             <template v-else>
               <router-link to="/account" >Account Summary</router-link>
-              <router-link to="/user/account" >Settings</router-link>
+              <router-link to="/account/settings" >Settings</router-link>
               <a href="#" @click.prevent="auth.logout(); isOpen = false">Sign Out</a>
             </template>
           </nav>

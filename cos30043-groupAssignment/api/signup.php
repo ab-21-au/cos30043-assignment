@@ -22,7 +22,7 @@ if (!$username || !$email || !$password) {
 
 $hash = password_hash($password, PASSWORD_DEFAULT);
 
-// Avoid raw mysqli exceptions being displayed to the user.
+
 mysqli_report(MYSQLI_REPORT_OFF);
 $conn = connectDatabase();
 

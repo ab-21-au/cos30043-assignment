@@ -159,7 +159,7 @@
   margin: 0;
   font-size: 2.25rem;
   font-weight: bold;
-  color: #e50914; /* Crimson accent layer matching catalogue theme */
+  color: #e50914; 
 }
 
 /* Layout Split Body */
@@ -317,7 +317,7 @@ export default {
     'auth.isAuthenticated.value'(newValue) {
       if (newValue === true) {
         console.log("Auth state caught! User is officially logged in.");
-        // This forces Vue to re-evaluate the v-if template automatically
+        
         this.$forceUpdate(); 
       }
     }
@@ -326,7 +326,7 @@ export default {
     async fetchUserStats() {
       this.loadingReviews = true;
       try {
-        // Fire both endpoints concurrently using the Vite Proxy mapping
+        
         const [reviewRes, watchRes] = await Promise.all([
           fetch(`/api/get_user_reviews.php?username=${this.auth.username}`),
           fetch(`/api/get_watch_count.php?username=${this.auth.username}`)
@@ -351,7 +351,6 @@ export default {
     },
     handleLogout() {
       this.auth.logout()
-      // Send user back to home or login track once cleared out
       this.$router.push('/films')
     },
     alert(msg) {

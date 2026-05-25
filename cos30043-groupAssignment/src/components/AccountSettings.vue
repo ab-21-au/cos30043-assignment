@@ -554,16 +554,32 @@ export default {
     };
   },
   mounted() {
+    
     if (this.auth.isAuthenticated.value) {
-      const activeUser = this.auth.username.value;
-      this.profile.username = activeUser;
-      this.profile.email = `${activeUser.toLowerCase()}@example.com`;
+      this.fetchCurrentProfileDetails();
     }
     this.currentIsDark = !!this.theme.isDark.value;
   },
   methods: {
     handleThemeToggle() {
       this.theme.toggleTheme();
+    },
+    
+    async fetchCurrentProfileDetails() {
+      try {
+        const response = await fetch('/api/update_profile.php', {
+          method: 'GET',
+          credentials: 'include'
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+          this.profile.username = data.username;
+          this.profile.email = data.email;
+        }
+      } catch (err) {
+        console.error("Failed to sync account profile info:", err);
+      }
     },
     async updateUsername() {
       try {
