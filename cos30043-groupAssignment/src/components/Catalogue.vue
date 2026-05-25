@@ -2,6 +2,10 @@
 import { ref, onMounted } from 'vue'
 import { tmdb, GENRES } from '../services/tmdb.js'
 import { useRouter } from 'vue-router'
+import { useAuth } from '../assets/UseAuth.js'
+
+const router = useRouter()
+const auth = useAuth()
 
 // State
 const recentMovies = ref([])
@@ -12,7 +16,7 @@ const loading = ref(true)
 const currentIndex = ref(0)
 
 //router
-const router = useRouter()
+//const router = useRouter()
 
 // Load all data
 async function loadData() {
@@ -133,6 +137,14 @@ function clearAll() {
   loadData()
 }
 
+function handleProfileClick() {
+  if (auth.isAuthenticated.value) {
+    router.push('/account') // Routes to dashboard if logged in
+  } else {
+    router.push('/login')    // Routes to login if guest
+  }
+}
+
 onMounted(() => loadData())
 
 // Nav to review page w/ movie id
@@ -145,6 +157,16 @@ function goToReview(movieId) {
   <div class="catalogue">
     <header class="header">
       <div class="logo">Retrospect</div>
+      <div class="header-right">
+        <span class="icon" @click="handleProfileClick" style="cursor: pointer; user-select: none;">
+          <template v-if="auth.isAuthenticated.value">
+            {{ auth.username.value }}
+          </template>
+          <template v-else>
+            Login
+          </template>
+        </span>
+      </div>
     </header>
 
     <section class="hero-section">
