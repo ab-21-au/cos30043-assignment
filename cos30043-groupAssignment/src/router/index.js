@@ -17,10 +17,6 @@ import PrivacyPolicy from "../components/policies/PrivacyPolicy.vue"
 import PoliciesLayout from "../components/policies/PoliciesLayout.vue"
 import SignIn from '../components/SignIn.vue'
 import SignUp from '../components/SignUp.vue'
-import AccountSettings from '../components/AccountSettings.vue'
-import Account from '../components/Account.vue'
-import Statistics from "../components/Statistics.vue"
-import ReviewAccount_Component from "../components/ReviewAccount_Component.vue"
 
 const routes = [
 
@@ -41,6 +37,7 @@ const routes = [
         children: [
             { path: '', redirect: '/films' },
             { path: '/films', component: Catalogue },
+            { path: '/lists', component: AccountLists },
             { path: '/account', component: Account },
             { path: '/about-us', component: AboutUs },
             { path: '/contact-us', component: ContactUs },
@@ -53,8 +50,9 @@ const routes = [
         component: AccountDashboard,
         children: [
             { path: '', component: Account },
+            { path: 'lists', component: AccountLists },
             { path: 'stats', component: Statistics },
-            { path: 'reviews', component: ReviewAccount_Component },
+            { path: 'reviews', component: ReviewAccount},
             { path: 'settings', component: AccountSettings },
         ]
     },

@@ -73,7 +73,7 @@
                     <input type="checkbox" id="AgreeTerms" v-model="AgreeTerms" class="large-checkbox">
                     <label for="AgreeTerms">
                         Please agree to our 
-                        <router-link to="/terms-of-service" class="terms-link">Terms of Service</router-link> 
+                        <router-link to="/policies" class="terms-link">Terms of Service</router-link> 
                         before continuing your account creation
                     </label>
                 </div>

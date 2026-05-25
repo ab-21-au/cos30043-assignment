@@ -120,6 +120,10 @@
         color: var(--text-primary);
     }
 
+    h4 {
+        color: var(--text-secondary);
+    }
+
     p, ul {
         color: var(--text-secondary);
         font-size: 14px;

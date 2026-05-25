@@ -16,7 +16,7 @@
             
             <div class="register-navigation-prompt">
                 <span>No account? </span>
-                <router-link to="/signup" class="register-link">register here</router-link>
+                <router-link to="/sign-up" class="register-link">register here</router-link>
             </div>
 
             <p class="form-error" v-if="errorMessage">{{ errorMessage }}</p>

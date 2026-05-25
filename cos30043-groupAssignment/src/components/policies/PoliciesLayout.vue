@@ -76,6 +76,7 @@
     a {
         display: inline-block;
         text-decoration: none;
+        justify-content: left;
         color: var(--text-primary);
         font-size: 18px;
 
