@@ -22,7 +22,7 @@ $current_username = $_SESSION['username'];
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $stmt = $conn->prepare("SELECT account_id, username, email FROM MRS_Account WHERE username = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT account_id, username, email, first_name, last_name, favourite_genre FROM MRS_Account WHERE username = ? LIMIT 1");
     $stmt->bind_param("s", $current_username);
     $stmt->execute();
     $result = $stmt->get_result()->fetch_assoc();
@@ -33,7 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             'success' => true, 
             'account_id' => (int)$result['account_id'],
             'username' => $result['username'], 
-            'email' => $result['email']
+            'email' => $result['email'],
+            'first_name' => $result['first_name'],
+            'last_name' => $result['last_name'],
+            'favourite_genre' => $result['favourite_genre']
         ]);
     } else {
         echo json_encode(['success' => false, 'error' => 'Account details not found.']);
@@ -51,14 +54,17 @@ if (!$data) {
 
 $new_username   = isset($data['username']) ? trim($data['username']) : '';
 $email          = isset($data['email']) ? trim($data['email']) : '';
+$first_name     = isset($data['first_name']) ? trim($data['first_name']) : '';
+$last_name      = isset($data['last_name']) ? trim($data['last_name']) : '';
+$favourite_genre = isset($data['favourite_genre']) ? trim($data['favourite_genre']) : '';
 
-if (empty($new_username) || empty($email)) {
+if (empty($new_username) || empty($email) || empty($first_name) || empty($last_name)) {
     echo json_encode(['success' => false, 'error' => 'All fields are required.']);
     exit;
 }
 
-$stmt = $conn->prepare("UPDATE MRS_Account SET username = ?, email = ? WHERE username = ?");
-$stmt->bind_param("sss", $new_username, $email, $current_username);
+$stmt = $conn->prepare("UPDATE MRS_Account SET username = ?, email = ?, first_name = ?, last_name = ?, favourite_genre = ? WHERE username = ?");
+$stmt->bind_param("ssssss", $new_username, $email, $first_name, $last_name, $favourite_genre, $current_username);
 
 if ($stmt->execute()) {
     $_SESSION['username'] = $new_username;

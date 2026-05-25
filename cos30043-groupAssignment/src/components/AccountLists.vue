@@ -16,6 +16,17 @@ const props = defineProps({
 const movies = ref([])
 const isLoading = ref(false)
 const error = ref('')
+const updatingMovieId = ref(null)
+
+const statusOptions = [
+  { label: 'Want to Watch', value: 'want_to_watch' },
+  { label: 'Watching', value: 'watching' },
+  { label: 'Watched', value: 'watched' },
+]
+
+const apiUrl = (endpoint) => import.meta.env.DEV
+  ? `/api/${endpoint}`
+  : `${import.meta.env.BASE_URL}api/${endpoint}`
 
 const listGroups = computed(() => {
   return [
@@ -43,7 +54,7 @@ const getMovies = async () => {
   error.value = ''
 
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}api/get_account_movies.php?account_id=${props.accountId}`)
+    const response = await fetch(apiUrl(`get_account_movies.php?account_id=${props.accountId}`))
     const result = await response.json()
 
     if (!result.success) {
@@ -56,6 +67,39 @@ const getMovies = async () => {
     console.error('Error fetching account movie lists:', fetchError)
   } finally {
     isLoading.value = false
+  }
+}
+
+const updateMovieStatus = async (movie, status) => {
+  if (movie.status === status) {
+    return
+  }
+
+  updatingMovieId.value = movie.user_movie_id
+  error.value = ''
+
+  try {
+    const response = await fetch(apiUrl('update_movie_status.php'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        user_movie_id: movie.user_movie_id,
+        status,
+      }),
+    })
+    const result = await response.json()
+
+    if (!result.success) {
+      throw new Error(result.error || 'Unable to update movie status')
+    }
+
+    movie.status = status
+  } catch (updateError) {
+    error.value = updateError.message
+    console.error('Error updating movie status:', updateError)
+  } finally {
+    updatingMovieId.value = null
   }
 }
 
@@ -87,6 +131,24 @@ watch(
                   <span class="small fw-semibold text-truncate">TMDB #{{ movie.tmdb_movie_id }}</span>
                   <span v-if="movie.is_favourite" aria-label="Favourite movie">☆</span>
                 </div>
+                <label class="small account-muted mt-3 mb-1" :for="`movie-status-${movie.user_movie_id}`">
+                  Status
+                </label>
+                <select
+                  :id="`movie-status-${movie.user_movie_id}`"
+                  class="form-select form-select-sm"
+                  :value="movie.status"
+                  :disabled="updatingMovieId === movie.user_movie_id"
+                  @change="updateMovieStatus(movie, $event.target.value)"
+                >
+                  <option
+                    v-for="option in statusOptions"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
               </div>
             </div>
           </div>
@@ -98,7 +160,7 @@ watch(
 
 <style scoped>
 .list-movie-card {
-  min-height: 138px;
+  min-height: 190px;
 }
 
 .poster-placeholder {
