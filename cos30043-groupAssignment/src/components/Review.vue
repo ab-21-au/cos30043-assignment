@@ -120,6 +120,9 @@
       </p>
     </section>
 
+    <!-- Rating Timeline -->
+     <ReviewTimeline />
+
     <!-- User Reviews -->
       <section class="user-reviews">
       <h3 class="section-label">User Reviews</h3>
@@ -180,9 +183,10 @@
 
 
 <script setup>
-import { ref, onMounted, computed} from 'vue';
+import { ref, onMounted, computed, provide} from 'vue';
 import { useRoute } from 'vue-router';
 import { tmdb } from '../services/tmdb.js';
+import ReviewTimeline from './ReviewTimeline.vue';
 
 
 const route = useRoute()
@@ -203,6 +207,7 @@ const movie = ref({
 });
 
 const reviews = ref([]);
+
 const newReview = ref({ 
   text: '', rating: '', 
   rewatch: '', 
@@ -308,6 +313,8 @@ const submitReview = async () => {
   }
 };
 
+provide('movie', movie) //COME BACK
+provide('reviews', reviews)
 
 onMounted(async() => {
   await fetchMovieDetails();

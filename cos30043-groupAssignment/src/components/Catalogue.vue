@@ -144,7 +144,7 @@ function goToReview(movieId) {
 <template>
   <div class="catalogue">
     <header class="header">
-      <div class="logo">Better Than Letterboxd</div>
+      <div class="logo">Retrospect</div>
     </header>
 
     <section class="hero-section">
