@@ -120,6 +120,9 @@
       </p>
     </section>
 
+    <!-- Rating Timeline -->
+     <ReviewTimeline />
+
     <!-- User Reviews -->
       <section class="user-reviews">
       <h3 class="section-label">User Reviews</h3>
@@ -171,6 +174,17 @@
           >
             Next
           </button>
+
+          <select
+          id="pageSizeSelect" 
+          v-model="reviewsPerPage" 
+          class="form-select form-select-sm" 
+          style="width: auto;"
+          >
+          <option bind-key:value="2">2</option>
+          <option bind-key:value="5">5</option>
+          <option :value="10">10</option>
+        </select>
         </div>
 
     </section>
@@ -180,9 +194,10 @@
 
 
 <script setup>
-import { ref, onMounted, computed} from 'vue';
+import { ref, onMounted, computed, provide, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import { tmdb } from '../services/tmdb.js';
+import ReviewTimeline from './ReviewTimeline.vue';
 
 
 const route = useRoute()
@@ -203,6 +218,7 @@ const movie = ref({
 });
 
 const reviews = ref([]);
+
 const newReview = ref({ 
   text: '', rating: '', 
   rewatch: '', 
@@ -238,7 +254,12 @@ const fetchMovieDetails = async () => {
 
 //pagination
 const currentPage = ref(1);
-const reviewsPerPage = 10;
+const reviewsPerPage = ref(5);
+
+//reset if 
+watch(reviewsPerPage, () => {
+  currentPage.value = 1;
+});
 
 const totalPages = computed(() => {
   return Math.ceil(reviews.value.length / reviewsPerPage) || 1;
@@ -308,6 +329,8 @@ const submitReview = async () => {
   }
 };
 
+provide('movie', movie) //COME BACK
+provide('reviews', reviews)
 
 onMounted(async() => {
   await fetchMovieDetails();

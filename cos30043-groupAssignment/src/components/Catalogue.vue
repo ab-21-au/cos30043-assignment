@@ -156,7 +156,7 @@ function goToReview(movieId) {
 <template>
   <div class="catalogue">
     <header class="header">
-      <div class="logo">Better Than Letterboxd</div>
+      <div class="logo">Retrospect</div>
       <div class="header-right">
         <span class="icon" @click="handleProfileClick" style="cursor: pointer; user-select: none;">
           <template v-if="auth.isAuthenticated.value">
