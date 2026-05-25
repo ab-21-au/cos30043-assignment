@@ -61,20 +61,6 @@ onMounted(() => {
     
   </div>
 
-  <!-- <div> -- NAV FOR ACCOUNTS, CAN USE V-IF/ELSE STATEMENT TO JUST SWITCH LINKS FROM ABOVE
-    <nav class="account-nav">
-      <div class="nav-links">
-        <router-link to="/films">Films</router-link> |
-        <router-link to="/account">Account</router-link> |
-        <router-link to="/lists">List</router-link> |
-        <router-link to="/about-us">About Us</router-link> |
-        <router-link to="/contact-us">Contact Us</router-link> 
-      </div>
-    </nav>
-
-    <router-view />
-  </div> -->
-
   <div>
     <footer class="footer">
       <div class="container">
@@ -105,4 +91,3 @@ onMounted(() => {
 
 </template>
 
-<!--CHANGE LATER, just used to see if it was working correctly-->

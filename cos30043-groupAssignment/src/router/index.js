@@ -31,18 +31,6 @@ const routes = [
     { path: '/thankyou', component: ThankYou },
     { path: '/:pathMatch(.*)*', component: error }, // catch-all route for 404 errors
 
-    // Nav bar for a user with an account
-    {
-        path: '/user', 
-        children: [
-            { path: '', redirect: '/films' },
-            { path: '/films', component: Catalogue },
-            { path: '/lists', component: AccountLists },
-            { path: '/account', component: Account },
-            { path: '/about-us', component: AboutUs },
-            { path: '/contact-us', component: ContactUs },
-        ]
-    },
 
     // User Account Dashboard routing
     {

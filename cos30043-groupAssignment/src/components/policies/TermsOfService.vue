@@ -92,7 +92,7 @@
             </p>
 
         <h2>8. Contact Us</h2>
-            <p>If you have any questions regarding what has been documented in our Terms and Conditions, you can contact us <router-link to="contact-us">here</router-link>.
+            <p>If you have any questions regarding what has been documented in our Terms and Conditions, you can contact us <router-link to="/contact-us">here</router-link>.
             We will do our best to get back to you in a timely manner.
             </p>      
     </div>
