@@ -13,6 +13,12 @@
             </div>
             
             <button type="submit" class="signin-btn">Sign in</button>
+            
+            <div class="register-navigation-prompt">
+                <span>No account? </span>
+                <router-link to="/signup" class="register-link">register here</router-link>
+            </div>
+
             <p class="form-error" v-if="errorMessage">{{ errorMessage }}</p>
         </form>
 
@@ -33,7 +39,6 @@
   background-color: #fafafa; 
 }
 
-
 .figma-login-form {
   box-sizing: border-box;
 
@@ -46,7 +51,7 @@
   position: relative;
   width: 320px;
   min-width: 320px;
-  height: 322px;
+  height: 355px; 
 
   background: #FFFFFF;
   border: 1px solid #000000;
@@ -76,7 +81,26 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  margin-top: auto; 
+}
+
+
+.register-navigation-prompt {
+  width: 100%;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: -8px; 
+}
+
+.register-link {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-link:hover {
+  text-decoration: underline;
 }
 
 .welcome-box {
@@ -86,10 +110,11 @@
 .form-error {
   color: #c00;
   font-size: 0.85rem;
+  width: 100%;
+  text-align: center;
+  margin: 0;
 }
 </style>
-
-
 
 <script>
 import { useAuth } from '../assets/UseAuth.js';
@@ -106,7 +131,6 @@ export default {
         async submitForm() {
             this.errorMessage = '';
             
-
             try {
                 const apiUrl = import.meta.env.DEV
                     ? '/api/signin.php'
