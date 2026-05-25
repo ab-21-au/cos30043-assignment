@@ -1,5 +1,5 @@
 <script setup>
-import { ref, Transition } from 'vue'
+import { onMounted, ref, Transition } from 'vue'
 import { useTheme } from './js/Theme.js';
 
 import { useAuth } from './assets/UseAuth.js';
@@ -9,6 +9,10 @@ const { isDark, hamburgerIcon, crossIcon, logo, toggleTheme } = useTheme();
 const auth = useAuth();
 
 const isOpen = ref(false)
+
+onMounted(() => {
+  auth.restoreSession()
+})
 
 </script>
 

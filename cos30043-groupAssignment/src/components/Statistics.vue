@@ -1,9 +1,16 @@
 <script setup>
-import {ref, computed, onMounted} from 'vue'
+import {ref, watch} from 'vue'
 
 import GenrePieChart from './charts/GenrePieChart.vue'
 import AverageReview from './charts/AverageReviews.vue'
 import YearlyFilms from './charts/YearlyMovieTotalChart.vue'
+
+const props = defineProps({
+    accountId: {
+        type: [Number, String],
+        default: null
+    }
+})
 
 const ratingsPlot = ref([])
 const ratingsActing = ref([])
@@ -13,8 +20,13 @@ const movieTotal = ref([])
 
 const err=ref(null)
 
-onMounted(() => {
-    const getSQLApiURL = `${import.meta.env.BASE_URL}api/get_account_reviews.php?account_id=1` //+ this.accountid (when routing set up will change)
+const loadStats = () => {
+    if (!props.accountId) {
+        return
+    }
+
+    err.value = null
+    const getSQLApiURL = `${import.meta.env.BASE_URL}api/get_account_reviews.php?account_id=${props.accountId}`
 
     fetch(getSQLApiURL)
         .then(response => {
@@ -56,7 +68,13 @@ onMounted(() => {
         .catch(error => {
             err.value = error.message
         })
-})
+}
+
+watch(
+    () => props.accountId,
+    loadStats,
+    { immediate: true }
+)
 
 </script>
 

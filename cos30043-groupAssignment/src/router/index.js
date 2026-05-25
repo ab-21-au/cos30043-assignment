@@ -4,6 +4,12 @@ import Review from '../components/Review.vue'
 import AboutUs from '../components/AboutUs.vue'
 import Catalogue from '../components/Catalogue.vue'
 import ContactUs from '../components/ContactUs.vue'
+import AccountDashboard from '../components/AccountDashboard.vue'
+import Account from '../components/Account.vue'
+import Statistics from '../components/Statistics.vue'
+import AccountLists from '../components/AccountLists.vue'
+import ReviewAccount from '../components/ReviewAccount_Component.vue'
+import AccountSettings from '../components/AccountSettings.vue'
 import ThankYou from '../components/redirects/ThankYou.vue'
 import error from '../components/redirects/Error404.vue'
 import TermsOfService from "../components/policies/TermsOfService.vue"
@@ -11,8 +17,6 @@ import PrivacyPolicy from "../components/policies/PrivacyPolicy.vue"
 import PoliciesLayout from "../components/policies/PoliciesLayout.vue"
 import SignIn from '../components/SignIn.vue'
 import SignUp from '../components/SignUp.vue'
-import AccountSettings from '../components/AccountSettings.vue'
-import Account from '../components/Account.vue'
 
 const routes = [
 
@@ -24,29 +28,16 @@ const routes = [
     { path: '/login', component: SignIn },
     { path: '/sign-up', component: SignUp },
     { path: '/thankyou', component: ThankYou },
-    { path: '/:pathMatch(.*)*', component: error }, // catch-all route for 404 errors
-
-    // Nav bar for a user with an account
-    {
-        path: '/user', //edit later to match the users details? (i think its ok to leave it)
-        children: [
-            { path: '', redirect: '/films' },
-            { path: '/films', component: Catalogue },
-            { path: '/account', component: Account }, //Fill in later
-            //{ path: '/lists', component: List },
-            { path: '/about-us', component: AboutUs },
-            { path: '/contact-us', component: ContactUs },
-        ]
-    },
 
     // User Account Dashboard routing
     {
         path: '/account',
-        //component: '' -- not sure if there will be a component that holds all of the routing for user account so i left this blank, can be deleted if not used
+        component: AccountDashboard,
         children: [
-            //{ path: 'stats', component: Stats },
-            //{ path: 'lists', component: Lists },
-            //{ path: 'user-reviews', component: UserReviews },
+            { path: '', component: Account },
+            { path: 'stats', component: Statistics },
+            { path: 'lists', component: AccountLists },
+            { path: 'reviews', component: ReviewAccount },
             { path: 'settings', component: AccountSettings },
         ]
     },
@@ -57,7 +48,7 @@ const routes = [
         children: [
             { path: 'terms-and-conditions', component: TermsOfService },
             { path: 'privacy-policy', component: PrivacyPolicy },
-            { path: '', redirect: 'policies/terms-and-conditions' }
+            { path: '', redirect: '/policies/terms-and-conditions' }
         ]
     },
 
