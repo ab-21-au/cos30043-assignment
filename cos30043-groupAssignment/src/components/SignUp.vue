@@ -53,6 +53,31 @@ export default{
         async submitForm(){
             this.errorMessage = '';
             this.successMessage = '';
+            
+                       
+            if (!this.Username.trim() || !this.Password.trim() || !this.Email.trim()) {
+                this.errorMessage = 'All fields are required.';
+                return;
+            }
+
+            
+            if (this.Username.trim().length < 3) {
+                this.errorMessage = 'Username must be at least 3 characters long.';
+                return;
+            }
+
+           
+            if (this.Password.length < 6) {
+                this.errorMessage = 'Password must be at least 6 characters long.';
+                return;
+            }
+
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(this.Email.trim())) {
+                this.errorMessage = 'Please enter a valid email address (e.g., name@domain.com).';
+                return;
+            }
 
             try {
                 const apiUrl = import.meta.env.DEV
