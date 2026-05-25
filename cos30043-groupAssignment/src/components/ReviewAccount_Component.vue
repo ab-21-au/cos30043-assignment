@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
   accountId: {
@@ -92,12 +92,12 @@ watch(reviewsPerPage, () => {
   currentPage.value = 1;
 });
 const totalPages = computed(() => {
-  return Math.ceil(reviews.value.length / reviewsPerPage) || 1;
+  return Math.ceil(reviews.value.length / reviewsPerPage.value) || 1;
 });
 
 const paginatedReviews = computed(() => {
-  const startIndex = (currentPage.value - 1) * reviewsPerPage;
-  return reviews.value.slice(startIndex, startIndex + reviewsPerPage);
+  const startIndex = (currentPage.value - 1) * reviewsPerPage.value;
+  return reviews.value.slice(startIndex, startIndex + reviewsPerPage.value);
 });
 
 const nextPage = () => { if (currentPage.value < totalPages.value) currentPage.value++; };
@@ -106,12 +106,12 @@ const prevPage = () => { if (currentPage.value > 1) currentPage.value--; };
 
 //get reviews
 const getUserReviews = async () => {
-  try {
-//testing only
-// const activeAccountId = props.accountId || 1;
+  if (!props.accountId) {
+    return;
+  }
 
+  try {
     const response = await fetch(`${import.meta.env.BASE_URL}api/get_account_reviews.php?account_id=${props.accountId}`);
-    // const response = await fetch(`${import.meta.env.BASE_URL}api/get_account_reviews.php?account_id=${activeAccountId}`);
     reviews.value = await response.json();
   } catch (error) {
     console.error("Error fetching account review records:", error);
@@ -150,10 +150,11 @@ const deleteReview = async (reviewId) => {
 };
 
 
-
-onMounted(() => {
-  getUserReviews();
-});
+watch(
+  () => props.accountId,
+  getUserReviews,
+  { immediate: true }
+);
 </script>
 
 

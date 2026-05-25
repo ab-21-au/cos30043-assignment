@@ -22,7 +22,7 @@ $current_username = $_SESSION['username'];
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $stmt = $conn->prepare("SELECT username, email FROM MRS_Account WHERE username = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT account_id, username, email FROM MRS_Account WHERE username = ? LIMIT 1");
     $stmt->bind_param("s", $current_username);
     $stmt->execute();
     $result = $stmt->get_result()->fetch_assoc();
@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($result) {
         echo json_encode([
             'success' => true, 
+            'account_id' => (int)$result['account_id'],
             'username' => $result['username'], 
             'email' => $result['email']
         ]);
@@ -48,8 +49,8 @@ if (!$data) {
     exit;
 }
 
-$new_username   = trim($data['username'] ?? '');
-$email          = trim($data['email'] ?? '');
+$new_username   = isset($data['username']) ? trim($data['username']) : '';
+$email          = isset($data['email']) ? trim($data['email']) : '';
 
 if (empty($new_username) || empty($email)) {
     echo json_encode(['success' => false, 'error' => 'All fields are required.']);
