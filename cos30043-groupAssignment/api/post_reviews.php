@@ -33,7 +33,7 @@ $rewatch_status   = isset($data['rewatch_status']) ? trim($data['rewatch_status'
 $met_expectations = isset($data['met_expectations']) ? trim($data['met_expectations']) : '';
 
 //checker for missing fields
-if ($account_id <= 0 || $tmdb_movie_id <= 0 || empty($rating) || empty($review_text)) {
+if ($account_id <= 0 || $tmdb_movie_id <= 0 || empty($rating) || empty($review_text) || empty($rewatch_status) || empty($met_expectations)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Missing required fields. Fill out your entire review form.']);
     exit;
@@ -65,8 +65,18 @@ if ($stmt) {
     if (mysqli_stmt_execute($stmt)) {
         echo json_encode(['success' => true, 'message' => 'Review logged successfully']);
     } else {
-        http_response_code(409); 
-        echo json_encode(['success' => false, 'error' => 'Unable to upload You can only review a film o.nce!']);
+        $error_number = mysqli_stmt_errno($stmt);
+
+        if ($error_number === 1062) {
+            http_response_code(409);
+            echo json_encode(['success' => false, 'error' => 'You can only review a film once.']);
+        } elseif ($error_number === 1452) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Review account was not found. Please sign in again.']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'error' => 'Unable to upload review. Database error: ' . mysqli_stmt_error($stmt)]);
+        }
     }
     mysqli_stmt_close($stmt);
 } else {

@@ -12,7 +12,7 @@ node_modules/
 dist
 dist-ssr
 *.local
-database/settings.php
+settings.php
 vite.config.js 
 # Ignore the Vite config file, unless need to add plugins
 

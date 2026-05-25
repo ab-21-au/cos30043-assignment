@@ -24,6 +24,11 @@
         </div>
       </section>
 
+      <AccountRecommendations
+        v-if="auth.isAuthenticated.value"
+        :account-id="accountId"
+      />
+
       <div class="dashboard-body">
         
         <main class="activity-section">
@@ -297,9 +302,13 @@
 
 <script>
 import { useAuth } from '../assets/UseAuth.js'
+import AccountRecommendations from './AccountRecommendations.vue'
 
 export default {
   name: 'AccountSummary',
+  components: {
+    AccountRecommendations
+  },
   props: {
     account: {
       type: Object,
