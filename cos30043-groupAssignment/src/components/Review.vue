@@ -262,12 +262,12 @@ watch(reviewsPerPage, () => {
 });
 
 const totalPages = computed(() => {
-  return Math.ceil(reviews.value.length / reviewsPerPage) || 1;
+  return Math.ceil(reviews.value.length / reviewsPerPage.value) || 1;
 });
 
 const paginatedReviews = computed(() => {
-  const startIndex = (currentPage.value - 1) * reviewsPerPage;
-  const endIndex = startIndex + reviewsPerPage;
+  const startIndex = (currentPage.value - 1) * reviewsPerPage.value;
+  const endIndex = startIndex + reviewsPerPage.value;
   return reviews.value.slice(startIndex, endIndex);
 });
 
@@ -283,10 +283,14 @@ const prevPage = () => {
 // fetch reviews here
 const getReviews = async () => {
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}api/get_reviews.php?movie_id=${movie.value.id}`);
-    reviews.value = await response.json();
+    const response = await fetch(`../api/get_reviews.php?movie_id=${movie.value.id}`);
+    //fixing error, if not json, will go to error
+    const data = await response.json();
+    // Just ensure the data is an array so pagination doesn't break
+    reviews.value = Array.isArray(data) ? data : [];
   } catch (error) {
     console.error("Error fetching reviews:", error);
+    reviews.value = []; 
   }
 };
 
@@ -294,7 +298,7 @@ const getReviews = async () => {
 const submitReview = async () => {
 
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}api/post_reviews.php`, {
+    const response = await fetch(`../api/post_reviews.php`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
