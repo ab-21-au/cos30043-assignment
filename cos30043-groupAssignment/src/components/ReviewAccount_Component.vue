@@ -24,6 +24,11 @@
               </p>
               <p class="meta-text-review"> Plot: {{ review.plot }} • Acting:  {{ review.acting }} • Pacing: {{  review.pacing }}</p>
             </div>
+            <div class="del-button">
+              <button @click="deleteReview(review.review_id)" class="btn btn-outline-danger btn-sm">
+                Delete Review
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -50,13 +55,24 @@
           >
             Next
           </button>
+
+          <select 
+          id="pageSizeSelect" 
+          v-model="reviewsPerPage" 
+          class="form-select form-select-sm" 
+          style="width: auto;"
+          >
+          <option bind-key:value="2">2</option>
+          <option bind-key:value="5">5</option>
+          <option :value="10">10</option>
+        </select>
         </div>
 
     </section>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 
 const props = defineProps({
   accountId: {
@@ -67,9 +83,14 @@ const props = defineProps({
 
 const reviews = ref([]);
 const currentPage = ref(1);
-const reviewsPerPage = 4;
+const reviewsPerPage = ref(5);
 
 // pagination
+
+//reset if 
+watch(reviewsPerPage, () => {
+  currentPage.value = 1;
+});
 const totalPages = computed(() => {
   return Math.ceil(reviews.value.length / reviewsPerPage) || 1;
 });
@@ -89,15 +110,62 @@ const getUserReviews = async () => {
 //testing only
 // const activeAccountId = props.accountId || 1;
 
-    const response = await fetch(`../api/get_account_reviews.php?account_id=${props.accountId}`);
-    // const response = await fetch(`../api/get_account_reviews.php?account_id=${activeAccountId}`);
+    const response = await fetch(`${import.meta.env.BASE_URL}api/get_account_reviews.php?account_id=${props.accountId}`);
+    // const response = await fetch(`${import.meta.env.BASE_URL}api/get_account_reviews.php?account_id=${activeAccountId}`);
     reviews.value = await response.json();
   } catch (error) {
     console.error("Error fetching account review records:", error);
   }
 };
 
+const deleteReview = async (reviewId) => {
+  if (!confirm("Are you sure you want to permanently delete this film review?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch('../api/del_review.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        review_id: reviewId,
+        account_id: props.accountId // TMP CHANGE IF/WHEN ACCOUNT IMPLEMENTED
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      //update reviews
+      await getUserReviews();
+    } else {
+      alert("Could not complete delete action: " + result.error);
+    }
+  } catch (error) {
+    console.error("Network system error deleting review:", error);
+    alert("An error occurred trying to connect to the server.");
+  }
+};
+
+
+
 onMounted(() => {
   getUserReviews();
 });
 </script>
+
+
+<style>
+  .user-reviews-warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  width: 80%;
+  color: var(--text-secondary);
+}
+
+
+</style>
