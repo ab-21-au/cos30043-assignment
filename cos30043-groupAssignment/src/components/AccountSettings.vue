@@ -1,17 +1,111 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
+
+const props = defineProps({
+  account: {
+    type: Object,
+    default: () => ({
+      username: '',
+      email: '',
+      created_at: '',
+    }),
+  },
+  accountId: {
+    type: [Number, String],
+    default: 1,
+  },
+})
+
+const emit = defineEmits(['account-updated'])
 
 const settings = reactive({
-  displayName: 'Demo User',
-  email: 'demo.user@example.com',
-  favouriteGenre: 'Drama',
+  username: '',
+  email: '',
   currentPassword: '',
   newPassword: '',
   confirmPassword: '',
 })
 
-const saveSettings = () => {
-  alert('Settings saved for scaffold demo.')
+const syncSettings = () => {
+  settings.username = props.account?.username || ''
+  settings.email = props.account?.email || ''
+}
+
+watch(() => props.account, syncSettings, { immediate: true, deep: true })
+
+const saveSettings = async () => {
+  if (settings.newPassword !== settings.confirmPassword) {
+    alert('New password and confirm password must match.')
+    return
+  }
+
+  try {
+    const response = await fetch(`${import.meta.env.BASE_URL}api/update_account.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        account_id: props.accountId,
+        username: settings.username,
+        email: settings.email,
+        current_password: settings.currentPassword,
+        new_password: settings.newPassword,
+      }),
+    })
+
+    const result = await response.json()
+
+    if (!result.success) {
+      alert(result.error || 'Unable to update account.')
+      return
+    }
+
+    emit('account-updated', {
+      account_id: Number(props.accountId),
+      username: settings.username,
+      email: settings.email,
+      created_at: props.account?.created_at || '',
+    })
+
+    settings.currentPassword = ''
+    settings.newPassword = ''
+    settings.confirmPassword = ''
+    alert('Account details updated.')
+  } catch (error) {
+    console.error('Error updating account details:', error)
+    alert('Unable to update account details.')
+  }
+}
+
+const deleteAccount = async () => {
+  if (!confirm('Delete this account? This will also delete related reviews and movie list entries.')) {
+    return
+  }
+
+  try {
+    const response = await fetch(`${import.meta.env.BASE_URL}api/delete_account.php`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        account_id: props.accountId,
+      }),
+    })
+
+    const result = await response.json()
+
+    if (!result.success) {
+      alert(result.error || 'Unable to delete account.')
+      return
+    }
+
+    alert('Account deleted.')
+  } catch (error) {
+    console.error('Error deleting account:', error)
+    alert('Unable to delete account.')
+  }
 }
 </script>
 
@@ -33,17 +127,6 @@ const saveSettings = () => {
 
               <div class="row g-3">
                 <div class="col-md-6">
-                  <label for="displayName" class="form-label">Preferred name</label>
-                  <input
-                    id="displayName"
-                    v-model="settings.displayName"
-                    type="text"
-                    class="form-control"
-                    placeholder="Preferred name"
-                  >
-                </div>
-
-                <div class="col-md-6">
                   <label for="email" class="form-label">Email address</label>
                   <input
                     id="email"
@@ -55,20 +138,10 @@ const saveSettings = () => {
                 </div>
 
                 <div class="col-md-6">
-                  <label for="favouriteGenre" class="form-label">Favourite genre</label>
-                  <select id="favouriteGenre" v-model="settings.favouriteGenre" class="form-select">
-                    <option>Action</option>
-                    <option>Comedy</option>
-                    <option>Drama</option>
-                    <option>Horror</option>
-                    <option>Sci-Fi</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
                   <label for="username" class="form-label">Username</label>
                   <input
                     id="username"
+                    v-model="settings.username"
                     type="text"
                     class="form-control"
                     placeholder="Username"
@@ -118,7 +191,7 @@ const saveSettings = () => {
 
           <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
             <button type="submit" class="btn btn-primary settings-save-btn">Change Details</button>
-            <button type="button" class="btn btn-danger">Delete Account</button>
+            <button type="button" class="btn btn-danger" @click="deleteAccount">Delete Account</button>
           </div>
         </section>
       </div>

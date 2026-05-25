@@ -1,8 +1,38 @@
 <script setup>
-const account = {
+import { onMounted, reactive } from 'vue'
+
+const account = reactive({
   id: 1,
-  name: 'Demo User',
+  name: 'demo_user',
+  username: 'demo_user',
+  email: 'demo.user@example.com',
+  created_at: '',
+})
+
+const setAccount = (accountData) => {
+  account.id = accountData.account_id
+  account.username = accountData.username
+  account.name = accountData.username
+  account.email = accountData.email
+  account.created_at = accountData.created_at
 }
+
+const getAccount = async () => {
+  try {
+    const response = await fetch(`${import.meta.env.BASE_URL}api/get_account.php?account_id=${account.id}`)
+    const result = await response.json()
+
+    if (result.success) {
+      setAccount(result.account)
+    }
+  } catch (error) {
+    console.error('Error fetching account details:', error)
+  }
+}
+
+onMounted(() => {
+  getAccount()
+})
 
 const navItems = [
   { label: 'Account Dashboard', to: '/account' },
@@ -35,7 +65,12 @@ const navItems = [
 
         <section class="col-lg-9 account-content">
           <router-view v-slot="{ Component }">
-            <component :is="Component" :account="account" :account-id="account.id" />
+            <component
+              :is="Component"
+              :account="account"
+              :account-id="account.id"
+              @account-updated="setAccount"
+            />
           </router-view>
         </section>
       </div>

@@ -1,21 +1,50 @@
 <script setup>
+import { onMounted, ref } from 'vue'
 import AccountWelcomeCard from './AccountWelcomeCard.vue'
 
-defineProps({
+const props = defineProps({
   account: {
     type: Object,
     required: true,
   },
+  accountId: {
+    type: [Number, String],
+    required: true,
+  },
 })
 
-const favouriteMovies = [
-  { title: 'Past Lives', genre: 'Drama', rating: '5.0' },
-  { title: 'Dune: Part Two', genre: 'Sci-Fi', rating: '4.0' },
-  { title: 'Arrival', genre: 'Sci-Fi', rating: '4.5' },
-  { title: 'Whiplash', genre: 'Drama', rating: '4.5' },
-  { title: 'The Matrix', genre: 'Action', rating: '4.0' },
-  { title: 'Spirited Away', genre: 'Animation', rating: '5.0' },
-]
+const favouriteMovies = ref([])
+const isLoading = ref(false)
+const error = ref('')
+
+const formatStatus = (status) => {
+  return status.replaceAll('_', ' ')
+}
+
+const getFavouriteMovies = async () => {
+  isLoading.value = true
+  error.value = ''
+
+  try {
+    const response = await fetch(`${import.meta.env.BASE_URL}api/get_account_movies.php?account_id=${props.accountId}&favourites_only=1`)
+    const result = await response.json()
+
+    if (!result.success) {
+      throw new Error(result.error || 'Unable to load favourite movies')
+    }
+
+    favouriteMovies.value = result.movies
+  } catch (fetchError) {
+    error.value = fetchError.message
+    console.error('Error fetching favourite movies:', fetchError)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(() => {
+  getFavouriteMovies()
+})
 </script>
 
 <template>
@@ -24,8 +53,13 @@ const favouriteMovies = [
 
     <section>
       <h3 class="h5 mb-3">Liked / Favourite Movies</h3>
-      <div class="row account-grid">
-        <div v-for="movie in favouriteMovies" :key="movie.title" class="col-sm-6 col-xl-4">
+      <div v-if="isLoading" class="account-muted">Loading favourite movies...</div>
+      <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
+      <div v-else-if="favouriteMovies.length === 0" class="account-muted">
+        No favourite movies found.
+      </div>
+      <div v-else class="row account-grid">
+        <div v-for="movie in favouriteMovies" :key="movie.user_movie_id" class="col-sm-6 col-xl-4">
           <article class="card account-card favourite-card h-100">
             <div class="card-body d-flex flex-column">
               <div class="poster-placeholder d-flex align-items-center justify-content-center mb-3">
@@ -33,13 +67,13 @@ const favouriteMovies = [
               </div>
 
               <div class="d-flex justify-content-between gap-3 mb-2">
-                <h4 class="h6 mb-0 text-truncate">{{ movie.title }}</h4>
+                <h4 class="h6 mb-0 text-truncate">TMDB #{{ movie.tmdb_movie_id }}</h4>
                 <span aria-label="Favourite movie">☆</span>
               </div>
 
               <div class="d-flex justify-content-between gap-3 mt-auto small account-muted">
-                <span>{{ movie.genre }}</span>
-                <span>{{ movie.rating }}/5</span>
+                <span>{{ formatStatus(movie.status) }}</span>
+                <span>{{ movie.created_at ? movie.created_at.substring(0, 10) : '' }}</span>
               </div>
             </div>
           </article>
