@@ -157,7 +157,7 @@ function goToReview(movieId) {
   <div class="catalogue">
     <header class="header">
       <div class="logo">Retrospect</div>
-      <div class="header-right">
+      <!-- <div class="header-right">
         <span class="icon" @click="handleProfileClick" style="cursor: pointer; user-select: none;">
           <template v-if="auth.isAuthenticated.value">
             {{ auth.username.value }}
@@ -166,7 +166,7 @@ function goToReview(movieId) {
             Login
           </template>
         </span>
-      </div>
+      </div> -->
     </header>
 
     <section class="hero-section">

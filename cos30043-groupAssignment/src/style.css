@@ -275,7 +275,9 @@
     position: fixed;
     right: 0;
     z-index: 103;
-    height: 100%;
+    height: fit-content;
+    padding-bottom: 10px;
+    /* height: 100%; */
     width: 400px;
     background-color: var(--bg-surface);
     border-radius: 5px;
@@ -336,6 +338,8 @@
     position: fixed;
     top: 15px;
     right: 0;
+    height: fit-content;
+    padding-bottom: 10px;
     z-index: 109;
     width: 200px;
     height: 50%;

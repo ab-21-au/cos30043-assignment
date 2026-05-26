@@ -27,7 +27,10 @@ const routes = [
     { path: '/contact-us', component: ContactUs },
     { path: '/login', component: SignIn },
     { path: '/sign-up', component: SignUp },
+
     { path: '/thankyou', component: ThankYou },
+    { path: '/:pathMatch(.*)*', component: error }, // catch-all route for 404 errors
+
 
     // User Account Dashboard routing
     {
@@ -35,9 +38,9 @@ const routes = [
         component: AccountDashboard,
         children: [
             { path: '', component: Account },
-            { path: 'stats', component: Statistics },
             { path: 'lists', component: AccountLists },
-            { path: 'reviews', component: ReviewAccount },
+            { path: 'stats', component: Statistics },
+            { path: 'reviews', component: ReviewAccount},
             { path: 'settings', component: AccountSettings },
         ]
     },
@@ -53,8 +56,8 @@ const routes = [
     },
 
     // For the footer
-    //{ path: '/login', component: Login }, //Fill in later
-    //{ path: '/sign-up', component: SignUp }, //Fill in later
+    { path: '/login', component: SignIn }, 
+    { path: '/sign-up', component: SignUp }, 
 
     // Review from clicking a movie
     { path: '/films/:id', component: Review }, //could replace with title if its more appropriate lol
