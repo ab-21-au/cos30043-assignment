@@ -5,6 +5,28 @@
     <section class="review-hero" aria-label="Movie details">
       <div class="d-flex align-items-center gap-3">
         <h1 class="hero-title"> {{ movie.title }} </h1>
+        <button
+          v-if="currentUser"
+          type="button"
+          class="favourite-btn"
+          :disabled="isFavourited || isFavouriteSubmitting"
+          @click="addFavouriteMovie"
+        >
+          {{ isFavourited ? 'Favourite Added' : 'Add Favourite' }}
+        </button>
+        <select
+          v-if="currentUser"
+          v-model="movieListStatus"
+          class="status-select"
+          :disabled="isStatusSubmitting"
+          @change="saveMovieStatus"
+          aria-label="Movie list status"
+        >
+          <option disabled value="">Set status</option>
+          <option value="want_to_watch">Want to Watch</option>
+          <option value="watching">Watching</option>
+          <option value="watched">Watched</option>
+        </select>
         <br>
       </div>
       <div>
@@ -82,7 +104,7 @@
 
         <div class="row g-3 mb-4">
           <div class="col-12 col-md-4">
-            <select v-model="newReview.rating" class="form-select" aria-label="Overall movie rating">
+            <select v-model="newReview.rating" class="form-select" aria-label="Overall movie rating" required>
               <option disabled value="">Choose rating</option>
               <option>Peak</option>
               <option>So bad it's good</option>
@@ -91,14 +113,14 @@
             </select>
           </div>
           <div class="col-12 col-md-4">
-            <select v-model="newReview.rewatch" class="form-select" aria-label="If it's a rewatch">
+            <select v-model="newReview.rewatch" class="form-select" aria-label="If it's a rewatch" required>
               <option disabled value="">Rewatch?</option>
               <option>First time watch</option>
               <option>Rewatch</option>
             </select>
           </div>
           <div class="col-12 col-md-4">
-            <select v-model="newReview.expectations" class="form-select" aria-label="If it met expectations">
+            <select v-model="newReview.expectations" class="form-select" aria-label="If it met expectations" required>
               <option disabled value="">Met expectations?</option>
               <option>Yes</option>
               <option>No</option>
@@ -198,13 +220,17 @@ import { ref, onMounted, computed, provide, watch} from 'vue';
 import { useRoute } from 'vue-router';
 import { tmdb } from '../services/tmdb.js';
 import ReviewTimeline from './ReviewTimeline.vue';
+import { useAuth } from '../assets/UseAuth.js';
 
 
 const route = useRoute()
+const auth = useAuth()
 const isFavourited = ref(false);
+const isFavouriteSubmitting = ref(false);
+const isStatusSubmitting = ref(false);
+const movieListStatus = ref('');
 
-//set true for now, change later when have account login system
-const currentUser = ref(true)
+const currentUser = computed(() => auth.isAuthenticated.value)
 
 const movie = ref({
   id: route.params.id,
@@ -227,6 +253,10 @@ const newReview = ref({
   actRating: 0,
   paceRating: 0
 });
+
+const apiUrl = (endpoint) => import.meta.env.DEV
+  ? `/api/${endpoint}`
+  : `${import.meta.env.BASE_URL}api/${endpoint}`;
 
 //fetch movie details from TMDB
 const fetchMovieDetails = async () => {
@@ -283,7 +313,7 @@ const prevPage = () => {
 // fetch reviews here
 const getReviews = async () => {
   try {
-    const response = await fetch(`../api/get_reviews.php?movie_id=${movie.value.id}`);
+    const response = await fetch(apiUrl(`get_reviews.php?movie_id=${movie.value.id}`));
     //fixing error, if not json, will go to error
     const data = await response.json();
     // Just ensure the data is an array so pagination doesn't break
@@ -296,15 +326,24 @@ const getReviews = async () => {
 
 //submit review here
 const submitReview = async () => {
+  if (!auth.accountId.value) {
+    alert("Please sign in again before posting a review.");
+    return;
+  }
+
+  if (!newReview.value.rating || !newReview.value.rewatch || !newReview.value.expectations || !newReview.value.text.trim()) {
+    alert("Please complete the whole review form before submitting.");
+    return;
+  }
 
   try {
-    const response = await fetch(`../api/post_reviews.php`, {
+    const response = await fetch(apiUrl('post_reviews.php'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        account_id: 3, // TMP UPDATE WITH ACCOUNT DETAILS LATER
+        account_id: auth.accountId.value,
         tmdb_movie_id: movie.value.id,
         rating_plot: newReview.value.plotRating,
         rating_acting: newReview.value.actRating,
@@ -333,6 +372,68 @@ const submitReview = async () => {
   }
 };
 
+const addFavouriteMovie = async () => {
+  if (!auth.isAuthenticated.value) {
+    alert("Please sign in to add favourites.");
+    return;
+  }
+
+  isFavouriteSubmitting.value = true;
+
+  try {
+    const response = await fetch(apiUrl('add_favourite.php'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ tmdb_movie_id: movie.value.id })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      isFavourited.value = true;
+    } else {
+      alert(data.error || "Could not add this movie to favourites.");
+    }
+  } catch (error) {
+    console.error("Error adding favourite movie:", error);
+    alert("Network error while adding favourite movie.");
+  } finally {
+    isFavouriteSubmitting.value = false;
+  }
+};
+
+const saveMovieStatus = async () => {
+  if (!auth.isAuthenticated.value || !movieListStatus.value) {
+    return;
+  }
+
+  isStatusSubmitting.value = true;
+
+  try {
+    const response = await fetch(apiUrl('save_movie_list_status.php'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        tmdb_movie_id: movie.value.id,
+        status: movieListStatus.value
+      })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      alert(data.error || "Could not save movie status.");
+    }
+  } catch (error) {
+    console.error("Error saving movie status:", error);
+    alert("Network error while saving movie status.");
+  } finally {
+    isStatusSubmitting.value = false;
+  }
+};
+
 provide('movie', movie) //COME BACK
 provide('reviews', reviews)
 
@@ -358,11 +459,36 @@ onMounted(async() => {
   text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
   }
 
-  .review-hero {
+.review-hero {
   background: var(--accent);
   padding: 5rem 2.5rem;
   border-bottom: 8px solid var(--accent-deep);
   color: var(--on-accent);
+}
+
+.favourite-btn {
+  border: 1px solid var(--on-accent);
+  border-radius: 6px;
+  background: var(--on-accent);
+  color: var(--accent-deep);
+  padding: 0.55rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.favourite-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.status-select {
+  min-width: 150px;
+  border: 1px solid var(--on-accent);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 0.55rem 0.75rem;
+  font-weight: 700;
 }
 
 /* style font section label */
