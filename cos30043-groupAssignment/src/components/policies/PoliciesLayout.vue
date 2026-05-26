@@ -16,14 +16,14 @@
 
 <style scoped>
 
-@media (min-width: 320px) {
+@media (max-width: 360px) {
 
     .policies-page {
         background-color: var(--bg-primary);
         
     }
 
-    #content {
+    .policies-page #content {
         margin-top: 100px;
         margin-bottom: 40px;
         border: 2px solid var(--border-subtle);
@@ -33,11 +33,11 @@
         background-color: var(--bg-form);
     }
 
-    a {
-        display: inline-block;
+    .policies-page a {
+        display: block;
         text-decoration: none;
         color: var(--text-primary);
-        font-size: 14px;
+        font-size: 11px;
 
         border: 2px solid var(--border-subtle);
         border-radius: 10px;
@@ -47,23 +47,28 @@
         margin-top: 5px;
     }
 
-    #links:first-child {
+    .policies-page #links:first-child {
         margin-top: 100px;
     }
 
-    a.router-link-active {
+    .policies-page a.router-link-active {
         font-weight: bold;
+    }
+
+    .policies-page h3 {
+        margin: 0;
+        padding: 0;
     }
 }
 
 
-@media (min-width: 1024px) {
+@media (min-width: 361px) {
     .policies-page {
         background-color: var(--bg-primary);
         
     }
 
-    #content {
+    .policies-page #content {
         margin-top: 20px;
         margin-bottom: 40px;
         border: 2px solid var(--border-subtle);
@@ -73,10 +78,8 @@
         background-color: var(--bg-form);
     }
 
-    a {
-        display: inline-block;
+    .policies-page a {
         text-decoration: none;
-        justify-content: left;
         color: var(--text-primary);
         font-size: 18px;
 
@@ -88,12 +91,19 @@
         padding: 5px;
     }
 
-    #links:first-child {
+    .policies-page #links:first-child {
         margin-top: 20px;
     }
 
-    a.router-link-active {
+    .policies-page a.router-link-active {
         font-weight: bold;
+    }
+
+    .policies-page h3 {
+        margin: 0;
+        margin-bottom: 30px;
+        padding: 0;
+        text-align: left;
     }
 }
 

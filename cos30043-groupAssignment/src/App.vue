@@ -65,19 +65,19 @@ onMounted(() => {
     <footer class="footer">
       <div class="container">
         <div class="row">
-          <div class="col-lg-4 col-sm-12">
+          <div class="col-lg-4 col-12 d-flex justify-content-center justify-content-lg-start">
             <img id="logo" :src="logo">
           </div>
-          <div class="col-lg-4 col-sm-6">
-            <h3>Get to Know Us!</h3>
+          <div class="col-lg-4 col-6">
+            <h3 id="footer-header">Get to Know Us!</h3>
             <nav>
               <h6><router-link to="/about-us">About Us</router-link></h6>
               <h6><router-link to="/contact-us">Contact Us</router-link></h6>
               <h6><router-link to="/policies">Policies</router-link></h6>
             </nav>
           </div>
-          <div class="col-lg-4 col-sm-6">
-            <h3>Accounts</h3>
+          <div class="col-lg-4 col-6">
+            <h3 id="footer-header">Accounts</h3>
             <nav>
               <h6><router-link to="/account">Your Account</router-link></h6>
               <h6><router-link to="/login">Login</router-link></h6>
