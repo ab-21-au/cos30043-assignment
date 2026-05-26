@@ -304,7 +304,7 @@ const submitReview = async () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        account_id: 3, // TMP UPDATE WITH ACCOUNT DETAILS LATER
+        account_id: 1, // TMP UPDATE WITH ACCOUNT DETAILS LATER
         tmdb_movie_id: movie.value.id,
         rating_plot: newReview.value.plotRating,
         rating_acting: newReview.value.actRating,
