@@ -117,13 +117,16 @@ export default {
 <style>
 /*ContactUs.Vue*/
 /*Phone (default)*/
-@media (min-width: 320px) {
+@media (max-width: 480px) {
   .contactus-container {
     border: 1px solid var(--border);
     border-radius: 25px;
     padding: 20px;
     width: 90%;
-    max-width: 250px;
+    max-width: 100%;
+    min-height: unset;
+    height: auto;
+    max-height: unset;
     margin: 0 auto;
     background-color: var(--bg-form);
     box-shadow: var(--shadow);
@@ -176,6 +179,14 @@ export default {
 }
 
 /* Contact Us -- Laptop view*/
+@media(max-width: 480px) {
+  .figma-signup-form {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    max-height: unset;
+  }
+}
 @media (min-width: 1024px) {
   .contactus-container {
     border: 1px solid var(--border);

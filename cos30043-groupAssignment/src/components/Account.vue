@@ -1,12 +1,12 @@
 <template>
   <div class="account-dashboard">
-    <div v-if="auth.isAuthenticated" class="dashboard-layout">
+    <div class="dashboard-layout">
       
       <header class="dashboard-header">
         <div class="user-meta">
           
           <div>
-            <h1>Welcome back, {{ auth.username }}!</h1>
+            <h1>Welcome back, {{ displayUsername }}!</h1>
             
           </div>
         </div>
@@ -23,6 +23,11 @@
           <p class="stat-number">{{ reviews.length }}</p>
         </div>
       </section>
+
+      <AccountRecommendations
+        v-if="auth.isAuthenticated.value"
+        :account-id="accountId"
+      />
 
       <div class="dashboard-body">
         
@@ -41,7 +46,7 @@
           </div>
 
           <div v-else class="activity-list">
-            <div v-for="review in reviews" class="activity-item">
+            <div v-for="review in reviews" :key="review.review_id" class="activity-item">
               <span class="activity-icon">
                 FILM
               </span>
@@ -51,17 +56,19 @@
                   <span class="badge-status">{{ review.rewatch_status }}</span>
                 </p>
                 
-                <h4 v-if="review.review_title" class="user-review-title">{{ review.review_title }}</h4>
+                <h4 v-if="review.review_title || review.title" class="user-review-title">
+                  {{ review.review_title || review.title }}
+                </h4>
                 
                 <p :class="{ 'spoiler-text': review.contains_spoilers }" class="user-review-body">
-                  {{ review.review_text }}
+                  {{ review.review_text || review.content }}
                 </p>
                 
                 <div class="metrics-row">
                   <span>Verdict: {{ review.rating }}</span> | 
-                  <span>Plot: {{ '★'.repeat(review.rating_plot) }}</span> | 
-                  <span>Acting: {{ '★'.repeat(review.rating_acting) }}</span> | 
-                  <span>Pacing: {{ '★'.repeat(review.rating_pacing) }}</span>
+                  <span>Plot: {{ '★'.repeat(review.rating_plot || review.plot || 0) }}</span> | 
+                  <span>Acting: {{ '★'.repeat(review.rating_acting || review.acting || 0) }}</span> | 
+                  <span>Pacing: {{ '★'.repeat(review.rating_pacing || review.pacing || 0) }}</span>
                 </div>
                 
                 <small>Reviewed on: {{ new Date(review.created_at).toLocaleDateString() }}</small>
@@ -86,11 +93,6 @@
       </div>
     </div>
 
-    <div v-else class="access-denied">
-      <h2>Access Denied</h2>
-      <p>Please sign in to view your profile dashboard summary.</p>
-      <button @click="$router.push('/login')" class="btn-primary">Go to Sign In</button>
-    </div>
   </div>
 </template>
 
@@ -300,9 +302,23 @@
 
 <script>
 import { useAuth } from '../assets/UseAuth.js'
+import AccountRecommendations from './AccountRecommendations.vue'
 
 export default {
   name: 'AccountSummary',
+  components: {
+    AccountRecommendations
+  },
+  props: {
+    account: {
+      type: Object,
+      default: () => ({})
+    },
+    accountId: {
+      type: [Number, String],
+      default: null
+    }
+  },
   data() {
     return {
       auth: useAuth(),
@@ -312,34 +328,41 @@ export default {
       errorMsg: ''
     }
   },
+  computed: {
+    displayUsername() {
+      return this.account?.username || this.auth.username.value || 'there'
+    }
+  },
   watch: {
-    // Watch for changes in the authenticated state
-    'auth.isAuthenticated.value'(newValue) {
-      if (newValue === true) {
-        console.log("Auth state caught! User is officially logged in.");
-        
-        this.$forceUpdate(); 
+    accountId(newValue) {
+      if (newValue) {
+        this.fetchUserStats()
       }
     }
   },
   methods: {
     async fetchUserStats() {
+      if (!this.accountId) {
+        this.loadingReviews = false
+        return
+      }
+
       this.loadingReviews = true;
       try {
-        
+        const query = `account_id=${encodeURIComponent(this.accountId)}`
         const [reviewRes, watchRes] = await Promise.all([
-          fetch(`/api/get_user_reviews.php?username=${this.auth.username}`),
-          fetch(`/api/get_watch_count.php?username=${this.auth.username}`)
+          fetch(`${import.meta.env.BASE_URL}api/get_account_reviews.php?${query}`),
+          fetch(`${import.meta.env.BASE_URL}api/get_account_movies.php?${query}&status=watched`)
         ]);
 
         const reviewData = await reviewRes.json();
         const watchData = await watchRes.json();
 
-        if (reviewData.success) {
-          this.reviews = reviewData.reviews;
+        if (Array.isArray(reviewData)) {
+          this.reviews = reviewData;
         }
-        if (watchData.success) {
-          this.filmsWatchedCount = watchData.count;
+        if (watchData.success && Array.isArray(watchData.movies)) {
+          this.filmsWatchedCount = watchData.movies.length;
         }
 
       } catch (err) {
@@ -359,8 +382,10 @@ export default {
   },
   mounted() {
     
-    if (this.auth.isAuthenticated) {
+    if (this.accountId) {
       this.fetchUserStats();
+    } else {
+      this.loadingReviews = false;
     }
 }
 }

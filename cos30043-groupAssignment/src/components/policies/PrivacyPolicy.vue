@@ -77,7 +77,7 @@
         <h2>Access to your Personal Information</h2>
             <p>
                 You may access the Personal Information we hold about you and to update and/or correct it, subject to 
-                certain exceptions. If you wish to access your Personal Information, please contact us <router-link to="contact-us">here</router-link>. <br>
+                certain exceptions. If you wish to access your Personal Information, please contact us <router-link to="/contact-us">here</router-link>. <br>
                 'Retrospect' will not charge any fee for your access request, but may charge an administrative fee for 
                 providing a copy of your Personal Information.<br>
                 In order to protect your Personal Information we may require identification from you before releasing 
@@ -99,7 +99,7 @@
             
         <h2>Privacy Policy Complaints and Enquiries</h2>
             <p>
-                If you have any questions or complaints regarding our Privacy Policy, you can contact us <router-link to="contact-us">here</router-link>.
+                If you have any questions or complaints regarding our Privacy Policy, you can contact us <router-link to="/contact-us">here</router-link>.
             </p>  
 
     </div>

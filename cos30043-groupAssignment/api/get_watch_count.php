@@ -34,7 +34,7 @@ if ($stmt) {
     
     echo json_encode([
         "success" => true,
-        "watch_count" => (int)($row['watch_count'] ?? 0)
+        "watch_count" => (int)(isset($row['watch_count']) ? $row['watch_count'] : 0)
     ]);
     
     mysqli_stmt_close($stmt);

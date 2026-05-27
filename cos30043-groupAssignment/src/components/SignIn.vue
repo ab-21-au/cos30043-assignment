@@ -1,7 +1,7 @@
 <template>
     <div id="centered-box">
         
-        <form v-if="!auth.isAuthenticated" @submit.prevent="submitForm" class="figma-login-form">
+        <form v-if="!auth.isAuthenticated.value" @submit.prevent="submitForm" class="figma-login-form">
             <div class="input-group">
                 <label for="Credential">Username or Email</label>
                 <input type="text" name="Credential" id="Credential" v-model="credential">
@@ -13,11 +13,17 @@
             </div>
             
             <button type="submit" class="signin-btn">Sign in</button>
+            
+            <div class="register-navigation-prompt">
+                <span>No account? </span>
+                <router-link to="/sign-up" class="register-link">register here</router-link>
+            </div>
+
             <p class="form-error" v-if="errorMessage">{{ errorMessage }}</p>
         </form>
 
         <div v-else class="welcome-box">
-            <p>You are already signed in as <strong>{{ auth.username }}</strong>.</p>
+            <p>You are already signed in as <strong>{{ auth.username.value }}</strong>.</p>
             <button @click="auth.logout()">Sign Out</button>
         </div>
     </div>
@@ -30,9 +36,8 @@
   justify-content: center; 
   align-items: center; 
   height: 100vh;
-  background-color: #fafafa; 
+  background-color: var(--bg-primary); 
 }
-
 
 .figma-login-form {
   box-sizing: border-box;
@@ -46,16 +51,17 @@
   position: relative;
   width: 320px;
   min-width: 320px;
-  height: 322px;
+  height: 355px; 
 
-  background: #FFFFFF;
-  border: 1px solid #000000;
+  background: var(--bg-form);
+  border: 1px solid var(--border);
   border-radius: 23px;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
+  color: var(--text-primary);
   width: 100%;
   gap: 6px;
 }
@@ -63,20 +69,48 @@
 .input-group input {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  background-color: var(--bg-input);
+  color: black;
+  border: 1px solid var(--bg-carousel-btn);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .signin-btn {
   width: 100%;
   padding: 10px;
-  background-color: #333;
-  color: white;
+  background-color: var(--bg-search-wrapper);
+  color: var(--bg-header);
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  margin-top: auto; 
+}
+
+.signin-btn:hover {
+  background-color: var(--accent);
+}
+
+
+.register-navigation-prompt {
+  width: 100%;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-hero-content);
+  margin-top: -8px; 
+}
+
+.register-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-link:hover {
+  text-decoration: underline;
 }
 
 .welcome-box {
@@ -84,12 +118,13 @@
 }
 
 .form-error {
-  color: #c00;
+  color: var(--rot-hover);
   font-size: 0.85rem;
+  width: 100%;
+  text-align: center;
+  margin: 0;
 }
 </style>
-
-
 
 <script>
 import { useAuth } from '../assets/UseAuth.js';
@@ -106,7 +141,6 @@ export default {
         async submitForm() {
             this.errorMessage = '';
             
-
             try {
                 const apiUrl = import.meta.env.DEV
                     ? '/api/signin.php'
@@ -115,6 +149,7 @@ export default {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({
                         credential: this.credential,
                         password: this.password
@@ -138,13 +173,13 @@ export default {
                 }
 
                 if (result.success) {
-                    this.auth.login(result.username);
+                    this.auth.login(result.username, result.account_id);
                     
                     // Clear form inputs
                     this.credential = '';
                     this.password = '';
 
-                    this.$router.push('/films');
+                    this.$router.push('/account');
                 } else {
                     this.errorMessage = result.error || 'Unable to sign in.';
                 }

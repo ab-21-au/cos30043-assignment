@@ -1,5 +1,5 @@
 <script setup>
-import { ref, Transition } from 'vue'
+import { onMounted, ref, Transition } from 'vue'
 import { useTheme } from './js/Theme.js';
 
 import { useAuth } from './assets/UseAuth.js';
@@ -9,6 +9,10 @@ const { isDark, hamburgerIcon, crossIcon, logo, toggleTheme } = useTheme();
 const auth = useAuth();
 
 const isOpen = ref(false)
+
+onMounted(() => {
+  auth.restoreSession()
+})
 
 </script>
 
@@ -57,37 +61,23 @@ const isOpen = ref(false)
     
   </div>
 
-  <!-- <div> -- NAV FOR ACCOUNTS, CAN USE V-IF/ELSE STATEMENT TO JUST SWITCH LINKS FROM ABOVE
-    <nav class="account-nav">
-      <div class="nav-links">
-        <router-link to="/films">Films</router-link> |
-        <router-link to="/account">Account</router-link> |
-        <router-link to="/lists">List</router-link> |
-        <router-link to="/about-us">About Us</router-link> |
-        <router-link to="/contact-us">Contact Us</router-link> 
-      </div>
-    </nav>
-
-    <router-view />
-  </div> -->
-
   <div>
     <footer class="footer">
       <div class="container">
         <div class="row">
-          <div class="col-lg-4 col-sm-12">
+          <div class="col-lg-4 col-12 d-flex justify-content-center justify-content-lg-start">
             <img id="logo" :src="logo">
           </div>
-          <div class="col-lg-4 col-sm-6">
-            <h3>Get to Know Us!</h3>
+          <div class="col-lg-4 col-6">
+            <h3 id="footer-header">Get to Know Us!</h3>
             <nav>
               <h6><router-link to="/about-us">About Us</router-link></h6>
               <h6><router-link to="/contact-us">Contact Us</router-link></h6>
               <h6><router-link to="/policies">Policies</router-link></h6>
             </nav>
           </div>
-          <div class="col-lg-4 col-sm-6">
-            <h3>Accounts</h3>
+          <div class="col-lg-4 col-6">
+            <h3 id="footer-header">Accounts</h3>
             <nav>
               <h6><router-link to="/account">Your Account</router-link></h6>
               <h6><router-link to="/login">Login</router-link></h6>
@@ -101,4 +91,3 @@ const isOpen = ref(false)
 
 </template>
 
-<!--CHANGE LATER, just used to see if it was working correctly-->

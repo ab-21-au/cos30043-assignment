@@ -5,6 +5,13 @@ CREATE TABLE IF NOT EXISTS MRS_Account (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    gender VARCHAR(20) NOT NULL,
+    favourite_genre VARCHAR(50) DEFAULT NULL,
+    
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -53,3 +60,52 @@ CREATE TABLE IF NOT EXISTS MRS_UserMovieList (
     CONSTRAINT unique_account_movie_list
         UNIQUE (account_id, tmdb_movie_id)
 );
+
+-- Demo account seed data for local/server testing.
+-- Login password for this seeded account: Password123!
+INSERT INTO MRS_Account (account_id, username, email, password_hash)
+VALUES
+    (1, 'demo_user', 'demo.user@example.com', '$2y$12$BLQ3LGG0RomNM0rWgW7WM.TbgN5hSDVPN6nNhy/fJvqEX21YO7Qd.')
+ON DUPLICATE KEY UPDATE
+    username = VALUES(username),
+    email = VALUES(email);
+
+INSERT INTO MRS_UserMovieList (account_id, tmdb_movie_id, status, is_favourite)
+VALUES
+    (1, 19404, 'watched', TRUE),
+    (1, 693134, 'watched', TRUE),
+    (1, 329865, 'watched', TRUE),
+    (1, 244786, 'want_to_watch', FALSE),
+    (1, 872585, 'watching', FALSE),
+    (1, 129, 'watched', TRUE)
+ON DUPLICATE KEY UPDATE
+    status = VALUES(status),
+    is_favourite = VALUES(is_favourite),
+    updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO MRS_Review (
+    account_id,
+    tmdb_movie_id,
+    rating_plot,
+    rating_acting,
+    rating_pacing,
+    rating,
+    rewatch_status,
+    met_expectations,
+    review_title,
+    review_text
+)
+VALUES
+    (1, 19404, 5, 5, 4, 'Peak', 'Rewatch', 'Yes', 'A favourite', 'A beautifully made film that still holds up.'),
+    (1, 693134, 4, 4, 4, 'Peak', 'First time watch', 'Yes', 'Huge scale', 'Strong visuals, sound, and world building.'),
+    (1, 329865, 5, 5, 5, 'Peak', 'First time watch', 'Yes', 'Quiet and memorable', 'A thoughtful film with a strong emotional centre.')
+ON DUPLICATE KEY UPDATE
+    rating_plot = VALUES(rating_plot),
+    rating_acting = VALUES(rating_acting),
+    rating_pacing = VALUES(rating_pacing),
+    rating = VALUES(rating),
+    rewatch_status = VALUES(rewatch_status),
+    met_expectations = VALUES(met_expectations),
+    review_title = VALUES(review_title),
+    review_text = VALUES(review_text),
+    updated_at = CURRENT_TIMESTAMP;

@@ -16,7 +16,6 @@
   --bg-form-text: black;
   --bg-dark: #0A100D;
   --bg-button: #0A100D;
-  ;
   --accent: #A22C29;
   --accent-deep: #902923;
   --accent-deeper: #511613;    
@@ -56,7 +55,6 @@
   --bg-form-text: black;
   --bg-dark: #050807;
   --bg-button: #D6D5C9;
-  ;
   --accent: #A22C29;
   --accent-deep: #902923;
   --accent-deeper: #511613;
@@ -205,7 +203,7 @@
 }
 
 /* Mobile Response with Toggle Button */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .theme-toggle {
     top: 15px;
     left: 20px;
@@ -277,7 +275,8 @@
     position: fixed;
     right: 0;
     z-index: 103;
-    height: 100%;
+    height: fit-content;
+    padding-bottom: 10px;
     width: 400px;
     background-color: var(--bg-surface);
     border-radius: 5px;
@@ -319,7 +318,7 @@
 }
 
 /* Mobile Navigation Pop-out */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
 
   #menu {
     position: fixed;
@@ -338,6 +337,8 @@
     position: fixed;
     top: 15px;
     right: 0;
+    height: fit-content;
+    padding-bottom: 10px;
     z-index: 109;
     width: 200px;
     height: 50%;
@@ -372,54 +373,48 @@
     background-color: var(--accent);
     height: fit-content;
     padding-bottom: 20px;
+  }
 
-    h3 {
-      margin-top: 20px;
-      color: var(--bg-form);
-      font-weight: bold;
-    }
+  .footer h3 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: var(--bg-form);
+    font-weight: bold;
+  }
 
-    a {
-      text-decoration: none;
-      color: var(--bg-surface);
-    }
+  .footer a {
+    text-decoration: none;
+    color: var(--bg-surface);
+    display: block;
+  }
 
-    #logo {
-      width: 300px;
-      margin-top: 35px;
-      background-color: var(--bg-button);
-      padding: 5px;
-      border-radius: 10px;
-    }
+  #logo {
+    width: 300px;
+    margin-top: 35px;
+    background-color: var(--bg-button);
+    padding: 5px;
+    border-radius: 10px;
   }
 }
 
 /* Mobile Footer */
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .footer {
-    background-color: var(--accent);
-    height: fit-content;
 
-    h3 {
-      margin-top: 20px;
-      color: var(--bg-form);
-      font-weight: bold;
+    .h3 {
+      text-align: center;
       font-size: 16px;
     }
 
     a {
-      text-decoration: none;
-      color: var(--bg-surface);
       font-size: 12px;
       margin-bottom: 10px;
+      text-align: center;
     }
 
     #logo {
       width: 100px;
       margin-top: 60px;
-      background-color: var(--bg-button);
-      padding: 5px;
-      border-radius: 10px;
     }
   }
 }
