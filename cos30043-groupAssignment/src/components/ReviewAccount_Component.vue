@@ -124,20 +124,14 @@ const deleteReview = async (reviewId) => {
   }
 
   try {
-//account backup
-    const activeAccountId = props.accountId || 1;
-
-
     const response = await fetch('../api/del_review.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // review_id: reviewId,
-        
-        review_id: parseInt(reviewId, 10),
-        account_id: parseInt(activeAccountId, 10)
+        review_id: reviewId,
+        account_id: props.accountId // TMP CHANGE IF/WHEN ACCOUNT IMPLEMENTED
       })
     });
 
