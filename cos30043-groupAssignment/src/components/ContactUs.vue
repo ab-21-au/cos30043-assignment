@@ -10,7 +10,8 @@ export default {
             lName: '',
             email: '',
             poNumber: '',
-            message: ''
+            message: '',
+            msg: ''
         }
     },
     methods: {
@@ -45,6 +46,7 @@ export default {
                     })
                 } else {
                     alert('Failed to submit form. Please try again.')
+                    this.msg = "Failed to submit form. Pleas try again";
                 }
 
             } catch (error) {
@@ -95,9 +97,9 @@ export default {
         <p>For any questions or concerns you may have. <br> Fill out the form below and we will keep in touch!</p>
     </div>
     <form method="post" action="https://api.web3forms.com/submit" @submit.prevent="submitForm" class="contactus-container">
-        <label for="fName">First Name: </label>
+        <label for="fName">First Name: </label><br>
         <input type="text" name="fName" id="fName" v-model="fName"/><br>
-        <label for="lName">Last Name: </label>
+        <label for="lName">Last Name: </label><br>
         <input type="text" name="lName" id="lName" v-model="lName"/><br>
 
         <label for="email">Email Address: </label><br>
@@ -113,9 +115,75 @@ export default {
     </form>
 </main>
 </template>
-
 <style>
+
 /*ContactUs.Vue*/
+/* Contact Us -- Laptop view*/
+@media (min-width: 481px) {
+  .contactus-container {
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 500px;
+    margin: auto;
+    margin-bottom: 60px;
+    background-color: var(--bg-form);
+    box-shadow: var(--shadow);
+    color: var(--text-primary);
+    input, textarea {
+      padding: 10px;
+      border: 0px solid var(--border);
+      box-sizing: border-box;
+      margin: 10px 0;
+      border-radius: 25px;
+      text-align: left;
+      color: var(--bg-form-text);
+      background-color: var(--bg-input);
+    }
+
+    #nameRow{
+      margin-bottom: 10px;
+      border: 0 solid var(--border);
+    }
+
+    #email, #ponumber{
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    textarea {
+      height: 200px;
+      width: 100%;
+      margin: 20px 0;
+    }
+    button{
+      background-color: var(--accent);
+      color: var(--accent-text-muted);
+      border: none;
+      padding: 10px 50px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      display: block;
+      margin: 0 auto;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: var(--accent-deep);
+      }
+    }
+  }  
+  #intro{
+    text-align: center;
+    padding-top: 60px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+        h1, p {
+      color: var(--text-primary);
+    }
+  }
+}
+
 /*Phone (default)*/
 @media (max-width: 480px) {
   .contactus-container {
@@ -176,77 +244,6 @@ export default {
       color: var(--text-primary);
     }
   }
-}
-
-/* Contact Us -- Laptop view*/
-@media(max-width: 480px) {
-  .figma-signup-form {
-    width: 100%;
-    min-width: unset;
-    height: auto;
-    max-height: unset;
-  }
-}
-@media (min-width: 1024px) {
-  .contactus-container {
-    border: 1px solid var(--border);
-    border-radius: 25px;
-    padding: 20px auto;
-    max-width: 500px;
-    background-color: var(--bg-form);
-    box-shadow: var(--shadow);
-    color: var(--text-primary);
-    input, textarea {
-      padding: 10px;
-      border: 0px solid var(--border);
-      box-sizing: border-box;
-      border-radius: 25px;
-      text-align: left;
-      color: var(--bg-form-text);
-      background-color: var(--bg-input);
-    }
-
-    #nameRow{
-      margin-bottom: 10px;
-      border: 0 solid var(--border);
-    }
-
-    #email, #ponumber{
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    textarea {
-      height: 200px;
-      width: 100%;
-      margin: 20px 0;
-    }
-    button{
-      background-color: var(--accent);
-      color: var(--accent-text-muted);
-      border: none;
-      padding: 10px 50px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: bold;
-      display: block;
-      margin: 0 auto;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: var(--accent-deep);
-      }
-    }
-    #intro{
-      text-align: center;
-      padding-top: 20px;
-      padding-bottom: 20px;
-    }
-  }  
-}
-
-.contactUs-page{
-  background-color: var(--bg-primary);
-  padding-bottom: 40px;
 }
 
 </style>
