@@ -7,7 +7,7 @@
 </main>
 </template>
 <style>
-@media (max-width: 1024px) {
+@media (min-width: 768px) {
     img{
         width: 200px;
         height: auto;

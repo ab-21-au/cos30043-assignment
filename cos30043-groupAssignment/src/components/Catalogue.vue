@@ -311,7 +311,7 @@ body {
 .hero-content h1 {
   font-size: clamp(28px, 5vw, 48px);
   margin-bottom: 10px;
-  color: (var(--text-primary));
+  color: var(--text-primary);
 }
 
 .hero-content p {
