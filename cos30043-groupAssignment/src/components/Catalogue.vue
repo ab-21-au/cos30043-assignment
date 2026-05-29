@@ -219,8 +219,8 @@ function goToReview(movieId) {
         </div>
       </div>
       <div class="filter-group">
-        <label>Filter Genre Movie</label>
-        <select v-model="selectedGenre" @change="doFilter">
+        <label for="genre">Filter Genre Movie</label>
+        <select id="genre" v-model="selectedGenre" @change="doFilter">
           <option value="">All Genres</option>
           <option v-for="g in GENRES" :key="g.id" :value="g.name">{{ g.name }}</option>
         </select>
@@ -240,7 +240,7 @@ function goToReview(movieId) {
           <div v-for="movie in row.movies" :key="movie.id" class="movie-card" @click="goToReview(movie.id)">
             <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
             <div class="movie-info">
-              <h4>{{ movie.title }}</h4>
+              <h3>{{ movie.title }}</h3>
               <span class="rating">★ {{ movie.vote_average?.toFixed(1) }}/10</span>
             </div>
           </div>
@@ -251,7 +251,7 @@ function goToReview(movieId) {
             <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
             <div class="movie-info">
               <h4>{{ movie.title }}</h4>
-              <span class="rating">★ {{ movie.vote_average?.toFixed(1) }}/10</span>
+              <span class="rating">★ {{ movie.vote_average?.toFixed(1) }}/10</span>-
             </div>
           </div>
         </div>
