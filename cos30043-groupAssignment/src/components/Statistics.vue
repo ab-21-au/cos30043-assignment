@@ -153,19 +153,6 @@ h3{
     margin: 20px;
 }
 
-.average-review {
-    margin: 20px ;
-    width: 100%;
-}
-
-@media (max-width: 360px){
-    .average-review {
-        width: 90%;
-        margin-left: 20px;
-        margin-right: 20px;
-    }
-}
-
 button{
     background-color: var(--accent-deep);
     color: white;
