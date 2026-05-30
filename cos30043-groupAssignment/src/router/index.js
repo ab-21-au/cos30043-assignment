@@ -5,7 +5,7 @@ import AboutUs from '../components/AboutUs.vue'
 import Catalogue from '../components/Catalogue.vue'
 import ContactUs from '../components/ContactUs.vue'
 import AccountDashboard from '../components/AccountDashboard.vue'
-import Account from '../components/Account.vue'
+import AccountDashboardHome from '../components/AccountDashboardHome.vue'
 import Statistics from '../components/Statistics.vue'
 import AccountLists from '../components/AccountLists.vue'
 import ReviewAccount from '../components/ReviewAccount_Component.vue'
@@ -37,7 +37,7 @@ const routes = [
         path: '/account',
         component: AccountDashboard,
         children: [
-            { path: '', component: Account },
+            { path: '', component: AccountDashboardHome },
             { path: 'lists', component: AccountLists },
             { path: 'stats', component: Statistics },
             { path: 'reviews', component: ReviewAccount},

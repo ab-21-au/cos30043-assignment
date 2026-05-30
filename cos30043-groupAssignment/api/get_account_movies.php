@@ -57,7 +57,7 @@ if ($stmt) {
             'account_id' => intval($row['account_id']),
             'tmdb_movie_id' => intval($row['tmdb_movie_id']),
             'status' => $row['status'],
-            'is_favourite' => boolval($row['is_favourite']),
+            'is_favourite' => (bool)$row['is_favourite'],
             'created_at' => $row['created_at'],
             'updated_at' => $row['updated_at'],
         ];

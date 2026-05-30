@@ -87,13 +87,14 @@ function loadDatabaseConfigPath() {
 function connectDatabase() {
     require loadDatabaseConfigPath();
 
-    // $conn = mysqli_connect(
     $db_host     = isset($host) ? $host : '';
     $db_user     = isset($username) ? $username : '';
     $db_pass     = isset($password) ? $password : '';
     $db_name     = isset($database) ? $database : '';
-    
-    $conn = mysqli_connect(
+
+    // Keep connection failures inside the JSON API contract.
+    mysqli_report(MYSQLI_REPORT_OFF);
+    $conn = @mysqli_connect(
         $db_host,
         $db_user,
         $db_pass,
