@@ -1,6 +1,9 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 import AccountWelcomeCard from './AccountWelcomeCard.vue'
+import AccountRecommendations from './AccountRecommendations.vue'
+import errorPlaceholder from '../assets/error-placeholder.jpg'
+import { tmdb } from '../services/tmdb.js'
 
 const props = defineProps({
   account: {
@@ -17,23 +20,56 @@ const favouriteMovies = ref([])
 const isLoading = ref(false)
 const error = ref('')
 
+const apiUrl = (endpoint) => import.meta.env.DEV
+  ? `/api/${endpoint}`
+  : `${import.meta.env.BASE_URL}api/${endpoint}`
+
+const posterUrl = (posterPath) => {
+  return posterPath
+    ? `https://image.tmdb.org/t/p/w342${posterPath}`
+    : errorPlaceholder
+}
+
+const addMovieDetails = async (movieRows) => {
+  const detailResults = await Promise.allSettled(
+    movieRows.map(movie => tmdb.getMovieById(movie.tmdb_movie_id))
+  )
+
+  return movieRows.map((movie, index) => {
+    const result = detailResults[index]
+    const details = result.status === 'fulfilled' && !result.value.status_code
+      ? result.value
+      : {}
+
+    return {
+      ...movie,
+      title: details.title || `TMDB #${movie.tmdb_movie_id}`,
+      poster_path: details.poster_path || null,
+    }
+  })
+}
+
 const formatStatus = (status) => {
   return status.replaceAll('_', ' ')
 }
 
 const getFavouriteMovies = async () => {
+  if (!props.accountId) {
+    return
+  }
+
   isLoading.value = true
   error.value = ''
 
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}api/get_account_movies.php?account_id=${props.accountId}&favourites_only=1`)
+    const response = await fetch(apiUrl(`get_account_movies.php?account_id=${props.accountId}&favourites_only=1`))
     const result = await response.json()
 
     if (!result.success) {
       throw new Error(result.error || 'Unable to load favourite movies')
     }
 
-    favouriteMovies.value = result.movies
+    favouriteMovies.value = await addMovieDetails(result.movies || [])
   } catch (fetchError) {
     error.value = fetchError.message
     console.error('Error fetching favourite movies:', fetchError)
@@ -42,14 +78,18 @@ const getFavouriteMovies = async () => {
   }
 }
 
-onMounted(() => {
-  getFavouriteMovies()
-})
+watch(
+  () => props.accountId,
+  getFavouriteMovies,
+  { immediate: true }
+)
 </script>
 
 <template>
   <div class="account-panel">
     <AccountWelcomeCard :account="account" />
+
+    <AccountRecommendations :account-id="accountId" />
 
     <section>
       <h3 class="h5 mb-3">Liked / Favourite Movies</h3>
@@ -58,20 +98,22 @@ onMounted(() => {
       <div v-else-if="favouriteMovies.length === 0" class="account-muted">
         No favourite movies found.
       </div>
-      <div v-else class="row account-grid">
-        <div v-for="movie in favouriteMovies" :key="movie.user_movie_id" class="col-sm-6 col-xl-4">
-          <article class="card account-card favourite-card h-100">
-            <div class="card-body d-flex flex-column">
-              <div class="poster-placeholder d-flex align-items-center justify-content-center mb-3">
-                <span class="small account-muted">Poster</span>
-              </div>
+      <div v-else class="row row-cols-2 row-cols-md-3 row-cols-xl-5 g-3">
+        <div v-for="movie in favouriteMovies" :key="movie.user_movie_id" class="col">
+          <article class="card account-card h-100">
+            <div class="card-body d-flex flex-column p-2">
+              <router-link :to="`/films/${movie.tmdb_movie_id}`" class="d-block ratio poster-ratio overflow-hidden rounded mb-2">
+                <img class="w-100 h-100 object-fit-cover poster-image" :src="posterUrl(movie.poster_path)" :alt="`${movie.title} poster`">
+              </router-link>
 
               <div class="d-flex justify-content-between gap-3 mb-2">
-                <h4 class="h6 mb-0 text-truncate">TMDB #{{ movie.tmdb_movie_id }}</h4>
+                <router-link :to="`/films/${movie.tmdb_movie_id}`" class="movie-title h6 mb-0 text-truncate text-decoration-none">
+                  {{ movie.title }}
+                </router-link>
                 <span aria-label="Favourite movie">☆</span>
               </div>
 
-              <div class="d-flex justify-content-between gap-3 mt-auto small account-muted">
+              <div class="d-flex justify-content-between gap-2 mt-auto account-muted small">
                 <span>{{ formatStatus(movie.status) }}</span>
                 <span>{{ movie.created_at ? movie.created_at.substring(0, 10) : '' }}</span>
               </div>
@@ -84,13 +126,19 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.favourite-card {
-  min-height: 220px;
+.poster-ratio {
+  --bs-aspect-ratio: 150%;
 }
 
-.poster-placeholder {
-  min-height: 120px;
-  border: 1px dashed var(--border-subtle);
-  border-radius: 8px;
+.poster-image {
+  background: var(--bg-surface);
+}
+
+.movie-title {
+  color: var(--text-primary);
+}
+
+.movie-title:hover {
+  color: var(--accent);
 }
 </style>
