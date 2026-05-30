@@ -5,28 +5,6 @@
     <section class="review-hero" aria-label="Movie details">
       <div class="d-flex align-items-center gap-3">
         <h1 class="hero-title"> {{ movie.title }} </h1>
-        <button
-          v-if="currentUser"
-          type="button"
-          class="favourite-btn"
-          :disabled="isFavourited || isFavouriteSubmitting"
-          @click="addFavouriteMovie"
-        >
-          {{ isFavourited ? 'Favourite Added' : 'Add Favourite' }}
-        </button>
-        <select
-          v-if="currentUser"
-          v-model="movieListStatus"
-          class="status-select"
-          :disabled="isStatusSubmitting"
-          @change="saveMovieStatus"
-          aria-label="Movie list status"
-        >
-          <option disabled value="">Set status</option>
-          <option value="want_to_watch">Want to Watch</option>
-          <option value="watching">Watching</option>
-          <option value="watched">Watched</option>
-        </select>
         <br>
       </div>
       <div>
@@ -46,6 +24,35 @@
 
       <div>
         <span v-for="tag in movie.tags" v-bind:key="tag">{{ tag }} • </span>
+      </div>
+
+      <div class="row g-2 mt-2">
+        <div class="col-12 col-md-auto">
+          <button
+            v-if="currentUser"
+            type="button"
+            class="favourite-btn"
+            :disabled="isFavourited || isFavouriteSubmitting"
+            @click="addFavouriteMovie"
+          >
+            {{ isFavourited ? 'Favourite Added' : 'Add Favourite' }}
+          </button>
+        </div>
+        <div class="col-12 col-md-auto">
+          <select
+            v-if="currentUser"
+            v-model="movieListStatus"
+            class="status-select"
+            :disabled="isStatusSubmitting"
+            @change="saveMovieStatus"
+            aria-label="Movie list status"
+          >
+            <option disabled value="">Set status</option>
+            <option value="want_to_watch">Want to Watch</option>
+            <option value="watching">Watching</option>
+            <option value="watched">Watched</option>
+          </select>
+        </div>
       </div>
     </section>
 
@@ -75,8 +82,8 @@
                 hover
                 :length="5"
                 :size="32"
-                color="var(--accent)"
-                active-color="var(--accent)"
+                color="var(--accent) !important"
+                active-color="var(--accent) !important"
               />
             </div>
         </div>
@@ -89,8 +96,8 @@
               hover
               :length="5"
               :size="32"
-              color="var(--accent)"
-              active-color="var(--accent)"
+              color="var(--accent) !important"
+              active-color="var(--accent) !important"
             />
           </div>
         </div>
@@ -471,10 +478,10 @@ onMounted(async() => {
 }
 
 .favourite-btn {
-  border: 1px solid var(--on-accent);
+  border: 2.5px solid var(--on-accent);
   border-radius: 6px;
-  background: var(--on-accent);
-  color: var(--accent-deep);
+  background: transparent;
+  color: var(--text-primary);
   padding: 0.55rem 0.9rem;
   font-weight: 700;
   cursor: pointer;
@@ -487,9 +494,9 @@ onMounted(async() => {
 
 .status-select {
   min-width: 150px;
-  border: 1px solid var(--on-accent);
+  border: 2.5px solid var(--on-accent);
   border-radius: 6px;
-  background: var(--bg-primary);
+  background: transparent;
   color: var(--text-primary);
   padding: 0.55rem 0.75rem;
   font-weight: 700;
@@ -565,6 +572,23 @@ onMounted(async() => {
     font-size: 1.5rem;
     margin-bottom: 10px;
   }
+
+
+  /* MANUALLY STRIP AWAY THE STOLEN BACKGROUND COLOR FROM THE STARS */
+.review-page .rating-box .v-rating button {
+  background-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* KEEPS THE STAR OUTLINE PERFECTLY VISIBLE */
+.review-page .rating-box .v-rating .v-icon {
+  opacity: 1 !important;
+}
+
+
+
   .post-btn {
     background-color: var(--accent);
     color: white;
