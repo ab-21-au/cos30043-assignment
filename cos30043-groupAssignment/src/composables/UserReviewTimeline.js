@@ -1,12 +1,12 @@
 import { ref, watchEffect } from 'vue'
 
 // Calculates when a review is made compared to the movies release date
-function getPeriodLabel(dateStr, releaseYear) {
+function getPeriodLabel(dateStr, releaseDate) {
     if (!dateStr) return 'Unknown'
 
     const reviewDate = new Date(dateStr)
-    const releaseDate = new Date(`${releaseYear}-01-01`) // JS converts Date to a timestamp in milliseconds  
-    const diffMilliseconds = reviewDate - releaseDate
+    const release = new Date(releaseDate) // JS converts Date to a timestamp in milliseconds  
+    const diffMilliseconds = reviewDate - release
     const diffDays = diffMilliseconds / (1000 * 60 * 60 * 24) // Milliseconds -> Days
 
     if (diffDays < 0) {
@@ -60,9 +60,9 @@ function ratingToScore(rating) {
 }
 
 // The Composable Function = A function which exists independently and can be reused across any components 
-// Takes reviews and release year, and creates a snapshot ref. When called, a reactive snapshots array is returned
+// Takes reviews and release date, and creates a snapshot ref. When called, a reactive snapshots array is returned
 // Transforms the reviews array into a dataset that a graph component can read and draw
-export function useReviewTimeline(reviews, releaseYear) {
+export function useReviewTimeline(reviews, releaseDate) {
     const snapshots = ref([])
 
     // Watches and automatically tracks values, re-running the function automatically when they get changed 
@@ -82,7 +82,7 @@ export function useReviewTimeline(reviews, releaseYear) {
 
         const groups = {}
         for (const review of reviews.value) {
-            const label = getPeriodLabel(review.created_at, releaseYear.value) 
+            const label = getPeriodLabel(review.created_at, releaseDate.value)
             if (!groups[label]) {
                 groups[label] = []
             }

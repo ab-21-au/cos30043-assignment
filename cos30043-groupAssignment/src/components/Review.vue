@@ -272,6 +272,7 @@ const fetchMovieDetails = async () => {
         id: data.id,
         title: data.title,
         year: data.release_date ? data.release_date.split('-')[0] : 'N/A',
+        releaseDate: data.release_date || null,
         genre: data.genres?.map(g => g.name).join(', ') || 'N/A',
         runtime: data.runtime || 'Unknown',
         globalRating: data.vote_average ? data.vote_average.toFixed(1) : 'N/A',
@@ -443,9 +444,6 @@ provide('reviews', reviews)
 onMounted(async() => {
   await fetchMovieDetails();
   await getReviews();
-  console.log('reviews:', reviews.value)
-  console.log('movie year:', movie.value.year)
-  console.log('snapshots:', snapshots.value)
 });
 </script>
 
