@@ -204,16 +204,19 @@
             Next
           </button>
 
-          <select
-          id="pageSizeSelect" 
-          v-model="reviewsPerPage" 
-          class="form-select form-select-sm" 
-          style="width: auto;"
-          >
-          <option :value="2">2</option>
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-        </select>
+          <div class="d-flex flex-column align-items-start gap-2">
+            <label for="pageSizeSelect" id="pageSizeLabel" class="mb-0">Reviews per page:</label>
+            <select
+              id="pageSizeSelect"
+              v-model="reviewsPerPage"
+              class="form-select form-select-sm"
+              style="width: auto;"
+            >
+              <option :value="2">2</option>
+              <option :value="5">5</option>
+              <option :value="10">10</option>
+            </select>
+          </div>
         </div>
 
     </section>
@@ -276,6 +279,7 @@ const fetchMovieDetails = async () => {
         id: data.id,
         title: data.title,
         year: data.release_date ? data.release_date.split('-')[0] : 'N/A',
+        releaseDate: data.release_date || null,
         genre: data.genres?.map(g => g.name).join(', ') || 'N/A',
         runtime: data.runtime || 'Unknown',
         globalRating: data.vote_average ? data.vote_average.toFixed(1) : 'N/A',
@@ -446,7 +450,7 @@ provide('reviews', reviews)
 
 onMounted(async() => {
   await fetchMovieDetails();
-  getReviews();
+  await getReviews();
 });
 </script>
 
@@ -658,5 +662,12 @@ onMounted(async() => {
   font-size: 1rem;
   color: var(--text-secondary);
   font-weight: 500;
+}
+
+#pageSizeLabel {
+  display: block;
+  font-size: 12px;
+  font-family: var(--bs-body-font-family);
+  color: var(--text-secondary);
 }
 </style>

@@ -67,13 +67,13 @@
     import { ref, inject, watch, onMounted, onUnmounted, nextTick } from 'vue'
     import { useReviewTimeline } from '../composables/UserReviewTimeline'
     
-    const movie = inject('movie', ref({ globalRating: null, year: null }))
+    const movie = inject('movie', ref({ globalRating: null, year: null, releaseDate: null }))   
     const reviews = inject('reviews', ref([]))
     
-    const releaseYear = ref(movie.value?.year || new Date().getFullYear()) //Initializes the releaseYear to whatever year is available 
-    watch(() => movie.value?.year, y => { if (y) releaseYear.value = y }) //Watches for the actual year and updates accordingly
+    const releaseDate = ref(movie.value?.releaseDate || null)
+    watch(() => movie.value?.releaseDate, d => { if (d) releaseDate.value = d }) // Watches for the actual release date and updates accordingly
     
-    const { snapshots } = useReviewTimeline(reviews, releaseYear) // Composable call
+    const { snapshots } = useReviewTimeline(reviews, releaseDate) // Composable call
     
     const canvasEl = ref(null) // refs attached to DOM
     const canvasContainer = ref(null) // refs attached to DOM
@@ -179,7 +179,7 @@
         const points = getPoints(canvas)
         const validPoints = points.filter(p => p.y !== null)
         
-        if (validPoints.length < 2) return
+        
         
         // User review connecting line
         const gradient = ctx.createLinearGradient(PADDING.left, 0, PADDING.left + w, 0)

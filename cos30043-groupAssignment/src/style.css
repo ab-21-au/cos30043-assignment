@@ -372,20 +372,35 @@
 
 /* Footer */
 /* Mobile Footer */
-.footer h3{
+
+.footer {
+  background-color: var(--accent);
+  height: fit-content;
+  padding-bottom: 20px;
+}
+
+.footer h1{
   text-align: center;
   font-size: 16px;
+  color: var(--bg-form);
+  font-weight: bold;
 }
 
 .footer a {
   font-size: 12px;
   margin-bottom: 10px;
   text-align: center;
+  text-decoration: none;
+  color: var(--bg-surface);
+  display: block;
 }
 
 .footer #logo {
   width: 100px;
-  margin-top: 60px;
+  margin-top: 30px;
+  background-color: var(--bg-button);
+  padding: 5px;
+  border-radius: 10px;
 }
 
 @media (min-width: 1024px) {
@@ -395,7 +410,7 @@
     padding-bottom: 20px;
   }
 
-  .footer h3 {
+  .footer h1 {
     margin-top: 20px;
     margin-bottom: 20px;
     color: var(--bg-form);

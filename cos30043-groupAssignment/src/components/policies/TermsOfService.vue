@@ -122,6 +122,7 @@
 
     h4 {
         color: var(--text-secondary);
+        font-size: 19px;
     }
 
     p, ul {
