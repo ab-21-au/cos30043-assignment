@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import AccountWelcomeCard from './AccountWelcomeCard.vue'
+import errorPlaceholder from '../assets/error-placeholder.jpg'
+import { tmdb } from '../services/tmdb.js'
 
 const props = defineProps({
   account: {
@@ -27,6 +29,31 @@ const statusOptions = [
 const apiUrl = (endpoint) => import.meta.env.DEV
   ? `/api/${endpoint}`
   : `${import.meta.env.BASE_URL}api/${endpoint}`
+
+const posterUrl = (posterPath) => {
+  return posterPath
+    ? `https://image.tmdb.org/t/p/w342${posterPath}`
+    : errorPlaceholder
+}
+
+const addMovieDetails = async (movieRows) => {
+  const detailResults = await Promise.allSettled(
+    movieRows.map(movie => tmdb.getMovieById(movie.tmdb_movie_id))
+  )
+
+  return movieRows.map((movie, index) => {
+    const result = detailResults[index]
+    const details = result.status === 'fulfilled' && !result.value.status_code
+      ? result.value
+      : {}
+
+    return {
+      ...movie,
+      title: details.title || `TMDB #${movie.tmdb_movie_id}`,
+      poster_path: details.poster_path || null,
+    }
+  })
+}
 
 const listGroups = computed(() => {
   return [
@@ -61,7 +88,7 @@ const getMovies = async () => {
       throw new Error(result.error || 'Unable to load movie lists')
     }
 
-    movies.value = result.movies
+    movies.value = await addMovieDetails(result.movies || [])
   } catch (fetchError) {
     error.value = fetchError.message
     console.error('Error fetching account movie lists:', fetchError)
@@ -122,13 +149,15 @@ watch(
         <p v-if="list.movies.length === 0" class="account-muted">No movies in this list.</p>
         <div v-else class="row account-grid">
           <div v-for="movie in list.movies" :key="movie.user_movie_id" class="col-6 col-md-4 col-xl-2">
-            <div class="card account-card list-movie-card h-100">
+            <div class="card account-card h-100">
               <div class="card-body d-flex flex-column justify-content-between">
-                <div class="poster-placeholder d-flex align-items-center justify-content-center mb-3">
-                  <span class="small account-muted">Poster</span>
-                </div>
+                <router-link :to="`/films/${movie.tmdb_movie_id}`" class="d-block ratio poster-ratio overflow-hidden rounded mb-3">
+                  <img class="w-100 h-100 object-fit-cover poster-image" :src="posterUrl(movie.poster_path)" :alt="`${movie.title} poster`">
+                </router-link>
                 <div class="d-flex justify-content-between align-items-center gap-2">
-                  <span class="small fw-semibold text-truncate">TMDB #{{ movie.tmdb_movie_id }}</span>
+                  <router-link :to="`/films/${movie.tmdb_movie_id}`" class="movie-title small fw-semibold text-truncate text-decoration-none">
+                    {{ movie.title }}
+                  </router-link>
                   <span v-if="movie.is_favourite" aria-label="Favourite movie">☆</span>
                 </div>
                 <label class="small account-muted mt-3 mb-1" :for="`movie-status-${movie.user_movie_id}`">
@@ -159,13 +188,19 @@ watch(
 </template>
 
 <style scoped>
-.list-movie-card {
-  min-height: 190px;
+.poster-ratio {
+  --bs-aspect-ratio: 150%;
 }
 
-.poster-placeholder {
-  min-height: 70px;
-  border: 1px dashed var(--border-subtle);
-  border-radius: 8px;
+.poster-image {
+  background: var(--bg-surface);
+}
+
+.movie-title {
+  color: var(--text-primary);
+}
+
+.movie-title:hover {
+  color: var(--accent);
 }
 </style>
