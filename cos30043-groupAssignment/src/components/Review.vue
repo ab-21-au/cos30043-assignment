@@ -442,7 +442,10 @@ provide('reviews', reviews)
 
 onMounted(async() => {
   await fetchMovieDetails();
-  getReviews();
+  await getReviews();
+  console.log('reviews:', reviews.value)
+  console.log('movie year:', movie.value.year)
+  console.log('snapshots:', snapshots.value)
 });
 </script>
 

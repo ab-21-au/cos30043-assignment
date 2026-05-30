@@ -11,25 +11,37 @@ function getPeriodLabel(dateStr, releaseYear) {
 
     if (diffDays < 0) {
         return 'Pre-release'
-    }        
+    }     
 
-    if (diffDays < 7) {
+    if (diffDays <= 3) {
+        return 'Opening weekend'
+    }    
+
+    if (diffDays <= 7) {
         return 'Opening week'
     }
 
-    if (diffDays < 30) {
+    if (diffDays <= 14) {
+        return 'First two weeks'
+    }
+
+    if (diffDays <= 30) {
         return 'First Month'
     }
 
-    if (diffDays < 180) {
+    if (diffDays <= 90) {
+        return 'First 3 months'
+    }
+
+    if (diffDays <= 180) {
         return 'First 6 months'
     }
 
-    if (diffDays < 365) { 
+    if (diffDays <= 365) { 
         return 'First year'
     }
 
-    if (diffDays < 365 * 3) { 
+    if (diffDays <= 365 * 3) { 
         return '1-3 years later'
     }
     
@@ -57,11 +69,14 @@ export function useReviewTimeline(reviews, releaseYear) {
     watchEffect(() => {
         const periodOrder = [
             'Pre-release',
+            'Opening weekend',
             'Opening week',
-            'First Month',
+            'First two weeks',
+            'First month',
+            'First 3 months',
             'First 6 months',
             'First year',
-            '1-3 years later',
+            '1–3 years later',
             '3+ years later'
         ]
 
