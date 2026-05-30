@@ -179,7 +179,7 @@
         const points = getPoints(canvas)
         const validPoints = points.filter(p => p.y !== null)
         
-        if (validPoints.length < 2) return
+        
         
         // User review connecting line
         const gradient = ctx.createLinearGradient(PADDING.left, 0, PADDING.left + w, 0)
