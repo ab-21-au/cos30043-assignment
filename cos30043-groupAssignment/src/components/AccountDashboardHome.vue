@@ -92,7 +92,7 @@ watch(
     <AccountRecommendations :account-id="accountId" />
 
     <section>
-      <h3 class="h5 mb-3">Liked / Favourite Movies</h3>
+      <h3 class="h5 mb-3">Favourite Movies</h3>
       <div v-if="isLoading" class="account-muted">Loading favourite movies...</div>
       <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
       <div v-else-if="favouriteMovies.length === 0" class="account-muted">
