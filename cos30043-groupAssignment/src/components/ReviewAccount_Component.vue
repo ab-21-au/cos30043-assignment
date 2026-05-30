@@ -16,13 +16,13 @@
               <h5 class="card-title">{{ review.title }}</h5>
               <p class="meta-text-review">{{ review.created_at ? review.created_at.substring(0, 4) : '' }}</p>
               <hr>
-              <p class="card-text text-secondary">{{ review.content }}</p>
+              <p class="card-text text-secondary"><bold class="quotes">"</bold>{{ review.content }}<bold class="quotes">"</bold></p>
             </div>
             <div class="card-footer bg-transparent border-top-0">
               <p class="meta-text-review">
-               Rating: {{ review.rating }} • Rewatch: {{ review.rewatch }} • Meet Expectations? {{ review.expectations }}
+               Rating: {{ review.rating }} <br>Rewatch:{{ review.rewatch }} Meet Expectations? {{ review.expectations }}
               </p>
-              <p class="meta-text-review"> Plot: {{ review.plot }} • Acting:  {{ review.acting }} • Pacing: {{  review.pacing }}</p>
+              <p class="meta-text-review"> Plot: {{ review.plot }} <br>Acting:  {{ review.acting }} <br>Pacing:{{  review.pacing }}</p>
             </div>
             <div class="del-button">
               <button @click="deleteReview(review.review_id)" class="btn btn-outline-danger btn-sm">
@@ -168,5 +168,13 @@ watch(
   color: var(--text-secondary);
 }
 
+.quotes{
+  font-size:x-large;
+  font-style:bold;
+}
+
+.card-text{
+  font-style:italic;
+}
 
 </style>

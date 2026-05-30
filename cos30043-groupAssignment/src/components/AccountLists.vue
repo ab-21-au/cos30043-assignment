@@ -188,6 +188,9 @@ watch(
 </template>
 
 <style scoped>
+.movie-status{
+  font-size:smaller;
+}
 .poster-ratio {
   --bs-aspect-ratio: 150%;
 }

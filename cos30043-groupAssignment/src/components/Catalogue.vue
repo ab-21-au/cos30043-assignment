@@ -251,7 +251,7 @@ function goToReview(movieId) {
             <img :src="movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : 'https://via.placeholder.com/200x300?text=No+Poster'" :alt="movie.title">
             <div class="movie-info">
               <h4>{{ movie.title }}</h4>
-              <span class="rating">★ {{ movie.vote_average?.toFixed(1) }}/10</span>-
+              <span class="rating">★ {{ movie.vote_average?.toFixed(1) }}/10</span>
             </div>
           </div>
         </div>
@@ -374,7 +374,7 @@ body {
 }
 
 .carousel-btn {
-  background: var(--bg-primary);
+  background: transparent;
   color: var(--text-primary);
   border: none;
   width: 45px;
@@ -394,7 +394,7 @@ body {
 }
 
 .carousel-btn:hover {
-  background: var(--bg-carousel-btn);
+  background: transparent;
 }
 
 .center-movie-info {
@@ -468,10 +468,15 @@ body {
 .search-wrapper button {
   padding: 14px 24px;
   background: var(--bg-search-wrapper);
-  color: var(--bg-input);
+  color: var(--text-primary);
   border: none;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.search-wrapper button:hover {
+  background: var(--accent);
+  color: var(--bg-input);
 }
 
 .results-grid {

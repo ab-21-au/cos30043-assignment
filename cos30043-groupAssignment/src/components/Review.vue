@@ -156,10 +156,10 @@
       <section class="user-reviews">
       <h3 class="section-label">User Reviews</h3>
  
-      <!-- checker 0 reviews -->
-      <div v-if="reviews.length === 0" class="user-reviews-warning" aria-label="No reviews for this movie">
+        <!-- checker 0 reviews -->
+        <div v-if="reviews.length === 0" class="review-user-reviews-warning" aria-label="No reviews for this movie">
           <p>No reviews yet for this movie. Be the first!</p>
-      </div>
+        </div>
 
 
       <div v-else class="row g-4 mx-auto">
@@ -169,13 +169,13 @@
               <h5 class="card-title">{{ review.username }}</h5>
               <p class="meta-text-review">{{ review.created_at ? review.created_at.substring(0, 4) : '' }}</p>
               <hr>
-              <p class="card-text text-secondary">{{ review.content }}</p>
+              <p class="card-text text-secondary"><bold class="quotes">"</bold>{{ review.content }}<bold class="quotes">"</bold></p>
             </div>
             <div class="card-footer bg-transparent border-top-0">
               <p class="meta-text-review">
-               Rating: {{ review.rating }} • Rewatch: {{ review.rewatch }} • Meet Expectations? {{ review.expectations }}
+               Rating: {{ review.rating }} <br> Rewatch: {{ review.rewatch }} <br> Meet Expectations? {{ review.expectations }}
               </p>
-              <p class="meta-text-review"> Plot: {{ review.plot }} • Acting:  {{ review.acting }} • Pacing: {{  review.pacing }}</p>
+              <p class="meta-text-review"> Plot: {{ review.plot }} <br> Acting:  {{ review.acting }} <br> Pacing: {{  review.pacing }}</p>
             </div>
           </div>
         </div>
@@ -203,8 +203,8 @@
           >
             Next
           </button>
-
-          <div class="d-flex flex-column align-items-start gap-2">
+        </div>
+        <div class="d-flex flex-row justify-content-center align-items-center gap-2 mt-4">
             <label for="pageSizeSelect" id="pageSizeLabel" class="mb-0">Reviews per page:</label>
             <select
               id="pageSizeSelect"
@@ -216,7 +216,6 @@
               <option :value="5">5</option>
               <option :value="10">10</option>
             </select>
-          </div>
         </div>
 
     </section>
@@ -506,7 +505,6 @@ onMounted(async() => {
 .section-label {
   color: var(--accent);
   border-left: 4px solid var(--accent);
-  padding-left: 0.75rem;
 }
 
 .user-review-form {
@@ -518,10 +516,10 @@ onMounted(async() => {
   margin-bottom: 2rem;
 }
 
-.review-card, .card {
+.card, .review-card{
+  margin: 0 1.5rem;
+  padding: 3rem;
   background: var(--bg-surface);
-  padding: 2rem;
-  margin: 0 3rem;
 }
 
 .form-select, .form-control {
@@ -535,10 +533,10 @@ onMounted(async() => {
 }
 
 
-.user-reviews-warning {
+.review-user-reviews-warning {
   background: var(--bg-surface);
-  width: 90%;
   margin-left: 5%;
+  width: 90%;
   padding : 2.5rem;
 }
 
@@ -587,42 +585,34 @@ onMounted(async() => {
   opacity: 1 !important;
 }
 
+.post-btn {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.post-btn:hover {
+  background-color: var(--accent-deeper);
+}
+.section-label {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  margin-left: 5%;
+}
+.meta-text-review {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
 
-
-  .post-btn {
-    background-color: var(--accent);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  .post-btn:hover {
-    background-color: var(--accent-deeper);
-  }
-  .section-label {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    margin-left: 5%;
-  }
-  .meta-text-review {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-  }
-
-
-
-  .not-logged-in {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 120px;
+.not-logged-in {
+  padding: 2rem;
 }
 
 .login-prompt {
   font-size: 1rem;
   color: var(--text-secondary);
-  margin: 0;
 }
 
 .login-link {

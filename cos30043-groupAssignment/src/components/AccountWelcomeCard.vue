@@ -24,10 +24,17 @@ const { logo } = useTheme()
 </template>
 
 <style scoped>
+.account-hero{
+  background-color: var(--bg-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .account-hero-logo {
   width: 160px;
   min-height: 80px;
-  background-color: var(--bg-button);
+  background-color: var(--bg-surface);
   border-radius: 10px;
   padding: 0.5rem;
 }

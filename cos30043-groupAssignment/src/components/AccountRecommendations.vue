@@ -150,7 +150,7 @@ watch(
           <p v-if="genreTotals.length" class="account-muted mb-0">
             Based on your favourite genres:
             <span v-for="genre in genreTotals.slice(0, 3)" :key="genre.id" class="genre-pill d-inline-flex align-items-center rounded-pill px-2 py-1 mt-1 me-1 small">
-              {{ genre.name }} {{ genre.count }}
+              {{ genre.name }}
             </span>
           </p>
         </div>
@@ -179,7 +179,7 @@ watch(
               <img class="w-100 d-block object-fit-cover recommendation-poster" :src="posterUrl(movie.poster_path)" :alt="movie.title">
               <div class="p-3">
                 <h3 class="h6 mb-1">{{ movie.title }}</h3>
-                <p class="small account-muted mb-0">{{ movie.release_date ? movie.release_date.substring(0, 4) : 'TBA' }}</p>
+                <p class="small account-muted justify-content center mb-0">{{ movie.release_date ? movie.release_date.substring(0, 4) : 'TBA' }}</p>
               </div>
             </router-link>
           </div>
@@ -208,5 +208,6 @@ watch(
 .recommendation-poster {
   aspect-ratio: 2 / 3;
   background: var(--bg-surface);
+  margin-top: 0;
 }
 </style>

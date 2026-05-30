@@ -355,7 +355,7 @@
         background: var(--bg-surface);
         border: 1px solid var(--bg-primary);
         color: var(--text-primary);
-        padding: 10px;
+        padding: 30px;
         font-size: 15px;
     }
     

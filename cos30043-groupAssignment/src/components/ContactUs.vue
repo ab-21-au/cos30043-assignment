@@ -119,7 +119,7 @@ export default {
 
 /*ContactUs.Vue*/
 /* Contact Us -- Laptop view*/
-@media (min-width: 481px) {
+@media (min-width: 768px) {
   .contactus-container {
     border: 1px solid var(--border);
     border-radius: 25px;
@@ -185,17 +185,18 @@ export default {
 }
 
 /*Phone (default)*/
-@media (max-width: 480px) {
   .contactus-container {
     border: 1px solid var(--border);
     border-radius: 25px;
     padding: 20px;
     width: 90%;
-    max-width: 100%;
+    max-width: 500px;
+    min-width: 300px;
     min-height: unset;
     height: auto;
     max-height: unset;
     margin: 0 auto;
+    margin-bottom: 60px;
     background-color: var(--bg-form);
     box-shadow: var(--shadow);
     color: var(--text-primary);
@@ -244,6 +245,6 @@ export default {
       color: var(--text-primary);
     }
   }
-}
+
 
 </style>

@@ -61,11 +61,11 @@ const team = [
     about: 'Im majoring in software dev, my favourite movie is fellowship of the ring, my fav animal is a panda and a hobby of mine is golf.' },
   { initials: 'TF', 
     name: 'Theodore', 
-    tasks: ['Advanced Feature - Movie Recommendaiton Algorithm','Catalogue'], 
+    tasks: ['Catalogue', "API Implementation & Services"], 
     about: 'Majors in Cyber Security and AI. I enjoy playing video games with friends and cooking various dishes for my family.' },
   { initials: 'MB', 
     name: 'Matt', 
-    tasks: ['User dashboard', 'Database setup'], 
+    tasks: ['User dashboard', 'Database setup', 'Advanced Feature - Movie Recommendaiton Algorithm'], 
     about: 'Majors in Software Engineering. I enjoy music, rugby, footy and building things. I always find my weekends are taken up by one of these things.' },
 ]
 </script>

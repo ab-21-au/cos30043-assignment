@@ -126,6 +126,11 @@
 </template>
 
 <style scoped>
+
+.account-hero{
+  background-color: var(--bg-primary);
+}
+
 .setting-row {
   min-height: 78px;
 }

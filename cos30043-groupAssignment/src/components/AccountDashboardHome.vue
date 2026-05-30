@@ -100,22 +100,23 @@ watch(
       </div>
       <div v-else class="row row-cols-2 row-cols-md-3 row-cols-xl-5 g-3">
         <div v-for="movie in favouriteMovies" :key="movie.user_movie_id" class="col">
-          <article class="card account-card h-100">
-            <div class="card-body d-flex flex-column p-2">
+          <article class="card-body">
+            <div class="card account-card list-card h-100 overflow-hidden text-decoration-none">
               <router-link :to="`/films/${movie.tmdb_movie_id}`" class="d-block ratio poster-ratio overflow-hidden rounded mb-2">
-                <img class="w-100 h-100 object-fit-cover poster-image" :src="posterUrl(movie.poster_path)" :alt="`${movie.title} poster`">
+                <img class="w-100 d-block object-fit-cover poster-image" :src="posterUrl(movie.poster_path)" :alt="`${movie.title} poster`">
               </router-link>
+              <div class="p-3">
+                <div class="d-flex justify-content-between gap-3 mb-2">
+                  <router-link :to="`/films/${movie.tmdb_movie_id}`" class="movie-title h6 mb-0 text-truncate text-decoration-none">
+                    {{ movie.title }}
+                  </router-link>
+                  <span aria-label="Favourite movie">☆</span>
+                </div>
 
-              <div class="d-flex justify-content-between gap-3 mb-2">
-                <router-link :to="`/films/${movie.tmdb_movie_id}`" class="movie-title h6 mb-0 text-truncate text-decoration-none">
-                  {{ movie.title }}
-                </router-link>
-                <span aria-label="Favourite movie">☆</span>
-              </div>
-
-              <div class="d-flex justify-content-between gap-2 mt-auto account-muted small">
-                <span>{{ formatStatus(movie.status) }}</span>
-                <span>{{ movie.created_at ? movie.created_at.substring(0, 10) : '' }}</span>
+                <div class="d-flex justify-content-between gap-2 mt-auto account-muted small">
+                  <span class="movie-status">{{ formatStatus(movie.status) }}</span>
+                  <span>{{ movie.created_at ? movie.created_at.substring(0, 10) : '' }}</span>
+                </div>
               </div>
             </div>
           </article>
@@ -127,11 +128,13 @@ watch(
 
 <style scoped>
 .poster-ratio {
-  --bs-aspect-ratio: 150%;
+  aspect-ratio: 2 / 3;
 }
 
 .poster-image {
   background: var(--bg-surface);
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .movie-title {
@@ -140,5 +143,19 @@ watch(
 
 .movie-title:hover {
   color: var(--accent);
+}
+
+.movie-status {
+  color: var(--accent-deeper);
+  font-style: bold;
+}
+
+.list-card {
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.list-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
 }
 </style>

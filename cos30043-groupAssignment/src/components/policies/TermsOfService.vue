@@ -101,37 +101,36 @@
 
 <style scoped>
 
-@media (min-width: 320px) {
-    #last-update {
-        font-style: italic;
-        color: var(--text-muted);
-    }
-
-    h1 {
-        border-bottom: 1px solid var(--border-subtle);
-        font-size: 22px;
-    }
-
-    h2 {
-        font-size: 20px;
-    }
-
-    h1, h2 {
-        color: var(--text-primary);
-    }
-
-    h4 {
-        color: var(--text-secondary);
-        font-size: 19px;
-    }
-
-    p, ul {
-        color: var(--text-secondary);
-        font-size: 14px;
-    }
+#last-update {
+    font-style: italic;
+    color: var(--text-muted);
 }
 
-@media (min-width: 1024px) {
+h1 {
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 22px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+h1, h2 {
+    color: var(--text-primary);
+}
+
+h4 {
+    color: var(--text-secondary);
+    font-size: 19px;
+}
+
+p, ul {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+
+@media (min-width: 768px) {
     #last-update {
         font-style: italic;
         color: var(--text-muted);
