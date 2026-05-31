@@ -60,7 +60,7 @@
 
 .policies-page a.router-link-active {
     font-weight: bold;
-    color: var(--accent-deeper);
+    color: var(--bg-input);
     background: var(--accent)
 }
 
